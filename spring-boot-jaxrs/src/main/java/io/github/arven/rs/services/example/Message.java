@@ -31,10 +31,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Brian Becker
  */
 @Entity
-@Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
-public class MessageData implements Serializable {
+public class Message implements Serializable {
         
     @Id
     @XmlID @XmlAttribute
@@ -53,7 +52,7 @@ public class MessageData implements Serializable {
     @Transient
     private List<String> tag;
     
-    public MessageData () {
+    public Message () {
         this.date = (Calendar.getInstance().getTime());
     }
     
@@ -65,7 +64,7 @@ public class MessageData implements Serializable {
      * @param   id          The id or title of the message
      * @param   message     The message text, created as a value
      */
-    public MessageData (String id, String message) {
+    public Message (String id, String message) {
         super();
         this.id = id;
         this.message = message;

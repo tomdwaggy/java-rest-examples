@@ -46,7 +46,7 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @GET
-    public GroupData getGroupInfo(@PathParam("group") String name) {
+    public Group getGroupInfo(@PathParam("group") String name) {
         return blogService.getGroup(name);
     }
     

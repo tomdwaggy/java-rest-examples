@@ -44,8 +44,8 @@ public class MicroBlogRestResource {
      * @return  Version of this demo
      */
     @Path("/version") @GET
-    public VersionMessage getVersion() {
-        return new VersionMessage("v1.1");
+    public Version getVersion() {
+        return new Version("v1.1");
     }
     
     /**
@@ -58,7 +58,7 @@ public class MicroBlogRestResource {
      * @return  
      */
     @Path("/group") @POST @RolesAllowed({"User"})
-    public StatusMessage createGroup(GroupData group, final @Context SecurityContext ctx) {
+    public StatusMessage createGroup(Group group, final @Context SecurityContext ctx) {
         try {
             blogService.addGroup(group, ctx.getUserPrincipal().getName());
             return new StatusMessage(Status.CREATED);
@@ -86,7 +86,7 @@ public class MicroBlogRestResource {
      * @return 
      */
     @Path("/user") @POST
-    public StatusMessage addUser(UserData user) {
+    public StatusMessage addUser(Person user) {
         try {
             blogService.addUser(user);
             return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));

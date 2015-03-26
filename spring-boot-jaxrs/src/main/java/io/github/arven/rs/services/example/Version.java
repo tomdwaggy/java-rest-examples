@@ -13,12 +13,12 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Brian Becker
  */
 @XmlRootElement
-public class VersionMessage {
+public class Version {
     
     @XmlElement
     private String version;
     
-    public VersionMessage(String version) {
+    public Version(String version) {
         this.version = version;
     }
     

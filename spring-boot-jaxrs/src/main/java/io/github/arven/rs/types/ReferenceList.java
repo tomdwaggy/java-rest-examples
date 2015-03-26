@@ -1,8 +1,8 @@
 package io.github.arven.rs.types;
 
-import io.github.arven.rs.services.example.GroupData;
-import io.github.arven.rs.services.example.MessageData;
-import io.github.arven.rs.services.example.UserData;
+import io.github.arven.rs.services.example.Group;
+import io.github.arven.rs.services.example.Message;
+import io.github.arven.rs.services.example.Person;
 import java.util.Collections;
 import java.util.List;
 
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlSeeAlso;
  */
 @XmlRootElement(name = "references")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlSeeAlso({GroupData.class, MessageData.class, UserData.class})
+@XmlSeeAlso({Group.class, Message.class, Person.class})
 public class ReferenceList {
 
     @XmlElement         private List<String> id;

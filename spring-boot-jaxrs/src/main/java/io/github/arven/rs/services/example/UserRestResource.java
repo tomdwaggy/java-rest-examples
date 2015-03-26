@@ -48,7 +48,7 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @GET
-    public UserData getUser(@PathParam("name") String name) {
+    public Person getUser(@PathParam("name") String name) {
         return blogService.getUser(name);
     }
     
@@ -157,7 +157,7 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/messages") @POST @RolesAllowed({"User"})
-    public StatusMessage postMessage(@PathParam("name") String name, MessageData post, final @Context SecurityContext ctx) {
+    public StatusMessage postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
             return new StatusMessage(Status.CREATED);

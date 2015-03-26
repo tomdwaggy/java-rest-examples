@@ -27,10 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Brian Becker
  */
 @Entity
-@Table(name="USERDATA")
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
-public class UserData implements Serializable {
+public class Person implements Serializable {
 
     @Id
     @XmlID @XmlAttribute
@@ -49,18 +48,18 @@ public class UserData implements Serializable {
     private String password;
 	
     @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name="USERDATA_ID")
-    private List<MessageData> messages;
+    private List<Message> messages;
 	
     @ManyToMany(mappedBy = "members")
-    private List<GroupData> groups;
+    private List<Group> groups;
 	
     @OneToMany(cascade = CascadeType.ALL) @JoinTable(name="HAS_FRIEND")
-    private List<UserData> friends;
+    private List<Person> friends;
     
-    public UserData() {
-    	this.messages = new LinkedList<MessageData>();
-    	this.groups = new LinkedList<GroupData>();
-    	this.friends = new LinkedList<UserData>();
+    public Person() {
+    	this.messages = new LinkedList<Message>();
+    	this.groups = new LinkedList<Group>();
+    	this.friends = new LinkedList<Person>();
     }
     
     /**
@@ -77,7 +76,7 @@ public class UserData implements Serializable {
      * @param   email       Email address for the user
      * @param   password    Password for the user (used for authentication)
      */
-    public UserData(String id, String nickname, String email, String password) {
+    public Person(String id, String nickname, String email, String password) {
     	super();
         this.id       = id;
         this.nickname = nickname;
@@ -125,7 +124,7 @@ public class UserData implements Serializable {
      * Get the list of messages for this user
      * @return 
      */
-    public List<MessageData> getMessages() {
+    public List<Message> getMessages() {
     	return this.messages;
     }
     
@@ -133,7 +132,7 @@ public class UserData implements Serializable {
      * Get the groups this user is in
      * @return 
      */
-    public List<GroupData> getGroups() {
+    public List<Group> getGroups() {
     	return this.groups;
     }
     
@@ -141,7 +140,7 @@ public class UserData implements Serializable {
      * Set the groups this user is in
      * @param groups
      */
-    public void setGroups(List<GroupData> groups) {
+    public void setGroups(List<Group> groups) {
     	this.groups = groups;
     }
     
@@ -149,7 +148,7 @@ public class UserData implements Serializable {
      * Get the friends this user has
      * @return 
      */
-    public List<UserData> getFriends() {
+    public List<Person> getFriends() {
     	return this.friends;
     }
     
@@ -157,7 +156,7 @@ public class UserData implements Serializable {
      * Set the friends this user has
      * @param friends
      */
-    public void setFriends(List<UserData> friends) {
+    public void setFriends(List<Person> friends) {
     	this.friends = friends;
     }
     

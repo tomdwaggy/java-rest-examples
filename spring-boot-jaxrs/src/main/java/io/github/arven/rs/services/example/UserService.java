@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
     @Inject private MicroBlogService blogService;
 
     public UserDetails loadUserByUsername(String string) throws UsernameNotFoundException {
-        UserData data = blogService.getUser(string);
+        Person data = blogService.getUser(string);
         if(data != null) {
             return new User(data.getId(), data.getPassword(), Arrays.asList(new SimpleGrantedAuthority("User")));
         } else {

@@ -30,8 +30,8 @@ public class MicroBlogService {
      * @param   userName        user id for the user
      * @return  The data for the user
      */
-    public UserData getUser( String userName ) {
-    	return test.find(UserData.class, userName);
+    public Person getUser( String userName ) {
+    	return test.find(Person.class, userName);
     }
     
     /**
@@ -40,7 +40,7 @@ public class MicroBlogService {
      * 
      * @param   user        user data for the user, containing user id
      */
-    public void addUser( UserData user ) {
+    public void addUser( Person user ) {
         test.persist(user);
     }
     
@@ -51,7 +51,7 @@ public class MicroBlogService {
      * @param   userName        user data for the user, containing user id
      */
     public void removeUser( String userName ) {
-        UserData user = test.find(UserData.class, userName);
+        Person user = test.find(Person.class, userName);
         user.getGroups().clear();
         user.getMessages().clear();
         test.persist(user);
@@ -67,12 +67,12 @@ public class MicroBlogService {
      * @param   userName        user id for the user whose posts we want
      * @return  a list of posts from the user
      */
-    public List<MessageData> getPosts( String userName ) {
-        UserData d = test.find(UserData.class, userName);
+    public List<Message> getPosts( String userName ) {
+        Person d = test.find(Person.class, userName);
         if (d != null) {
-            return new LinkedList<MessageData>(d.getMessages());
+            return new LinkedList<Message>(d.getMessages());
         }
-        return new LinkedList<MessageData>();
+        return new LinkedList<Message>();
     }
 
     /**
@@ -84,10 +84,10 @@ public class MicroBlogService {
      * @param   userName        user id for the user who will be posting
      * @param   post        message which should be posted by the user
      */
-    public void addPost( String userName, MessageData post ) {
+    public void addPost( String userName, Message post ) {
     	test.persist(post);
     	if(test.contains(post)) {
-            UserData user = test.find(UserData.class, userName);
+            Person user = test.find(Person.class, userName);
             user.getMessages().add(post);
             test.persist(user);
     	}
@@ -100,8 +100,8 @@ public class MicroBlogService {
      * @param postName
      */
     public void removePost( String userName, String postName ) {
-        UserData user = test.find(UserData.class, userName);
-        for(MessageData p : user.getMessages()) {
+        Person user = test.find(Person.class, userName);
+        for(Message p : user.getMessages()) {
             if(p.getId().equals(postName)) {
                 user.getMessages().remove(p);
             }
@@ -115,8 +115,8 @@ public class MicroBlogService {
      * @param   groupName       group id for the group we want information about
      * @return  The group information
      */
-    public GroupData getGroup( String groupName ) {
-        return test.find(GroupData.class, groupName);
+    public Group getGroup( String groupName ) {
+        return test.find(Group.class, groupName);
     }
     
     /**
@@ -126,12 +126,12 @@ public class MicroBlogService {
      * @param   groupName       group id for the group we want members of
      * @return  The group member list
      */
-    public List<UserData> getGroupMembers( String groupName ) {
-        GroupData d = test.find(GroupData.class, groupName);
+    public List<Person> getGroupMembers( String groupName ) {
+        Group d = test.find(Group.class, groupName);
         if (d != null) {
-            return new LinkedList<UserData>(d.getMembers());
+            return new LinkedList<Person>(d.getMembers());
         }
-        return new LinkedList<UserData>();
+        return new LinkedList<Person>();
     }
     
     /**
@@ -143,9 +143,9 @@ public class MicroBlogService {
      * @param   group       group data for the group we want to create
      * @param   userName    username of the person who is creating the group
      */
-    public void addGroup( GroupData group, String userName ) {
+    public void addGroup( Group group, String userName ) {
     	if(!test.contains(group)) {
-    		UserData user = test.find(UserData.class, userName);
+    		Person user = test.find(Person.class, userName);
     		group.getMembers().add(user);    		
     		test.persist(group);
     	}
@@ -159,8 +159,8 @@ public class MicroBlogService {
      * @param   userName    username who is joining the group
      */
     public void addGroupMember( String groupName, String userName ) {
-        GroupData group = test.find(GroupData.class, groupName);
-        UserData user = test.find(UserData.class, userName);
+        Group group = test.find(Group.class, groupName);
+        Person user = test.find(Person.class, userName);
         if(!group.getMembers().contains(user)) {
         	group.getMembers().add(user);
         	test.persist(group);
@@ -178,8 +178,8 @@ public class MicroBlogService {
      * @param   userName    user id which is leaving the group
      */
     public void leaveGroup( String groupName, String userName ) {
-        GroupData group = test.find(GroupData.class, groupName);
-        UserData user = test.find(UserData.class, userName);
+        Group group = test.find(Group.class, groupName);
+        Person user = test.find(Person.class, userName);
         group.getMembers().remove(user);
         test.persist(group);
         if(group.getMembers().isEmpty()) {
@@ -195,7 +195,7 @@ public class MicroBlogService {
      * @param   groupName       group id for removal
      */
     public void removeGroup( String groupName ) {
-        test.remove(test.find(GroupData.class, groupName));
+        test.remove(test.find(Group.class, groupName));
     }
     
     /**
@@ -206,12 +206,12 @@ public class MicroBlogService {
      * @param   userName    user id for friends list
      * @return  the friends list, or empty if not valid
      */
-    public List<UserData> getFriends( String userName ) {
-        UserData d = test.find(UserData.class, userName);
+    public List<Person> getFriends( String userName ) {
+        Person d = test.find(Person.class, userName);
         if (d != null) {
-            return new LinkedList<UserData>(d.getFriends());
+            return new LinkedList<Person>(d.getFriends());
         }
-        return new LinkedList<UserData>();
+        return new LinkedList<Person>();
     }
     
     /**
@@ -224,8 +224,8 @@ public class MicroBlogService {
      * @param   friendName  user id which is being added as a friend
      */
     public void addFriend( String userName, String friendName ) {
-    	UserData user = test.find(UserData.class, userName);
-    	UserData friend = test.find(UserData.class, friendName);
+    	Person user = test.find(Person.class, userName);
+    	Person friend = test.find(Person.class, friendName);
     	user.getFriends().add(friend);
     	test.persist(user);
     }
@@ -239,8 +239,8 @@ public class MicroBlogService {
      * @param   friendName  user id which is being removed as a friend
      */
     public void removeFriend( String userName, String friendName ) {
-    	UserData user = test.find(UserData.class, userName);
-    	UserData friend = test.find(UserData.class, friendName);
+    	Person user = test.find(Person.class, userName);
+    	Person friend = test.find(Person.class, friendName);
     	user.getFriends().remove(friend);
     	test.persist(user);
     }

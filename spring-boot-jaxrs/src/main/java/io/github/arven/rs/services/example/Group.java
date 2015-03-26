@@ -23,10 +23,9 @@ import javax.xml.bind.annotation.XmlValue;
  * @author Brian Becker
  */
 @Entity
-@Table(name="GROUPDATA")
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.NONE)
-public class GroupData implements Serializable {
+public class Group implements Serializable {
 
     @Id
     @XmlID @XmlAttribute
@@ -37,10 +36,10 @@ public class GroupData implements Serializable {
     private String description;
 	
     @ManyToMany
-    private List<UserData> members;
+    private List<Person> members;
     
-    public GroupData() {
-    	this.members = new LinkedList<UserData>();
+    public Group() {
+    	this.members = new LinkedList<Person>();
     }
     
     /**
@@ -49,7 +48,7 @@ public class GroupData implements Serializable {
      * @param   id              Name of the group which will be used in API
      * @param   description     Description of the group
      */
-    public GroupData(String id, String description) {
+    public Group(String id, String description) {
     	super();
         this.id = id;
         this.description = description;
@@ -77,7 +76,7 @@ public class GroupData implements Serializable {
      * Get the list of members
      * @return 
      */
-    public List<UserData> getMembers() {
+    public List<Person> getMembers() {
     	return this.members;
     }
     
@@ -85,7 +84,7 @@ public class GroupData implements Serializable {
      * Set the list of members
      * @param members
      */
-    public void setMembers(List<UserData> members) {
+    public void setMembers(List<Person> members) {
     	this.members = members;
     }    
     
