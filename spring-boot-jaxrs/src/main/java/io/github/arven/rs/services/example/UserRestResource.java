@@ -6,7 +6,6 @@
 package io.github.arven.rs.services.example;
 
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
-import io.github.arven.rs.services.example.StatusMessage.Status;
 
 import io.github.arven.rs.types.DataList;
 import java.io.Serializable;
@@ -24,6 +23,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -65,9 +65,9 @@ public class UserRestResource implements Serializable {
     public StatusMessage removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeUser(name);
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.OK);
         } else {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -102,9 +102,9 @@ public class UserRestResource implements Serializable {
     public StatusMessage addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addFriend(name, friend);
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.CREATED);
         } else {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -124,9 +124,9 @@ public class UserRestResource implements Serializable {
     public StatusMessage removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeFriend(name, friend);
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.OK);
         } else {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -143,7 +143,7 @@ public class UserRestResource implements Serializable {
     @GET
     @Path("/messages") public DataList getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
         return new DataList(blogService.getPosts(name), offset, MAX_LIST_SPAN, true);
-    }        
+    }
     
     /**
      * For a given user, this method posts a message in their name. Any
@@ -160,9 +160,9 @@ public class UserRestResource implements Serializable {
     public StatusMessage postMessage(@PathParam("name") String name, MessageData post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.CREATED);
         } else {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     

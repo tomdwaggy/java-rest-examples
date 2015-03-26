@@ -18,14 +18,15 @@ import org.springframework.context.annotation.ComponentScan;
  */
 
 @SpringBootApplication
-@ComponentScan("com.github.arven.rs.services.example")
-@EntityScan("com.github.arven.rs.services.example")
+@ComponentScan("io.github.arven.rs.services.example")
+@EntityScan("io.github.arven.rs.services.example")
 public class Application implements Serializable {
 
     @Named
     public static class JerseyConfig extends ResourceConfig {
 
         public JerseyConfig() {
+            packages("io.github.arven.rs.filter;io.github.arven.rs.services.example");
             this.register(MicroBlogRestResource.class);
             this.register(JacksonFeature.class);
         }

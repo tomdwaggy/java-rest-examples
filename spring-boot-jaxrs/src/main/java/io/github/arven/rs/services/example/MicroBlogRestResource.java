@@ -1,6 +1,5 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.services.example.StatusMessage.Status;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -12,7 +11,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -60,9 +61,9 @@ public class MicroBlogRestResource {
     public StatusMessage createGroup(GroupData group, final @Context SecurityContext ctx) {
         try {
             blogService.addGroup(group, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.CREATED);
         } catch (Exception e) {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }        
     
@@ -88,9 +89,10 @@ public class MicroBlogRestResource {
     public StatusMessage addUser(UserData user) {
         try {
             blogService.addUser(user);
-            return new StatusMessage(Status.SUCCESS);
+            return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
         } catch (Exception e) {
-            return new StatusMessage(Status.FAILURE);
+            System.out.println("<<<EXCEPTION>>>" + e.getMessage());
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }    
     

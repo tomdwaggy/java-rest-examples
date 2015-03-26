@@ -6,7 +6,6 @@
 package io.github.arven.rs.services.example;
 
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
-import io.github.arven.rs.services.example.StatusMessage.Status;
 
 import io.github.arven.rs.types.DataList;
 import java.io.Serializable;
@@ -23,6 +22,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -77,9 +77,9 @@ public class GroupRestResource implements Serializable {
     public StatusMessage joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.addGroupMember(name, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.CREATED);
         } else {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -97,9 +97,9 @@ public class GroupRestResource implements Serializable {
     public StatusMessage leaveGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.leaveGroup(name, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.SUCCESS);
+            return new StatusMessage(Status.OK);
         } else {
-            return new StatusMessage(Status.FAILURE);
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
