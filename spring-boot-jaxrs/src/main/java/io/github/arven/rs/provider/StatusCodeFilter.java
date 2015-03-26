@@ -1,4 +1,4 @@
-package io.github.arven.rs.filter;
+package io.github.arven.rs.provider;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -20,8 +20,7 @@ import javax.ws.rs.ext.Provider;
 public class StatusCodeFilter implements ContainerResponseFilter {
 
     public void filter(ContainerRequestContext req, ContainerResponseContext res) throws IOException {
-        System.out.println("<<<STOPPED>>>");
-        if(res.getEntity() instanceof StatusCode) {
+        if(res.getEntity() instanceof StatusCode && res.getStatus() == 200) {
             StatusCode s = (StatusCode) res.getEntity();
             res.setStatus(s.error());
         }

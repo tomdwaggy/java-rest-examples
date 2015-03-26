@@ -31,6 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Brian Becker
  */
 @Entity
+@Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Message implements Serializable {

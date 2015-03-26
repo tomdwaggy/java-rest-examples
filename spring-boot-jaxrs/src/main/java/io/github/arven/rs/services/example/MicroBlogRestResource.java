@@ -1,5 +1,7 @@
 package io.github.arven.rs.services.example;
 
+import java.util.Arrays;
+import java.util.Collections;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -27,8 +29,8 @@ import javax.ws.rs.core.SecurityContext;
 
 @Named
 @Path("/example/v1")
-@Produces({ MediaType.APPLICATION_JSON })
-@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class MicroBlogRestResource {
     
     public static int MAX_LIST_SPAN = 10;
@@ -89,9 +91,9 @@ public class MicroBlogRestResource {
     public StatusMessage addUser(Person user) {
         try {
             blogService.addUser(user);
-            return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
+            //return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
+            return new StatusMessage(Status.CREATED);
         } catch (Exception e) {
-            System.out.println("<<<EXCEPTION>>>" + e.getMessage());
             return new StatusMessage(Status.FORBIDDEN);
         }
     }    

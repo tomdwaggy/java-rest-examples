@@ -32,8 +32,8 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
-@Produces({ MediaType.APPLICATION_JSON })
-@Consumes({ MediaType.APPLICATION_JSON })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class GroupRestResource implements Serializable {
         
     @Inject private MicroBlogService blogService;

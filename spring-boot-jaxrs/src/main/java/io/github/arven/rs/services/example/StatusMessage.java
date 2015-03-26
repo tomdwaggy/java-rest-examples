@@ -5,10 +5,12 @@
  */
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.filter.StatusCode;
+import io.github.arven.rs.provider.StatusCode;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.Link.JaxbAdapter;
 import javax.ws.rs.core.Response;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -17,32 +19,28 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  *
  * @author Brian Becker
  */
-@XmlRootElement
+@XmlRootElement(name = "status")
+@XmlAccessorType(XmlAccessType.NONE)
 public class StatusMessage implements StatusCode {
     
-    @XmlElement
-    private Response.Status status;
+    @XmlElement(name="code")
+    private int error;
     
-    @XmlElement
-    @XmlJavaTypeAdapter(JaxbAdapter.class)
-    private Link link;
+    @XmlElement(name="message")
+    private String message;
+    
+    public StatusMessage() { this.error = 200; }
     
     public StatusMessage(Response.Status status) {
-        this.status = status;
-        this.link = null;
+        this.error = status.getStatusCode();
     }    
+ 
+    public int error() {
+        return error;
+    }
     
-    public StatusMessage(Response.Status status, Link link) {
-        this.status = status;
-        this.link = link;
+    public String message() {
+        return this.message;
     }
    
-    public int error() {
-        return status.getStatusCode();
-    }
-    
-    public static StatusMessage created(Link l) {
-        return new StatusMessage(Response.Status.CREATED, l);
-    }
-    
 }

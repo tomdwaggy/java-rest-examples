@@ -26,9 +26,10 @@ public class Application implements Serializable {
     public static class JerseyConfig extends ResourceConfig {
 
         public JerseyConfig() {
-            packages("io.github.arven.rs.filter;io.github.arven.rs.services.example");
+            packages("io.github.arven.rs.provider;io.github.arven.rs.services.example");
             this.register(MicroBlogRestResource.class);
             this.register(JacksonFeature.class);
+            //this.register(JaxbFeature.class)
         }
     }
 

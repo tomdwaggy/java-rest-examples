@@ -27,6 +27,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Brian Becker
  */
 @Entity
+@Table(name="USERDATA")
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
 public class Person implements Serializable {
