@@ -1,5 +1,6 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.types.HypermediaEntity;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +31,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="USERDATA")
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Person implements Serializable {
+public class Person extends HypermediaEntity implements Serializable {
 
     @Id
     @XmlID @XmlAttribute

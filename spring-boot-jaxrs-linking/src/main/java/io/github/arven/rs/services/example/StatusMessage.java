@@ -33,7 +33,8 @@ public class StatusMessage implements StatusCode {
     
     public StatusMessage(Response.Status status) {
         this.error = status.getStatusCode();
-    }    
+        this.message = status.getReasonPhrase();
+    }
  
     public int error() {
         return error;

@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import javax.inject.Named;
 import java.io.Serializable;
+import javax.ws.rs.ApplicationPath;
+import javax.xml.bind.Marshaller;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -23,14 +25,15 @@ import org.springframework.context.annotation.ComponentScan;
 public class Application implements Serializable {
 
     @Named
+    @ApplicationPath("/example")
     public static class JerseyConfig extends ResourceConfig {
 
         public JerseyConfig() {
             packages("io.github.arven.rs.provider;io.github.arven.rs.services.example");
             this.register(MicroBlogRestResource.class);
             this.register(JacksonFeature.class);
-            //this.register(JaxbFeature.class)
         }
+        
     }
 
     public static void main(String[] args) {

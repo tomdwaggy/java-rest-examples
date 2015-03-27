@@ -18,6 +18,8 @@ public class Version {
     @XmlElement
     private String version;
     
+    public Version() {}
+    
     public Version(String version) {
         this.version = version;
     }

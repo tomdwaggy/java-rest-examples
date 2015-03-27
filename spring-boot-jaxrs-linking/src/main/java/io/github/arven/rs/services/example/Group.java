@@ -1,5 +1,6 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.types.HypermediaEntity;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,6 +12,7 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
@@ -26,14 +28,14 @@ import javax.xml.bind.annotation.XmlValue;
 @Table(name="GROUPDATA")
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Group implements Serializable {
+public class Group extends HypermediaEntity implements Serializable {
 
     @Id
     @XmlID @XmlAttribute
     private String id;
     
     @Basic
-    @XmlValue
+    @XmlElement
     private String description;
 	
     @ManyToMany

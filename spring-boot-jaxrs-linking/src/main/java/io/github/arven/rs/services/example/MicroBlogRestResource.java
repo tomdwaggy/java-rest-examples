@@ -1,7 +1,6 @@
 package io.github.arven.rs.services.example;
 
-import java.util.Arrays;
-import java.util.Collections;
+import io.github.arven.rs.types.Hyper;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -12,6 +11,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
@@ -28,16 +28,19 @@ import javax.ws.rs.core.SecurityContext;
  */
 
 @Named
-@Path("/example/v1")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Path("/v1")
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "text/html" })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class MicroBlogRestResource {
     
     public static int MAX_LIST_SPAN = 10;
     
-    @Inject private MicroBlogService blogService;
-    @Inject private UserRestResource userResource;
-    @Inject private GroupRestResource groupResource;
+    private final MicroBlogService blogService;
+    
+    @Inject
+    public MicroBlogRestResource(MicroBlogService blogService) {
+        this.blogService = blogService;
+    }
     
     /**
      * The most trivial example of a REST method, simply get the version and
@@ -60,12 +63,14 @@ public class MicroBlogRestResource {
      * @return  
      */
     @Path("/group") @POST @RolesAllowed({"User"})
-    public StatusMessage createGroup(Group group, final @Context SecurityContext ctx) {
+    public Hyper<StatusMessage> createGroup(Group group, final @Context SecurityContext ctx) {
         try {
             blogService.addGroup(group, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.CREATED);
+            return new Hyper.Builder(new StatusMessage(Status.CREATED))
+                    .link(Link.fromPath("/example/v1/group/{name}").rel("created").build(group.getId()))
+                    .build();
         } catch (Exception e) {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new Hyper.Builder(new StatusMessage(Status.CONFLICT)).build();
         }
     }        
     
@@ -76,7 +81,7 @@ public class MicroBlogRestResource {
      */
     @Path("/group/{group}")
     public GroupRestResource getGroupSubResource() {
-        return groupResource;
+        return new GroupRestResource(blogService);
     }
     
     /**
@@ -88,24 +93,27 @@ public class MicroBlogRestResource {
      * @return 
      */
     @Path("/user") @POST
-    public StatusMessage addUser(Person user) {
+    public Hyper<StatusMessage> addUser(Person user) {
         try {
             blogService.addUser(user);
             //return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
-            return new StatusMessage(Status.CREATED);
+            return new Hyper.Builder(new StatusMessage(Status.CREATED))
+                    .link(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()))
+                    .build();                    
         } catch (Exception e) {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new Hyper.Builder(new StatusMessage(Status.CONFLICT)).build();
         }
     }    
     
     /**
      * Get some operations on a specific user.
      * 
+     * @param name
      * @return sub resource for user
      */
     @Path("/user/{name}")
-    public UserRestResource getUserSubResource() {
-        return userResource;
+    public UserRestResource getUserSubResource(@PathParam("name") String name) {
+        return new UserRestResource(blogService);
     }
  
 }

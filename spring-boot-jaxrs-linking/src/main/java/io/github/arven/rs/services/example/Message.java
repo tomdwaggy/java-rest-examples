@@ -3,6 +3,7 @@ package io.github.arven.rs.services.example;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+import io.github.arven.rs.types.HypermediaEntity;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -34,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Message implements Serializable {
+public class Message extends HypermediaEntity implements Serializable {
         
     @Id
     @XmlID @XmlAttribute

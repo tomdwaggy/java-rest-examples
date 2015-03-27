@@ -8,6 +8,7 @@ package io.github.arven.rs.services.example;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
 import io.github.arven.rs.types.DataList;
+import io.github.arven.rs.types.Hyper;
 import java.io.Serializable;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
+import javax.ws.rs.core.Link;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
@@ -31,12 +33,15 @@ import javax.ws.rs.core.SecurityContext;
  *
  * @author Brian Becker
  */
-@Named
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "text/html" })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class GroupRestResource implements Serializable {
         
-    @Inject private MicroBlogService blogService;
+    private final MicroBlogService blogService;
+    
+    public GroupRestResource(MicroBlogService blogService) {
+        this.blogService = blogService;
+    }    
     
     /**
      * For a given group, this method gets the information and returns it back
@@ -46,8 +51,11 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @GET
-    public Group getGroupInfo(@PathParam("group") String name) {
-        return blogService.getGroup(name);
+    public Hyper<Group> getGroupInfo(@PathParam("group") String name) {
+        return new Hyper.Builder(blogService.getGroup(name))
+                .link(Link.fromPath("/example/v1/group/{group}").rel("self").build(name))
+                .link(Link.fromPath("/example/v1/group/{group}/members").rel("list").build(name))
+                .build();
     }
     
     /**
@@ -59,8 +67,11 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @Path("/members") @GET
-    public DataList getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
-        return new DataList(blogService.getGroupMembers(name), offset, MAX_LIST_SPAN, false);
+    public Hyper<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
+        return new Hyper.Builder(blogService.getGroupMembers(name))
+                .offset(offset).limit(MAX_LIST_SPAN)
+                .link(Link.fromPath("/example/v1/group/{group}/members").rel("self list").build(name)).each("delete")
+                .build();
     }
     
     /**
@@ -74,12 +85,12 @@ public class GroupRestResource implements Serializable {
      * @return  
      */
     @Path("/members/{user}") @PUT @RolesAllowed({"User"})
-    public StatusMessage joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
+    public Hyper<StatusMessage> joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.addGroupMember(name, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.CREATED);
+            return new Hyper.Builder(new StatusMessage(Status.CREATED)).build();
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new Hyper.Builder(new StatusMessage(Status.FORBIDDEN)).build();
         }
     }
     
