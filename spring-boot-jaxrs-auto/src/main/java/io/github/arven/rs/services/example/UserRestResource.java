@@ -5,6 +5,7 @@
  */
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.provider.HyperlinkedData;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
 import io.github.arven.rs.types.HyperList;
@@ -36,6 +37,7 @@ import javax.ws.rs.core.UriBuilder;
  */
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "text/html" })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@HyperlinkedData
 public class UserRestResource implements Serializable {
         
     private final MicroBlogService blogService;

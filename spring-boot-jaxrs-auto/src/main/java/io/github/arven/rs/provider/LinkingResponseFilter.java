@@ -14,23 +14,21 @@ package io.github.arven.rs.provider;
 import io.github.arven.rs.types.HyperList;
 import io.github.arven.rs.types.HypermediaEntity;
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import java.util.List;
+import javax.inject.Named;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
+import javax.interceptor.InvocationContext;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
-import javax.ws.rs.container.ContainerResponseFilter;
-import javax.ws.rs.core.GenericEntity;
-import javax.ws.rs.core.Link;
-import javax.ws.rs.ext.Provider;
-import org.jvnet.tiger_types.Types;
 
 /**
  *
  * @author brian.becker
  */
-@Provider
-public class LinkingResponseFilter implements ContainerResponseFilter {
+@Interceptor
+@HyperlinkedData
+public class LinkingResponseFilter {
     
     public static boolean isListOf(Class c, Object entity) {
         if(List.class.isInstance(entity)) {
@@ -45,6 +43,18 @@ public class LinkingResponseFilter implements ContainerResponseFilter {
         }
         return false;
     }
+    
+    @AroundInvoke
+    public Object intercept(InvocationContext ctx) throws Exception {
+        System.out.println("<<<<< REPLACING ENTITY >>>>>");
+        Object returnValue = ctx.proceed();
+        System.out.println("<<<< INTERCEPTING AT ALL >>>>");
+        if(HypermediaEntity.class.isInstance(returnValue) || isListOf(HypermediaEntity.class, returnValue)) {
+            return new HyperList.Builder(returnValue).build();
+        } else {
+            return returnValue;
+        }
+    }
 
     public void filter(ContainerRequestContext req, ContainerResponseContext res) throws IOException {
         //Type type = Types.createParameterizedType(HyperList.class, res.getEntityType());
@@ -57,13 +67,13 @@ public class LinkingResponseFilter implements ContainerResponseFilter {
         //}
         
         //System.out.println("TIGER: " + type.toString());
-        if(HypermediaEntity.class.isInstance(res.getEntity()) || isListOf(HypermediaEntity.class, res.getEntity())) { //|| isListOf(HypermediaEntity.class, res.getEntity())) {
-            System.out.println("<<<<< REPLACING ENTITY >>>>>");
-            res.setEntity(new HyperList.Builder(res.getEntity())
-                    .link(Link.fromPath("/").build())
-                    .build()
-            );
-        }
+        //if(HypermediaEntity.class.isInstance(res.getEntity()) || isListOf(HypermediaEntity.class, res.getEntity())) { //|| isListOf(HypermediaEntity.class, res.getEntity())) {
+        //    System.out.println("<<<<< REPLACING ENTITY >>>>>");
+        //    res.setEntity(new HyperList.Builder(res.getEntity())
+        //            .link(Link.fromPath("/").build())
+        //            .build()
+        //    );
+        //}
     }
     
 }
