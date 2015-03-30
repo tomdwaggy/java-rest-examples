@@ -25,11 +25,11 @@ than
  * bandwidth.
  */
 @Provider
-public class OnlyReliableMarshaller implements ContextResolver<Marshaller> {
+public class GetPackageMarshaller implements ContextResolver<Marshaller> {
 
         private final Providers providers;
 
-        public OnlyReliableMarshaller(@Context Providers providers) {
+        public GetPackageMarshaller(@Context Providers providers) {
                 this.providers = providers;
         }
 
@@ -39,11 +39,9 @@ public class OnlyReliableMarshaller implements ContextResolver<Marshaller> {
                 JAXBContext context = JAXBContext.newInstance("io.github.arven.rs.services.example:io.github.arven.rs.types");
                 Marshaller marshaller = context.createMarshaller();
                 marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
-                System.out.println("<<<<RETURNING MARSHALLER>>>>");
                 return marshaller;
             } catch (JAXBException je) {
                 // XXX Log?
-                System.out.println("<<<<RETURNING NULLLLLLLL>>>> " + je.getMessage());
                 return null;
             }
         }

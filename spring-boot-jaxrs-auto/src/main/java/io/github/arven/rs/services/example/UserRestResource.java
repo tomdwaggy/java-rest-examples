@@ -7,8 +7,9 @@ package io.github.arven.rs.services.example;
 
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.types.Hyper;
+import io.github.arven.rs.types.HyperList;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
@@ -52,10 +53,8 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @GET
-    public Hyper<Person> getUser(@PathParam("name") String name) {
-        return new Hyper.Builder(blogService.getUser(name))
-                .link(Link.fromUriBuilder(uri).rel("self").build(name))
-                .build();
+    public Person getUser(@PathParam("name") String name) {
+        return blogService.getUser(name);
     }
     
     /**
@@ -68,14 +67,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @DELETE @RolesAllowed({"User"})
-    public Hyper<StatusMessage> removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
+    public StatusMessage removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeUser(name);
-            return new Hyper.Builder(new StatusMessage(Status.OK))
-                .link(Link.fromUriBuilder(uri).rel("deleted").build(name))
-                .build();
+            return new StatusMessage(Status.OK);
         } else {
-            return new Hyper.Builder(new StatusMessage(Status.FORBIDDEN)).build();
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -88,9 +85,8 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @Path("/friends") @GET
-    public Hyper<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return new Hyper.Builder(blogService.getFriends(name))
-            .link(Link.fromUriBuilder(uri.clone().path("/friends")).rel("self list").build(name)).each("show delete").build();
+    public List<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return blogService.getFriends(name);
     }
     
     /**
@@ -108,13 +104,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/friends/{friend}") @PUT @RolesAllowed({"User"})
-    public Hyper<StatusMessage> addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
+    public StatusMessage addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addFriend(name, friend);
-            return new Hyper.Builder(new StatusMessage(Status.CREATED))
-                .link(Link.fromUriBuilder(uri.clone().path("/friends/{friend}")).rel("self delete").build(name, friend)).build();
+            return new StatusMessage(Status.CREATED);
         } else {
-            return new Hyper.Builder(new StatusMessage(Status.FORBIDDEN)).build();
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -131,13 +126,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/friends/{friend}") @DELETE @RolesAllowed({"User"})
-    public Hyper<StatusMessage> removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
+    public StatusMessage removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeFriend(name, friend);
-            return new Hyper.Builder(new StatusMessage(Status.OK))
-                .link(Link.fromUriBuilder(uri.clone().path("/friends/{friend}")).rel("deleted").build(name, friend)).build();
+            return new StatusMessage(Status.OK);
         } else {
-            return new Hyper.Builder(new StatusMessage(Status.FORBIDDEN)).build();
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     
@@ -152,10 +146,8 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @GET
-    @Path("/messages") public Hyper<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return new Hyper.Builder(blogService.getPosts(name))
-            .link(Link.fromUriBuilder(uri.clone().path("/messages")).rel("self post").build(name))
-            .reverse(true).limit(MAX_LIST_SPAN).offset(offset).each("show", "delete").build();        
+    @Path("/messages") public HyperList<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return new HyperList.Builder(blogService.getPosts(name)).build();
     }
     
     /**
@@ -170,13 +162,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/messages") @POST @RolesAllowed({"User"})
-    public Hyper<StatusMessage> postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
+    public StatusMessage postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
-            return new Hyper.Builder(new StatusMessage(Status.CREATED))
-                .link(Link.fromUriBuilder(uri.clone().path("/messages")).rel("self").build(name, post.getId())).build();
+            return new StatusMessage(Status.CREATED);
         } else {
-            return new Hyper.Builder(new StatusMessage(Status.FORBIDDEN)).build();
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     

@@ -7,12 +7,10 @@ package io.github.arven.rs.services.example;
 
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.types.DataList;
-import io.github.arven.rs.types.Hyper;
+import io.github.arven.rs.types.HyperList;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
-import javax.inject.Inject;
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -51,11 +49,8 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @GET
-    public Hyper<Group> getGroupInfo(@PathParam("group") String name) {
-        return new Hyper.Builder(blogService.getGroup(name))
-                .link(Link.fromPath("/example/v1/group/{group}").rel("self").build(name))
-                .link(Link.fromPath("/example/v1/group/{group}/members").rel("list").build(name))
-                .build();
+    public Group getGroupInfo(@PathParam("group") String name) {
+        return blogService.getGroup(name);
     }
     
     /**
@@ -67,11 +62,8 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @Path("/members") @GET
-    public Hyper<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
-        return new Hyper.Builder(blogService.getGroupMembers(name))
-                .offset(offset).limit(MAX_LIST_SPAN)
-                .link(Link.fromPath("/example/v1/group/{group}/members").rel("self list").build(name)).each("delete")
-                .build();
+    public List<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
+        return blogService.getGroupMembers(name);
     }
     
     /**
@@ -85,12 +77,12 @@ public class GroupRestResource implements Serializable {
      * @return  
      */
     @Path("/members/{user}") @PUT @RolesAllowed({"User"})
-    public Hyper<StatusMessage> joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
+    public StatusMessage joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.addGroupMember(name, ctx.getUserPrincipal().getName());
-            return new Hyper.Builder(new StatusMessage(Status.CREATED)).build();
+            return new StatusMessage(Status.CREATED);
         } else {
-            return new Hyper.Builder(new StatusMessage(Status.FORBIDDEN)).build();
+            return new StatusMessage(Status.FORBIDDEN);
         }
     }
     

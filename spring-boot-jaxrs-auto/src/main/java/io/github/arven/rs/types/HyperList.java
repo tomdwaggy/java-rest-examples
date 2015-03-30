@@ -1,6 +1,9 @@
 package io.github.arven.rs.types;
 
 import com.google.common.collect.Lists;
+import io.github.arven.rs.services.example.Group;
+import io.github.arven.rs.services.example.Message;
+import io.github.arven.rs.services.example.Person;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
@@ -21,7 +25,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
  */
 @XmlRootElement(name = "api")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Hyper<ResponseType> {
+@XmlSeeAlso({Person.class, Group.class, Message.class})
+public class HyperList<ResponseType> {
     
     private Integer offset = null;
     private boolean reverse = false;
@@ -36,12 +41,12 @@ public class Hyper<ResponseType> {
     @XmlAnyElement
     private List<ResponseType> content;
     
-    public Hyper() {
+    public HyperList() {
     }
     
     public static class Builder<ResponseType> {
         
-        private final Hyper<ResponseType> response = new Hyper();
+        private final HyperList<ResponseType> response = new HyperList();
         
         public Builder(ResponseType body) {
             response.content = Arrays.asList(body);
@@ -90,7 +95,7 @@ public class Hyper<ResponseType> {
             return this;
         }
 
-        public Hyper<ResponseType> build() {
+        public HyperList<ResponseType> build() {
             if(response.self != null && response.eachActions != null) {
                 for(Object o : response.content) {
                     if(o instanceof HypermediaEntity) {

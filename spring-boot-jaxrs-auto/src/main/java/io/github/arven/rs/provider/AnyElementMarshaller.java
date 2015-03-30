@@ -5,10 +5,7 @@
  */
 package io.github.arven.rs.provider;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Provider;
 import javax.ws.rs.ext.Providers;
@@ -25,11 +22,11 @@ than
  * bandwidth.
  */
 @Provider
-public class OnlyReliableMarshaller implements ContextResolver<Marshaller> {
+public class AnyElementMarshaller implements ContextResolver<Marshaller> {
 
         private final Providers providers;
 
-        public OnlyReliableMarshaller(@Context Providers providers) {
+        public AnyElementMarshaller(@Context Providers providers) {
                 this.providers = providers;
         }
 
@@ -42,7 +39,6 @@ public class OnlyReliableMarshaller implements ContextResolver<Marshaller> {
                 System.out.println("<<<<RETURNING MARSHALLER>>>>");
                 return marshaller;
             } catch (JAXBException je) {
-                // XXX Log?
                 System.out.println("<<<<RETURNING NULLLLLLLL>>>> " + je.getMessage());
                 return null;
             }

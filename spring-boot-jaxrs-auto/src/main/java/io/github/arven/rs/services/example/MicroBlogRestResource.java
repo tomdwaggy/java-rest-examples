@@ -1,6 +1,6 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.types.Hyper;
+import io.github.arven.rs.types.HyperList;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -63,14 +63,12 @@ public class MicroBlogRestResource {
      * @return  
      */
     @Path("/group") @POST @RolesAllowed({"User"})
-    public Hyper<StatusMessage> createGroup(Group group, final @Context SecurityContext ctx) {
+    public StatusMessage createGroup(Group group, final @Context SecurityContext ctx) {
         try {
             blogService.addGroup(group, ctx.getUserPrincipal().getName());
-            return new Hyper.Builder(new StatusMessage(Status.CREATED))
-                    .link(Link.fromPath("/example/v1/group/{name}").rel("created").build(group.getId()))
-                    .build();
-        } catch (Exception e) {
-            return new Hyper.Builder(new StatusMessage(Status.CONFLICT)).build();
+            return new StatusMessage(Status.CREATED);
+        } catch(Exception e) {
+            return new StatusMessage(Status.CONFLICT);
         }
     }        
     
@@ -93,15 +91,13 @@ public class MicroBlogRestResource {
      * @return 
      */
     @Path("/user") @POST
-    public Hyper<StatusMessage> addUser(Person user) {
+    public StatusMessage addUser(Person user) {
         try {
             blogService.addUser(user);
             //return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
-            return new Hyper.Builder(new StatusMessage(Status.CREATED))
-                    .link(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()))
-                    .build();                    
+            return new StatusMessage(Status.CREATED);                 
         } catch (Exception e) {
-            return new Hyper.Builder(new StatusMessage(Status.CONFLICT)).build();
+            return new StatusMessage(Status.INTERNAL_SERVER_ERROR);
         }
     }    
     
