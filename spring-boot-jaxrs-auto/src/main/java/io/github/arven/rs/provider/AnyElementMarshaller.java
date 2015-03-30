@@ -21,7 +21,7 @@ than
  * declaration in generated XML, which otherwise would consume considerable
  * bandwidth.
  */
-@Provider
+//@Provider
 public class AnyElementMarshaller implements ContextResolver<Marshaller> {
 
         private final Providers providers;

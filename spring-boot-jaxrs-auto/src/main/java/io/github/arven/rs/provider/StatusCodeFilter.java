@@ -16,7 +16,7 @@ import javax.ws.rs.ext.Provider;
  *
  * @author brian.becker
  */
-@Provider
+//@Provider
 public class StatusCodeFilter implements ContainerResponseFilter {
 
     public void filter(ContainerRequestContext req, ContainerResponseContext res) throws IOException {
