@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import io.github.arven.rs.services.example.Group;
 import io.github.arven.rs.services.example.Message;
 import io.github.arven.rs.services.example.Person;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -110,26 +111,31 @@ public class Hyper<ResponseType> {
             response.eachActions.addAll(Arrays.asList(action));
             return this;
         }
-
+        
         public Hyper<ResponseType> build() {
             if(response.self != null) {
-                System.out.println("<<<<<<< NONEMPTY RESPONSE >>>>>>>");
                 for(Object o : response.content) {
-                    if(Linked.class.isInstance(o)) {
-                        System.out.println("<<<<<< ADDDING LINKS >>>>>>");
+                    if(Linked.class.isInstance(o) && o.getClass().isAnnotationPresent(HyperlinkPath.class)) {
+                        HyperlinkPath id = (HyperlinkPath) o.getClass().getAnnotation(HyperlinkPath.class);
                         Linked r = (Linked) o;
                         r.getLinks().clear();
                         Link.Builder lb;
-                        if(response.content.size() > 1) {
-                            lb = Link.fromUriBuilder(response.self.clone().path(r.getId()));
-                        } else {
-                            lb = Link.fromUriBuilder(response.self.clone());
-                        }
+                        lb = Link.fromPath(id.value());
                         for(String s : response.eachActions) {
                             lb.rel(s);
                         }
-                        r.getLinks().add(lb.rel("self").build());
-                        System.out.println(r);
+                        Link self = lb.rel("self").build(r.getId());
+                        r.getLinks().add(self);
+                        for(Method m : o.getClass().getMethods()) {
+                            if(m.isAnnotationPresent(Action.class)) {
+                                Action act = (Action) m.getAnnotation(Action.class);
+                                if(act.target().equals("")) {
+                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.value())).rel(act.value()).build());
+                                } else {
+                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.target())).rel(act.value()).build());
+                                }
+                            }
+                        }
                     }
                 }
             }

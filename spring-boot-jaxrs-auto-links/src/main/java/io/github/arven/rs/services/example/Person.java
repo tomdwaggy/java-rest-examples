@@ -1,5 +1,7 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.types.Action;
+import io.github.arven.rs.types.HyperlinkPath;
 import io.github.arven.rs.types.Linked;
 import java.io.Serializable;
 import java.util.Arrays;
@@ -16,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
+import javax.ws.rs.HttpMethod;
 import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -36,6 +39,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="USERDATA")
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
+@HyperlinkPath("/example/v1/user/{id}")
 public class Person implements Serializable, Linked<Link> {
 
     @Id
@@ -155,6 +159,7 @@ public class Person implements Serializable, Linked<Link> {
      * Get the friends this user has
      * @return 
      */
+    @Action("friends")
     public List<Person> getFriends() {
     	return this.friends;
     }
@@ -177,7 +182,9 @@ public class Person implements Serializable, Linked<Link> {
     
     /**
      * Get the email address of this user
+     * @return 
      */
+    @Action("email")
     public String getEmail() {
         return this.email;
     }
