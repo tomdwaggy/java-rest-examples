@@ -1,9 +1,8 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.hypertext.HyperlinkAction;
 import io.github.arven.rs.hypertext.HyperlinkId;
 import io.github.arven.rs.hypertext.HyperlinkPath;
-import io.github.arven.rs.hypertext.HyperlinkIdentifier;
+import io.github.arven.rs.hypertext.InjectHyperlinks;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -38,7 +37,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
 @HyperlinkPath("/example/v1/user/{id}")
-public class Person implements Serializable, HyperlinkIdentifier {
+public class Person implements Serializable {
 
     @Id
     @XmlID @XmlAttribute
@@ -134,7 +133,6 @@ public class Person implements Serializable, HyperlinkIdentifier {
      * Get the list of messages for this user
      * @return 
      */
-    @HyperlinkAction("messages")
     public List<Message> getMessages() {
     	return this.messages;
     }
@@ -159,7 +157,6 @@ public class Person implements Serializable, HyperlinkIdentifier {
      * Get the friends this user has
      * @return 
      */
-    @HyperlinkAction("friends")
     public List<Person> getFriends() {
     	return this.friends;
     }
@@ -191,7 +188,7 @@ public class Person implements Serializable, HyperlinkIdentifier {
     @Transient
     private List<Link> links = new LinkedList<Link>();
 
-    @Override
+    @InjectHyperlinks
     @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
     public Collection<Link> getLinks() {

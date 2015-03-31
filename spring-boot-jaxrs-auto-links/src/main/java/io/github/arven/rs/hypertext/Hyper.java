@@ -8,8 +8,15 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
 import javax.ws.rs.core.Link;
 import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -20,6 +27,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import org.javatuples.Pair;
+import org.javatuples.Tuple;
 
 /**
  * The Hyper class is a wrapper for most data types, including lists, which
@@ -43,6 +52,7 @@ public class Hyper<ResponseType> {
     private UriBuilder self = null;
     private List<String> eachActions = new LinkedList<String>();
     private String type = "application/xml";
+    private Class<?> matcher = null;
     
     @XmlAttribute
     public Integer getSize() {
@@ -53,8 +63,6 @@ public class Hyper<ResponseType> {
         }
     }
     
-    @XmlElement(name = "link")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)
     private final Collection<Link> links = new LinkedList<Link>();
     
     @XmlAnyElement
@@ -125,30 +133,45 @@ public class Hyper<ResponseType> {
             return this;
         }
         
+        public Builder<ResponseType> matcher(Class matched) {
+            response.matcher = matched;
+            return this;
+        }
+        
         public Hyper<ResponseType> build() {
             if(response.self != null) {
                 for(Object o : response.content) {
-                    if(HyperlinkIdentifier.class.isInstance(o) && o.getClass().isAnnotationPresent(HyperlinkPath.class)) {
+                    if(o.getClass().isAnnotationPresent(HyperlinkPath.class)) {
                         HyperlinkPath id = (HyperlinkPath) o.getClass().getAnnotation(HyperlinkPath.class);
-                        HyperlinkIdentifier r = (HyperlinkIdentifier) o;
-                        r.getLinks().clear();
-                        Link.Builder lb;
-                        lb = Link.fromUri(UriBuilder.fromPath(id.value()).buildFromMap(HyperlinkUtils.getHyperlinkValues(r)));
-                        for(String s : response.eachActions) {
-                            lb.rel(s);
-                        }
-                        Link self = lb.rel("self").type(response.type).build();
-                        r.getLinks().add(self);
-                        for(Method m : o.getClass().getMethods()) {
-                            if(m.isAnnotationPresent(HyperlinkAction.class)) {
-                                HyperlinkAction act = (HyperlinkAction) m.getAnnotation(HyperlinkAction.class);
-                                if(act.target().equals("")) {
-                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.value())).rel(act.value()).type(response.type).build());
-                                } else {
-                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.target())).rel(act.value()).type(response.type).build());
+                        System.out.println(response.matcher);
+                        List<Link> links = new LinkedList<Link>();
+                        Map<String, String> params = HyperlinkUtils.getHyperlinkValues(o);
+                        if(response.matcher != null) {
+                            for(Method m : response.matcher.getSuperclass().getMethods()) {
+                                if(m.isAnnotationPresent(Hyperlinked.class)) {
+                                    String relpath = "";
+                                    Hyperlinked hlr = (Hyperlinked) m.getAnnotation(Hyperlinked.class);
+                                    if(m.isAnnotationPresent(Path.class)) {
+                                        Path p = (Path)m.getAnnotation(Path.class);
+                                        relpath = p.value();
+                                    }
+                                    if(m.isAnnotationPresent(GET.class)) {
+                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("self").build());
+                                    }
+                                    if(m.isAnnotationPresent(DELETE.class)) {
+                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("remove").build());
+                                    }
+                                    if(m.isAnnotationPresent(POST.class)) {
+                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("build").build());
+                                    }
+                                    if(m.isAnnotationPresent(PUT.class)) {
+                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("update").build());
+                                    }                                    
                                 }
                             }
                         }
+                        System.out.println(links);
+                        HyperlinkUtils.injectHyperlinks(o, links);
                     }
                 }
             }

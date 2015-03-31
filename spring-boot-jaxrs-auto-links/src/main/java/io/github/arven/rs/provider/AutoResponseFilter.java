@@ -3,7 +3,7 @@ package io.github.arven.rs.provider;
 import io.github.arven.rs.hypertext.WebStatusCode;
 import io.github.arven.rs.hypertext.ListView;
 import io.github.arven.rs.hypertext.Hyper;
-import io.github.arven.rs.hypertext.HyperlinkIdentifier;
+import io.github.arven.rs.hypertext.HyperlinkPath;
 import java.io.IOException;
 import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -33,17 +33,27 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             res.setStatus(s.error());
         }
         
-        if(HyperlinkIdentifier.class.isInstance(res.getEntity())) {
+        String type = "application/xml";
+        
+        List<Object> matched =  req.getUriInfo().getMatchedResources();
+        Class matchedClass = null;
+        if(matched.size() > 0) {
+            matchedClass = matched.get(0).getClass();
+        }
+        
+        if(res.getEntity().getClass().isAnnotationPresent(HyperlinkPath.class)) {
             res.setEntity(
                 new Hyper.Builder().entity(res.getEntity())
-                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())
+                        .matcher(matchedClass)
+                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
                         .type(res.getMediaType().toString())
                         .build()
             );
         } else if(List.class.isInstance(res.getEntity())) {
             res.setEntity(
                 new Hyper.Builder().entityList((List)res.getEntity())
-                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())
+                        .matcher(matchedClass)
+                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
                         .type(res.getMediaType().toString())
                         .build()
             );
@@ -51,7 +61,8 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             ListView dl = (ListView)res.getEntity();
             res.setEntity(
                 new Hyper.Builder().entityList(dl.collection()).limit(dl.limit()).offset(dl.offset()).reverse(dl.reverse())
-                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())
+                        .matcher(matchedClass)
+                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
                         .type(res.getMediaType().toString())
                         .build()
             );

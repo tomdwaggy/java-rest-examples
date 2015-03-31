@@ -46,18 +46,18 @@ public class WebStatusResponse implements WebStatusCode {
         this.link = Arrays.asList();
     }
     
-    private static void addLink(List links, HyperlinkIdentifier id, String rel) {
+    private static void addLink(List links, Object id, String rel) {
         if(id.getClass().isAnnotationPresent(HyperlinkPath.class)) {
             HyperlinkPath path = id.getClass().getAnnotation(HyperlinkPath.class);
             links.add(Link.fromUri(UriBuilder.fromPath(path.value()).buildFromMap(HyperlinkUtils.getHyperlinkValues(id))).rel(rel).build());
         }
     }
     
-    public WebStatusResponse(Response.Status status, HyperlinkIdentifier... ids) {
+    public WebStatusResponse(Response.Status status, Object... ids) {
         this(status);
         this.link = new LinkedList();
         String type = "self";
-        for(HyperlinkIdentifier id : ids) {
+        for(Object id : ids) {
             addLink(this.link, id, type);
             type = "target";
         }

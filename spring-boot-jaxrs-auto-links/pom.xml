@@ -84,7 +84,12 @@
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
                 <version>3.1</version>
-            </dependency>          
+            </dependency>
+            <dependency>
+                    <groupId>org.javatuples</groupId>
+                    <artifactId>javatuples</artifactId>
+                    <version>1.2</version>
+            </dependency>    
 	</dependencies>
 
 	<properties>

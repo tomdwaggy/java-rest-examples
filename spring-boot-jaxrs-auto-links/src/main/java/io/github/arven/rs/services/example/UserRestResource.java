@@ -5,6 +5,7 @@
  */
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.hypertext.Hyperlinked;
 import io.github.arven.rs.hypertext.WebStatusResponse;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
@@ -49,7 +50,7 @@ public class UserRestResource implements Serializable {
      * @param name
      * @return 
      */
-    @GET
+    @GET @Hyperlinked
     public Person getUser(@PathParam("name") String name) {
         return blogService.getUser(name);
     }
@@ -63,7 +64,8 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @DELETE @RolesAllowed({"User"})
+    @DELETE @Hyperlinked
+    @RolesAllowed({"User"})
     public WebStatusResponse removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeUser(name);
@@ -81,7 +83,7 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
-    @Path("/friends") @GET
+    @Path("/friends") @GET @Hyperlinked
     public ListView<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
         return new ListView<Person>(blogService.getFriends(name)).offset(offset).limit(MAX_LIST_SPAN);
     }
@@ -142,7 +144,7 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
-    @GET
+    @GET @Hyperlinked
     @Path("/messages") public ListView<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
         return new ListView(blogService.getPosts(name)).offset(offset).reverse(true);
     }
