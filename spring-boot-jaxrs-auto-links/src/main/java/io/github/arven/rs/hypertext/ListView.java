@@ -1,4 +1,4 @@
-package io.github.arven.rs.types;
+package io.github.arven.rs.hypertext;
 
 import io.github.arven.rs.services.example.Group;
 import io.github.arven.rs.services.example.Message;

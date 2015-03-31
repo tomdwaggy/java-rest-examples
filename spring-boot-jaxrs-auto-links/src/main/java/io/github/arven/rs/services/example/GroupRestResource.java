@@ -5,9 +5,10 @@
  */
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.hypertext.WebStatusResponse;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.types.ListView;
+import io.github.arven.rs.hypertext.ListView;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
@@ -75,12 +76,12 @@ public class GroupRestResource implements Serializable {
      * @return  
      */
     @Path("/members/{user}") @PUT @RolesAllowed({"User"})
-    public StatusMessage joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
+    public WebStatusResponse joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.addGroupMember(name, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.CREATED);
+            return new WebStatusResponse(Status.CREATED, blogService.getUser(user), blogService.getGroup(name));
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -95,12 +96,12 @@ public class GroupRestResource implements Serializable {
      * @return  
      */
     @Path("/members/{user}") @DELETE @RolesAllowed({"User"})
-    public StatusMessage leaveGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
+    public WebStatusResponse leaveGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.leaveGroup(name, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.OK);
+            return new WebStatusResponse(Status.OK);
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     

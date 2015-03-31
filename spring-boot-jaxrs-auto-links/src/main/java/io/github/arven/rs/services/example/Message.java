@@ -3,7 +3,8 @@ package io.github.arven.rs.services.example;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import io.github.arven.rs.types.Linked;
+import io.github.arven.rs.hypertext.HyperlinkPath;
+import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,7 +40,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Message implements Serializable, Linked<Link> {
+@HyperlinkPath("/example/v1/message/{id}")
+public class Message implements Serializable, HyperlinkIdentifier {
         
     @Id
     @XmlID @XmlAttribute
@@ -94,6 +96,15 @@ public class Message implements Serializable, Linked<Link> {
     }    
     
     /**
+     * Get the group id
+     * 
+     * @return	the group id
+     */
+    public Object getLinkedId() {
+    	return this.id;
+    }        
+    
+    /**
      * Get the list of tags from the message by parsing the string with a
      * regular expression. The tags are in the format #tagname throughout
      * the message, and they should all be picked up by the parser.
@@ -114,7 +125,7 @@ public class Message implements Serializable, Linked<Link> {
     private List<Link> links = new LinkedList<Link>();
 
     @Override
-    @XmlElement(name = "link")
+    @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
     public Collection<Link> getLinks() {
         return links;

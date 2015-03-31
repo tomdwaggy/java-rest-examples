@@ -1,6 +1,8 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.types.Linked;
+import io.github.arven.rs.hypertext.HyperlinkAction;
+import io.github.arven.rs.hypertext.HyperlinkPath;
+import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,7 +21,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlValue;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
@@ -33,7 +34,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="GROUPDATA")
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Group implements Serializable, Linked<Link> {
+@HyperlinkPath("/example/v1/group/{id}")
+public class Group implements Serializable, HyperlinkIdentifier {
 
     @Id
     @XmlID @XmlAttribute
@@ -81,9 +83,19 @@ public class Group implements Serializable, Linked<Link> {
     }
     
     /**
+     * Get the group id
+     * 
+     * @return	the group id
+     */
+    public Object getLinkedId() {
+    	return this.id;
+    }    
+    
+    /**
      * Get the list of members
      * @return 
      */
+    @HyperlinkAction("members")
     public List<Person> getMembers() {
     	return this.members;
     }
@@ -100,7 +112,7 @@ public class Group implements Serializable, Linked<Link> {
     private List<Link> links = new LinkedList<Link>();
 
     @Override
-    @XmlElement(name = "link")
+    @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
     public Collection<Link> getLinks() {
         return links;

@@ -5,9 +5,10 @@
  */
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.hypertext.WebStatusResponse;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.types.ListView;
+import io.github.arven.rs.hypertext.ListView;
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
@@ -63,12 +64,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @DELETE @RolesAllowed({"User"})
-    public StatusMessage removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
+    public WebStatusResponse removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeUser(name);
-            return new StatusMessage(Status.OK);
+            return new WebStatusResponse(Status.OK);
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -100,12 +101,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/friends/{friend}") @PUT @RolesAllowed({"User"})
-    public StatusMessage addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
+    public WebStatusResponse addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addFriend(name, friend);
-            return new StatusMessage(Status.CREATED);
+            return new WebStatusResponse(Status.CREATED, blogService.getUser(name), blogService.getUser(friend));
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -122,12 +123,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/friends/{friend}") @DELETE @RolesAllowed({"User"})
-    public StatusMessage removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
+    public WebStatusResponse removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeFriend(name, friend);
-            return new StatusMessage(Status.OK);
+            return new WebStatusResponse(Status.OK);
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -158,12 +159,12 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @Path("/messages") @POST @RolesAllowed({"User"})
-    public StatusMessage postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
+    public WebStatusResponse postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
-            return new StatusMessage(Status.CREATED);
+            return new WebStatusResponse(Status.CREATED);
         } else {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     

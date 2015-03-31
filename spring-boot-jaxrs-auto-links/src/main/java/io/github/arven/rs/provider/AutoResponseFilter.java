@@ -6,9 +6,10 @@ package io.github.arven.rs.provider;
  * and open the template in the editor.
  */
 
-import io.github.arven.rs.types.ListView;
-import io.github.arven.rs.types.Hyper;
-import io.github.arven.rs.types.Linked;
+import io.github.arven.rs.hypertext.WebStatusCode;
+import io.github.arven.rs.hypertext.ListView;
+import io.github.arven.rs.hypertext.Hyper;
+import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.IOException;
 import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -25,12 +26,12 @@ import javax.ws.rs.ext.Provider;
 public class AutoResponseFilter implements ContainerResponseFilter {
 
     public void filter(ContainerRequestContext req, ContainerResponseContext res) throws IOException {
-        if(res.getEntity() instanceof StatusCode && res.getStatus() == 200) {
-            StatusCode s = (StatusCode) res.getEntity();
+        if(res.getEntity() instanceof WebStatusCode && res.getStatus() == 200) {
+            WebStatusCode s = (WebStatusCode) res.getEntity();
             res.setStatus(s.error());
         }
         
-        if(Linked.class.isInstance(res.getEntity())) {
+        if(HyperlinkIdentifier.class.isInstance(res.getEntity())) {
             res.setEntity(
                 new Hyper.Builder().entity(res.getEntity())
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())

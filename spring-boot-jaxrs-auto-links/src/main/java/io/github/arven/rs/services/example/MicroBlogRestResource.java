@@ -1,5 +1,6 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.hypertext.WebStatusResponse;
 import java.util.Arrays;
 import java.util.Collections;
 import javax.annotation.security.RolesAllowed;
@@ -60,12 +61,12 @@ public class MicroBlogRestResource {
      * @return  
      */
     @Path("/group") @POST @RolesAllowed({"User"})
-    public StatusMessage createGroup(Group group, final @Context SecurityContext ctx) {
+    public WebStatusResponse createGroup(Group group, final @Context SecurityContext ctx) {
         try {
             blogService.addGroup(group, ctx.getUserPrincipal().getName());
-            return new StatusMessage(Status.CREATED);
+            return new WebStatusResponse(Status.CREATED, group);
         } catch (Exception e) {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }        
     
@@ -88,13 +89,13 @@ public class MicroBlogRestResource {
      * @return 
      */
     @Path("/user") @POST
-    public StatusMessage addUser(Person user) {
+    public WebStatusResponse addUser(Person user) {
         try {
             blogService.addUser(user);
             //return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
-            return new StatusMessage(Status.CREATED);
+            return new WebStatusResponse(Status.CREATED, user);
         } catch (Exception e) {
-            return new StatusMessage(Status.FORBIDDEN);
+            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }    
     

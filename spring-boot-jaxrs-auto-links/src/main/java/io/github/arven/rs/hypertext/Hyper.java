@@ -1,4 +1,4 @@
-package io.github.arven.rs.types;
+package io.github.arven.rs.hypertext;
 
 import com.google.common.collect.Lists;
 import io.github.arven.rs.services.example.Group;
@@ -115,20 +115,20 @@ public class Hyper<ResponseType> {
         public Hyper<ResponseType> build() {
             if(response.self != null) {
                 for(Object o : response.content) {
-                    if(Linked.class.isInstance(o) && o.getClass().isAnnotationPresent(HyperlinkPath.class)) {
+                    if(HyperlinkIdentifier.class.isInstance(o) && o.getClass().isAnnotationPresent(HyperlinkPath.class)) {
                         HyperlinkPath id = (HyperlinkPath) o.getClass().getAnnotation(HyperlinkPath.class);
-                        Linked r = (Linked) o;
+                        HyperlinkIdentifier r = (HyperlinkIdentifier) o;
                         r.getLinks().clear();
                         Link.Builder lb;
                         lb = Link.fromPath(id.value());
                         for(String s : response.eachActions) {
                             lb.rel(s);
                         }
-                        Link self = lb.rel("self").build(r.getId());
+                        Link self = lb.rel("self").build(r.getLinkedId());
                         r.getLinks().add(self);
                         for(Method m : o.getClass().getMethods()) {
-                            if(m.isAnnotationPresent(Action.class)) {
-                                Action act = (Action) m.getAnnotation(Action.class);
+                            if(m.isAnnotationPresent(HyperlinkAction.class)) {
+                                HyperlinkAction act = (HyperlinkAction) m.getAnnotation(HyperlinkAction.class);
                                 if(act.target().equals("")) {
                                     r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.value())).rel(act.value()).build());
                                 } else {

@@ -1,6 +1,7 @@
-package io.github.arven.rs.types;
+package io.github.arven.rs.hypertext;
 
 import java.util.Collection;
+import javax.ws.rs.core.Link;
 
 /**
 * Interface to mark objects that are identifiable by an ID of any type.
@@ -8,12 +9,12 @@ import java.util.Collection;
 * @author Oliver Gierke
  * @param <ID>
 */
-public interface Linked<LinkType> {
+public interface HyperlinkIdentifier {
     /**
     * Returns the id identifying the object.
     *
     * @return the identifier or {@literal null} if not available.
     */ 
-    public abstract Collection<LinkType> getLinks();
-    public abstract String getId();
+    public abstract Collection<Link> getLinks();
+    public abstract Object getLinkedId();
 }
