@@ -7,8 +7,9 @@ package io.github.arven.rs.services.example;
 
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.types.DataList;
+import io.github.arven.rs.types.ListView;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -80,8 +81,8 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @Path("/friends") @GET
-    public DataList getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return new DataList(blogService.getFriends(name), offset, MAX_LIST_SPAN, false);
+    public ListView<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return new ListView<Person>(blogService.getFriends(name)).offset(offset).limit(MAX_LIST_SPAN);
     }
     
     /**
@@ -141,8 +142,8 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @GET
-    @Path("/messages") public DataList getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return new DataList(blogService.getPosts(name), offset, MAX_LIST_SPAN, true);
+    @Path("/messages") public List<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return blogService.getPosts(name);
     }
     
     /**

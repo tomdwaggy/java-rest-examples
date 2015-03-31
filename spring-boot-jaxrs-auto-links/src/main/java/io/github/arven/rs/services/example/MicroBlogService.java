@@ -145,9 +145,9 @@ public class MicroBlogService {
      */
     public void addGroup( Group group, String userName ) {
     	if(!test.contains(group)) {
-    		Person user = test.find(Person.class, userName);
-    		group.getMembers().add(user);    		
-    		test.persist(group);
+            Person user = test.find(Person.class, userName);
+            group.getMembers().add(user);    		
+            test.persist(group);
     	}
     }
     
@@ -162,8 +162,8 @@ public class MicroBlogService {
         Group group = test.find(Group.class, groupName);
         Person user = test.find(Person.class, userName);
         if(!group.getMembers().contains(user)) {
-        	group.getMembers().add(user);
-        	test.persist(group);
+            group.getMembers().add(user);
+            test.persist(group);
         }
     }
     

@@ -7,8 +7,9 @@ package io.github.arven.rs.services.example;
 
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.types.DataList;
+import io.github.arven.rs.types.ListView;
 import java.io.Serializable;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -59,8 +60,8 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @Path("/members") @GET
-    public DataList getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
-        return new DataList(blogService.getGroupMembers(name), offset, MAX_LIST_SPAN, false);
+    public ListView<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
+        return new ListView<Person>(blogService.getGroupMembers(name));
     }
     
     /**

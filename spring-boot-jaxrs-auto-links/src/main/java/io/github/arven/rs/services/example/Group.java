@@ -1,6 +1,9 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.rs.types.Linked;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Basic;
@@ -8,12 +11,16 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
+import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlValue;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The GroupData class is a simple class which provides a description to
@@ -26,14 +33,14 @@ import javax.xml.bind.annotation.XmlValue;
 @Table(name="GROUPDATA")
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Group implements Serializable {
+public class Group implements Serializable, Linked<Link> {
 
     @Id
     @XmlID @XmlAttribute
     private String id;
     
     @Basic
-    @XmlValue
+    @XmlElement
     private String description;
 	
     @ManyToMany
@@ -88,5 +95,15 @@ public class Group implements Serializable {
     public void setMembers(List<Person> members) {
     	this.members = members;
     }    
+
+    @Transient
+    private List<Link> links = new LinkedList<Link>();
+
+    @Override
+    @XmlElement(name = "link")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
+    public Collection<Link> getLinks() {
+        return links;
+    }
     
 }

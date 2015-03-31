@@ -3,11 +3,14 @@ package io.github.arven.rs.services.example;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+import io.github.arven.rs.types.Linked;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -17,12 +20,14 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The MessageData class provides some basic information about a message
@@ -34,7 +39,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
-public class Message implements Serializable {
+public class Message implements Serializable, Linked<Link> {
         
     @Id
     @XmlID @XmlAttribute
@@ -47,8 +52,8 @@ public class Message implements Serializable {
     private Date date;
     
     @Basic
-    @XmlElement
-    private String message;
+    @XmlElement(name = "body")
+    private String body;
     
     @Transient
     private List<String> tag;
@@ -68,7 +73,7 @@ public class Message implements Serializable {
     public Message (String id, String message) {
         super();
         this.id = id;
-        this.message = message;
+        this.body = message;
     }
     
     /**
@@ -97,12 +102,22 @@ public class Message implements Serializable {
      */
     @XmlElement
     public List<String> getTags() {
-        if(message != null) {
+        if(body != null) {
             tag = new ArrayList<String>();
-            Iterable<String> it = Iterables.filter(Splitter.on(" ").omitEmptyStrings().split(message), Predicates.containsPattern("^#.*$"));
+            Iterable<String> it = Iterables.filter(Splitter.on(" ").omitEmptyStrings().split(body), Predicates.containsPattern("^#.*$"));
             tag.addAll(Arrays.asList(Iterables.toArray(it, String.class)));
         }
         return tag;
+    }
+
+    @Transient
+    private List<Link> links = new LinkedList<Link>();
+
+    @Override
+    @XmlElement(name = "link")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
+    public Collection<Link> getLinks() {
+        return links;
     }
     
 }
