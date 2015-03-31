@@ -143,8 +143,8 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @GET
-    @Path("/messages") public List<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return blogService.getPosts(name);
+    @Path("/messages") public ListView<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return new ListView(blogService.getPosts(name)).offset(offset).reverse(true);
     }
     
     /**
@@ -158,11 +158,12 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/messages") @POST @RolesAllowed({"User"})
+    @POST
+    @Path("/messages") @RolesAllowed({"User"})
     public WebStatusResponse postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
-            return new WebStatusResponse(Status.CREATED);
+            return new WebStatusResponse(Status.CREATED, post);
         } else {
             return new WebStatusResponse(Status.FORBIDDEN);
         }
@@ -176,7 +177,8 @@ public class UserRestResource implements Serializable {
      * @param message
      * @return  
      */
-    @Path("/messages/{message}") @GET
+    @GET
+    @Path("/messages/{message}")
     public List<Message> postMessage(@PathParam("name") String name, @PathParam("message") String message) {
         return blogService.getPost(name, message);
     }    
