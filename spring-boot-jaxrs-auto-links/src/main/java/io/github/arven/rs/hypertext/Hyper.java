@@ -22,6 +22,13 @@ import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
+ * The Hyper class is a wrapper for most data types, including lists, which
+ * provides a convenient way to bootstrap the links in return values as well
+ * as rewrite the lists. It supports injection into classes which implement
+ * HyperlinkIdentifier, as well as gets its data from two annotations: the
+ * HyperlinkPath class annotation, and the HyperlinkId method and field
+ * annotation.
+ * 
  * @author Brian Becker
  * @param <ResponseType>
  */

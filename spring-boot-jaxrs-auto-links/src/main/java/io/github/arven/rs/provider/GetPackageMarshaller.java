@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.github.arven.rs.provider;
 
 import javax.ws.rs.core.Context;
@@ -14,12 +9,10 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 /**
- * Generates JAXB {@link Marshaller}s configured to emit fragments, rather 
-than
- * standalone XML documents. This suppresses the <code>&lt;?xml ... 
-&gt;</code>
- * declaration in generated XML, which otherwise would consume considerable
- * bandwidth.
+ * We want to generate a Marshaller which will read its context from the JAXB
+ * index files, rather than relying solely on the XmlSeeAlso annotation. This
+ * is specific to the given project, and should define all of the packages
+ * in which JAXB elements might be found.
  */
 @Provider
 public class GetPackageMarshaller implements ContextResolver<Marshaller> {
@@ -33,12 +26,10 @@ public class GetPackageMarshaller implements ContextResolver<Marshaller> {
         @Override
         public Marshaller getContext(Class<?> type) {
             try {
-                JAXBContext context = JAXBContext.newInstance("io.github.arven.rs.services.example:io.github.arven.rs.types");
+                JAXBContext context = JAXBContext.newInstance("io.github.arven.rs.services.example:io.github.arven.rs.hypertext");
                 Marshaller marshaller = context.createMarshaller();
-                marshaller.setProperty(Marshaller.JAXB_FRAGMENT, true);
                 return marshaller;
             } catch (JAXBException je) {
-                // XXX Log?
                 return null;
             }
         }

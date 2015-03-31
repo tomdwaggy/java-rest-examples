@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.github.arven.rs.hypertext;
 
 import java.util.Arrays;
@@ -14,13 +9,15 @@ import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapters;
 
 /**
- *
+ * This is a web application failure or success response. This response
+ * should be sent on the success of a POST, PUT, DELETE request in order
+ * to give some feedback about what has just occurred, rather than sending
+ * a void response.
+ * 
  * @author Brian Becker
  */
 @XmlRootElement(name = "status")

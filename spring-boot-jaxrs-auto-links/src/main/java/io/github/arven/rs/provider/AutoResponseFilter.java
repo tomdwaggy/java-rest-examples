@@ -1,11 +1,5 @@
 package io.github.arven.rs.provider;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 import io.github.arven.rs.hypertext.WebStatusCode;
 import io.github.arven.rs.hypertext.ListView;
 import io.github.arven.rs.hypertext.Hyper;
@@ -19,12 +13,20 @@ import javax.ws.rs.core.Link;
 import javax.ws.rs.ext.Provider;
 
 /**
- *
- * @author brian.becker
+ * This filter wraps various types of responses. It handles the WebStatusCode
+ * types of responses, setting the actual HTTP status code before returning.
+ * It also handles the HyperlinkIdentifier classes, as well as lists of the
+ * same, of which it builds the Hyper wrapper object and sets the new return
+ * value. It also sets the initial link of the request, by providing a link
+ * on the Hyper wrapper. This initial link should be used for same-request
+ * level interactions, not objects returned in the list.
+ * 
+ * @author Brian Becker
  */
 @Provider
 public class AutoResponseFilter implements ContainerResponseFilter {
 
+    @Override
     public void filter(ContainerRequestContext req, ContainerResponseContext res) throws IOException {
         if(res.getEntity() instanceof WebStatusCode && res.getStatus() == 200) {
             WebStatusCode s = (WebStatusCode) res.getEntity();

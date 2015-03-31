@@ -13,12 +13,13 @@ import java.io.Serializable;
 import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 
 /**
- * Initial Spring Boot Application Configuration
+ * This Spring Boot application configuration simply defines Jersey and
+ * prepares the entire Spring application for startup.
+ * 
+ * @author Brian Becker
  */
-
 @SpringBootApplication
 @ComponentScan("io.github.arven.rs.services.example")
 @EntityScan("io.github.arven.rs.services.example")
@@ -27,12 +28,10 @@ public class Application implements Serializable {
 
     @Named
     public static class JerseyConfig extends ResourceConfig {
-
         public JerseyConfig() {
             packages("io.github.arven.rs.provider;io.github.arven.rs.services.example");
             this.register(MicroBlogRestResource.class);
             this.register(JacksonFeature.class);
-            //this.register(JaxbFeature.class)
         }
     }
 

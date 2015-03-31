@@ -1,13 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.github.arven.rs.hypertext;
 
 /**
- *
- * @author brian.becker
+ * This is a message which contains a Web Status Code, allowing for an
+ * extensible set of message types. Before the message is sent, any message
+ * with a WebStatusCode implementation will set the error code. This
+ * allows for a response with an object type which can also return special
+ * failure conditions.
+ * 
+ * @author Brian Becker
  */
 public interface WebStatusCode {
     

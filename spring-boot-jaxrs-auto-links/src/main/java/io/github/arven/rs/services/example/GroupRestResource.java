@@ -6,11 +6,8 @@
 package io.github.arven.rs.services.example;
 
 import io.github.arven.rs.hypertext.WebStatusResponse;
-import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
-
 import io.github.arven.rs.hypertext.ListView;
 import java.io.Serializable;
-import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;

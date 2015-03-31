@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.github.arven.rs.provider;
 
 import com.google.common.base.Throwables;
@@ -12,8 +7,12 @@ import javax.ws.rs.ext.ExceptionMapper;
 import javax.ws.rs.ext.Provider;
 
 /**
+ * This is a simple exception mapper. It is designed to provide the entire
+ * stack trace for development, so it returns it via the Guava Throwables
+ * utility class, in a text/plain format. This should not be used in a
+ * production system.
  *
- * @author brian.becker
+ * @author Brian Becker
  */
 @Provider
 public class AnyExceptionMapper implements ExceptionMapper<RuntimeException> {

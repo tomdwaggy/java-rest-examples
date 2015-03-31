@@ -5,7 +5,6 @@ import io.github.arven.rs.hypertext.HyperlinkId;
 import io.github.arven.rs.hypertext.HyperlinkPath;
 import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
