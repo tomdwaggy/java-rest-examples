@@ -1,5 +1,7 @@
 package io.github.arven.rs.services.example;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -74,6 +76,21 @@ public class MicroBlogService {
         }
         return new LinkedList<Message>();
     }
+    
+    /**
+     * Get a specific post, if it is owned by the user
+     * 
+     * @param   userName        user id for the user whose posts we want
+     * @param   postName
+     * @return  a single matching post
+     */
+    public List<Message> getPost( String userName, String postName ) {
+        Message m = test.find(Message.class, postName);
+        if (m.getUserName().equals(userName)) {
+            return Arrays.asList(m);
+        }
+        return Collections.EMPTY_LIST;
+    }    
 
     /**
      * Add a post for the given user. If the user does not exist, the post
@@ -88,8 +105,8 @@ public class MicroBlogService {
     	test.persist(post);
     	if(test.contains(post)) {
             Person user = test.find(Person.class, userName);
-            user.getMessages().add(post);
-            test.persist(user);
+            post.setUser(user);
+            test.persist(post);
     	}
     }
     

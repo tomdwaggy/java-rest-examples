@@ -35,6 +35,7 @@ public class Hyper<ResponseType> {
     @XmlAttribute   private Integer limit = null;
     private UriBuilder self = null;
     private List<String> eachActions = new LinkedList<String>();
+    private String type = "application/xml";
     
     @XmlAttribute
     public Integer getSize() {
@@ -70,6 +71,11 @@ public class Hyper<ResponseType> {
         
         public Builder<ResponseType> entity(ResponseType entity) {
             response.content = Arrays.asList(entity);
+            return this;
+        }
+        
+        public Builder<ResponseType> type(String type) {
+            response.type = type;
             return this;
         }
 
@@ -120,19 +126,19 @@ public class Hyper<ResponseType> {
                         HyperlinkIdentifier r = (HyperlinkIdentifier) o;
                         r.getLinks().clear();
                         Link.Builder lb;
-                        lb = Link.fromPath(id.value());
+                        lb = Link.fromUri(UriBuilder.fromPath(id.value()).buildFromMap(HyperlinkUtils.getHyperlinkValues(r)));
                         for(String s : response.eachActions) {
                             lb.rel(s);
                         }
-                        Link self = lb.rel("self").build(r.getLinkedId());
+                        Link self = lb.rel("self").type(response.type).build();
                         r.getLinks().add(self);
                         for(Method m : o.getClass().getMethods()) {
                             if(m.isAnnotationPresent(HyperlinkAction.class)) {
                                 HyperlinkAction act = (HyperlinkAction) m.getAnnotation(HyperlinkAction.class);
                                 if(act.target().equals("")) {
-                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.value())).rel(act.value()).build());
+                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.value())).rel(act.value()).type(response.type).build());
                                 } else {
-                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.target())).rel(act.value()).build());
+                                    r.getLinks().add(Link.fromUriBuilder(self.getUriBuilder().path(act.target())).rel(act.value()).type(response.type).build());
                                 }
                             }
                         }

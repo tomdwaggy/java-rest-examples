@@ -1,6 +1,7 @@
 package io.github.arven.rs.services.example;
 
 import io.github.arven.rs.hypertext.HyperlinkAction;
+import io.github.arven.rs.hypertext.HyperlinkId;
 import io.github.arven.rs.hypertext.HyperlinkPath;
 import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.Serializable;
@@ -58,7 +59,7 @@ public class Person implements Serializable, HyperlinkIdentifier {
     @XmlElement
     private String password;
 	
-    @OneToMany(cascade = CascadeType.ALL) @JoinColumn(name="USERDATA_ID")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Message> messages;
 	
     @ManyToMany(mappedBy = "members")
@@ -109,18 +110,10 @@ public class Person implements Serializable, HyperlinkIdentifier {
      * 
      * @return	the user's id
      */
+    @HyperlinkId
     public String getId() {
     	return this.id;
-    }
-    
-    /**
-     * Get the group id
-     * 
-     * @return	the group id
-     */
-    public Object getLinkedId() {
-    	return this.id;
-    }        
+    }  
     
     /**
      * Get the user id
@@ -129,7 +122,7 @@ public class Person implements Serializable, HyperlinkIdentifier {
      */
     public String getNickname() {
     	return this.nickname;
-    }    
+    }
     
     /**
      * Get the user password

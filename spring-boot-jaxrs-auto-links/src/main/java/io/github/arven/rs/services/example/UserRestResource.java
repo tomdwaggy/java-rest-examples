@@ -168,4 +168,17 @@ public class UserRestResource implements Serializable {
         }
     }
     
+    /**
+     * For a given user name, this method gets a specific message, if it
+     * exists.
+     * 
+     * @param name
+     * @param message
+     * @return  
+     */
+    @Path("/messages/{message}") @GET
+    public List<Message> postMessage(@PathParam("name") String name, @PathParam("message") String message) {
+        return blogService.getPost(name, message);
+    }    
+    
 }

@@ -1,6 +1,7 @@
 package io.github.arven.rs.services.example;
 
 import io.github.arven.rs.hypertext.HyperlinkAction;
+import io.github.arven.rs.hypertext.HyperlinkId;
 import io.github.arven.rs.hypertext.HyperlinkPath;
 import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.Serializable;
@@ -37,7 +38,7 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @HyperlinkPath("/example/v1/group/{id}")
 public class Group implements Serializable, HyperlinkIdentifier {
 
-    @Id
+    @HyperlinkId @Id
     @XmlID @XmlAttribute
     private String id;
     
@@ -81,15 +82,6 @@ public class Group implements Serializable, HyperlinkIdentifier {
     public String getId() {
     	return this.id;
     }
-    
-    /**
-     * Get the group id
-     * 
-     * @return	the group id
-     */
-    public Object getLinkedId() {
-    	return this.id;
-    }    
     
     /**
      * Get the list of members

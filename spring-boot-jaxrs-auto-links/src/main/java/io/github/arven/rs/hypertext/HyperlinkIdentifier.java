@@ -1,5 +1,6 @@
 package io.github.arven.rs.hypertext;
 
+import java.lang.reflect.Method;
 import java.util.Collection;
 import javax.ws.rs.core.Link;
 
@@ -16,5 +17,5 @@ public interface HyperlinkIdentifier {
     * @return the identifier or {@literal null} if not available.
     */ 
     public abstract Collection<Link> getLinks();
-    public abstract Object getLinkedId();
+    
 }

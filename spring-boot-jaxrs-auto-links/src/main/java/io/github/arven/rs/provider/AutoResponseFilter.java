@@ -35,12 +35,14 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             res.setEntity(
                 new Hyper.Builder().entity(res.getEntity())
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())
+                        .type(res.getMediaType().toString())
                         .build()
             );
         } else if(List.class.isInstance(res.getEntity())) {
             res.setEntity(
                 new Hyper.Builder().entityList((List)res.getEntity())
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())
+                        .type(res.getMediaType().toString())
                         .build()
             );
         } else if(ListView.class.isInstance(res.getEntity())) {
@@ -48,6 +50,7 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             res.setEntity(
                 new Hyper.Builder().entityList(dl.collection()).limit(dl.limit()).offset(dl.offset()).reverse(dl.reverse())
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").build())
+                        .type(res.getMediaType().toString())
                         .build()
             );
         }

@@ -3,6 +3,7 @@ package io.github.arven.rs.services.example;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+import io.github.arven.rs.hypertext.HyperlinkId;
 import io.github.arven.rs.hypertext.HyperlinkPath;
 import io.github.arven.rs.hypertext.HyperlinkIdentifier;
 import java.io.Serializable;
@@ -17,6 +18,8 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,9 +43,10 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
-@HyperlinkPath("/example/v1/message/{id}")
+@HyperlinkPath("/example/v1/user/{user}/messages/{message}")
 public class Message implements Serializable, HyperlinkIdentifier {
-        
+       
+    @HyperlinkId("message")
     @Id
     @XmlID @XmlAttribute
     private String id;
@@ -56,6 +60,10 @@ public class Message implements Serializable, HyperlinkIdentifier {
     @Basic
     @XmlElement(name = "body")
     private String body;
+    
+    @ManyToOne
+    @JoinColumn(name="USERDATA_ID")
+    private Person user;
     
     @Transient
     private List<String> tag;
@@ -93,16 +101,16 @@ public class Message implements Serializable, HyperlinkIdentifier {
      */
     public String getId() {
         return this.id;
+    }
+    
+    public void setUser(Person person) {
+        this.user = person;
     }    
     
-    /**
-     * Get the group id
-     * 
-     * @return	the group id
-     */
-    public Object getLinkedId() {
-    	return this.id;
-    }        
+    @HyperlinkId("user")
+    public String getUserName() {
+        return this.user.getId();
+    }
     
     /**
      * Get the list of tags from the message by parsing the string with a
