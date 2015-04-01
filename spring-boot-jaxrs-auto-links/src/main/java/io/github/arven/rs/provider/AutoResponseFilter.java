@@ -5,6 +5,7 @@ import io.github.arven.rs.hypertext.ListView;
 import io.github.arven.rs.hypertext.Hyper;
 import io.github.arven.rs.hypertext.HyperlinkPath;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerResponseContext;
@@ -37,14 +38,29 @@ public class AutoResponseFilter implements ContainerResponseFilter {
         
         List<Object> matched =  req.getUriInfo().getMatchedResources();
         Class matchedClass = null;
+        String matchedMethod = "";
         if(matched.size() > 0) {
             matchedClass = matched.get(0).getClass();
         }
+        
+        if(req.getUriInfo().getMatchedURIs().size() > req.getUriInfo().getMatchedResources().size()) {
+            List<String> matchedMethods = req.getUriInfo().getMatchedURIs();
+            matchedMethod = matchedMethods.get(0).replace(matchedMethods.get(1), "");
+            System.out.println(matchedMethods.get(0).replace(matchedMethods.get(1), ""));
+        } else {
+            matchedMethod = "/";
+        }
+        //System.out.println(matchedMethods);
+        //System.out.println(req.getUriInfo().getMatchedResources());
+        
+        //System.out.println(req.getUriInfo().getMatchedURIs());
+        //System.out.println(req.getUriInfo().getPathSegments() + " " + req.getUriInfo().getPathParameters());
         
         if(res.getEntity().getClass().isAnnotationPresent(HyperlinkPath.class)) {
             res.setEntity(
                 new Hyper.Builder().entity(res.getEntity())
                         .matcher(matchedClass)
+                        .method(matchedMethod)
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
                         .type(res.getMediaType().toString())
                         .build()
@@ -53,6 +69,7 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             res.setEntity(
                 new Hyper.Builder().entityList((List)res.getEntity())
                         .matcher(matchedClass)
+                        .method(matchedMethod)
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
                         .type(res.getMediaType().toString())
                         .build()
@@ -62,6 +79,7 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             res.setEntity(
                 new Hyper.Builder().entityList(dl.collection()).limit(dl.limit()).offset(dl.offset()).reverse(dl.reverse())
                         .matcher(matchedClass)
+                        .method(matchedMethod)
                         .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
                         .type(res.getMediaType().toString())
                         .build()

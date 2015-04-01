@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -23,12 +22,8 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-import org.javatuples.Pair;
-import org.javatuples.Tuple;
 
 /**
  * The Hyper class is a wrapper for most data types, including lists, which
@@ -53,6 +48,7 @@ public class Hyper<ResponseType> {
     private List<String> eachActions = new LinkedList<String>();
     private String type = "application/xml";
     private Class<?> matcher = null;
+    private String method = "";
     
     @XmlAttribute
     public Integer getSize() {
@@ -138,6 +134,11 @@ public class Hyper<ResponseType> {
             return this;
         }
         
+        public Builder<ResponseType> method(String method) {
+            response.method = method;
+            return this;
+        }
+        
         public Hyper<ResponseType> build() {
             if(response.self != null) {
                 for(Object o : response.content) {
@@ -149,24 +150,30 @@ public class Hyper<ResponseType> {
                         if(response.matcher != null) {
                             for(Method m : response.matcher.getSuperclass().getMethods()) {
                                 if(m.isAnnotationPresent(Hyperlinked.class)) {
-                                    String relpath = "";
+                                    String relpath = "/";
                                     Hyperlinked hlr = (Hyperlinked) m.getAnnotation(Hyperlinked.class);
                                     if(m.isAnnotationPresent(Path.class)) {
                                         Path p = (Path)m.getAnnotation(Path.class);
                                         relpath = p.value();
                                     }
-                                    if(m.isAnnotationPresent(GET.class)) {
-                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("self").build());
+                                    System.out.println(response.method);
+                                    System.out.println(relpath);
+                                    if(relpath.startsWith(response.method)) {
+                                        relpath = relpath.substring(response.method.length(), relpath.length());
+                                        System.out.println(relpath);
+                                        if(m.isAnnotationPresent(GET.class)) {
+                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("self").build());
+                                        }
+                                        if(m.isAnnotationPresent(DELETE.class)) {
+                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("remove").build());
+                                        }
+                                        if(m.isAnnotationPresent(POST.class)) {
+                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("build").build());
+                                        }
+                                        if(m.isAnnotationPresent(PUT.class)) {
+                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("update").build());
+                                        }
                                     }
-                                    if(m.isAnnotationPresent(DELETE.class)) {
-                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("remove").build());
-                                    }
-                                    if(m.isAnnotationPresent(POST.class)) {
-                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("build").build());
-                                    }
-                                    if(m.isAnnotationPresent(PUT.class)) {
-                                        links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("update").build());
-                                    }                                    
                                 }
                             }
                         }

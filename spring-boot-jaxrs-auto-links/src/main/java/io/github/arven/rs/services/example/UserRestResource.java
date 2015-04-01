@@ -102,7 +102,8 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/friends/{friend}") @PUT @RolesAllowed({"User"})
+    @Path("/friends/{friend}") @PUT
+    @RolesAllowed({"User"})
     public WebStatusResponse addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addFriend(name, friend);
@@ -124,7 +125,8 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/friends/{friend}") @DELETE @RolesAllowed({"User"})
+    @Path("/friends/{friend}") @DELETE
+    @RolesAllowed({"User"})
     public WebStatusResponse removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeFriend(name, friend);
@@ -144,8 +146,8 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
-    @GET @Hyperlinked
-    @Path("/messages") public ListView<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+    @Path("/messages") @GET @Hyperlinked
+    public ListView<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
         return new ListView(blogService.getPosts(name)).offset(offset).reverse(true);
     }
     
@@ -160,8 +162,8 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @POST
-    @Path("/messages") @RolesAllowed({"User"})
+    @Path("/messages") @POST
+    @RolesAllowed({"User"})
     public WebStatusResponse postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
@@ -179,8 +181,7 @@ public class UserRestResource implements Serializable {
      * @param message
      * @return  
      */
-    @GET
-    @Path("/messages/{message}")
+    @Path("/messages/{message}") @GET
     public List<Message> postMessage(@PathParam("name") String name, @PathParam("message") String message) {
         return blogService.getPost(name, message);
     }    

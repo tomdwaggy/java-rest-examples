@@ -52,7 +52,7 @@ public class HyperlinkUtils {
             if(m.isAnnotationPresent(InjectHyperlinks.class)) {
                 try {
                     if(m.getReturnType().equals(Void.class)) {
-                        Collection<Link> hlinks = (Collection<Link>) m.invoke(o, links);
+                        m.invoke(o, links);
                         return;
                     } else {
                         Collection<Link> hlinks = (Collection<Link>) m.invoke(o);
@@ -72,6 +72,7 @@ public class HyperlinkUtils {
                     Collection<Link> hlinks = (Collection<Link>) f.get(o);
                     hlinks.addAll(links);
                     f.setAccessible(access);
+                    return;
                 } catch (IllegalAccessException | IllegalArgumentException ex) {
                     Logger.getLogger(HyperlinkUtils.class.getName()).log(Level.SEVERE, null, ex);
                 }
