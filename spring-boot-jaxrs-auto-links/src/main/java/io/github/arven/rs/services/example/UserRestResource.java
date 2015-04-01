@@ -102,7 +102,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/friends/{friend}") @PUT
+    @Path("/friends/{friend}") @PUT @Hyperlinked
     @RolesAllowed({"User"})
     public WebStatusResponse addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
@@ -125,7 +125,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/friends/{friend}") @DELETE
+    @Path("/friends/{friend}") @DELETE @Hyperlinked
     @RolesAllowed({"User"})
     public WebStatusResponse removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
@@ -162,7 +162,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/messages") @POST
+    @Path("/messages") @POST @Hyperlinked
     @RolesAllowed({"User"})
     public WebStatusResponse postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
@@ -181,8 +181,8 @@ public class UserRestResource implements Serializable {
      * @param message
      * @return  
      */
-    @Path("/messages/{message}") @GET
-    public List<Message> postMessage(@PathParam("name") String name, @PathParam("message") String message) {
+    @Path("/messages/{message}") @GET @Hyperlinked
+    public List<Message> getSingleMessage(@PathParam("name") String name, @PathParam("message") String message) {
         return blogService.getPost(name, message);
     }    
     

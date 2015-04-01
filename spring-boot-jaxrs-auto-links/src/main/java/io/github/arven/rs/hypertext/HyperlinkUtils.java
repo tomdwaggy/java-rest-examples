@@ -70,7 +70,11 @@ public class HyperlinkUtils {
                     boolean access = f.isAccessible();
                     f.setAccessible(true);
                     Collection<Link> hlinks = (Collection<Link>) f.get(o);
-                    hlinks.addAll(links);
+                    if(hlinks != null) {
+                        hlinks.addAll(links);
+                    } else {
+                        f.set(o, links);
+                    }
                     f.setAccessible(access);
                     return;
                 } catch (IllegalAccessException | IllegalArgumentException ex) {

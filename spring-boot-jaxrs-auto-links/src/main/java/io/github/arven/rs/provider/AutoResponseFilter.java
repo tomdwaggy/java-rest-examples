@@ -34,57 +34,31 @@ public class AutoResponseFilter implements ContainerResponseFilter {
             res.setStatus(s.error());
         }
         
-        String type = "application/xml";
-        
+        // Start Building Hyper Wrapper
+        Hyper.Builder builder = new Hyper.Builder()
+                .self(Link.fromUri(URI.create("/").resolve(req.getUriInfo().getPath())).rel("self").type("application/xml").build())
+                .type("application/xml");
+                
+        // Get Matched Classes
         List<Object> matched =  req.getUriInfo().getMatchedResources();
-        Class matchedClass = null;
-        String matchedMethod = "";
         if(matched.size() > 0) {
-            matchedClass = matched.get(0).getClass();
+            builder.matcher(matched.get(0).getClass());
         }
         
+        // Get Matched Paths
         if(req.getUriInfo().getMatchedURIs().size() > req.getUriInfo().getMatchedResources().size()) {
             List<String> matchedMethods = req.getUriInfo().getMatchedURIs();
-            matchedMethod = matchedMethods.get(0).replace(matchedMethods.get(1), "");
-            System.out.println(matchedMethods.get(0).replace(matchedMethods.get(1), ""));
-        } else {
-            matchedMethod = "/";
+            builder.method(URI.create("/").resolve(URI.create(matchedMethods.get(1)).relativize(URI.create(matchedMethods.get(0)))));
         }
-        //System.out.println(matchedMethods);
-        //System.out.println(req.getUriInfo().getMatchedResources());
-        
-        //System.out.println(req.getUriInfo().getMatchedURIs());
-        //System.out.println(req.getUriInfo().getPathSegments() + " " + req.getUriInfo().getPathParameters());
         
         if(res.getEntity().getClass().isAnnotationPresent(HyperlinkPath.class)) {
-            res.setEntity(
-                new Hyper.Builder().entity(res.getEntity())
-                        .matcher(matchedClass)
-                        .method(matchedMethod)
-                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
-                        .type(res.getMediaType().toString())
-                        .build()
-            );
+            res.setEntity(builder.entity(res.getEntity()).build());
         } else if(List.class.isInstance(res.getEntity())) {
-            res.setEntity(
-                new Hyper.Builder().entityList((List)res.getEntity())
-                        .matcher(matchedClass)
-                        .method(matchedMethod)
-                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
-                        .type(res.getMediaType().toString())
-                        .build()
-            );
+            res.setEntity(builder.entityList((List)res.getEntity()).build());
         } else if(ListView.class.isInstance(res.getEntity())) {
-            ListView dl = (ListView)res.getEntity();
-            res.setEntity(
-                new Hyper.Builder().entityList(dl.collection()).limit(dl.limit()).offset(dl.offset()).reverse(dl.reverse())
-                        .matcher(matchedClass)
-                        .method(matchedMethod)
-                        .link(Link.fromUri(req.getUriInfo().getRequestUri()).rel("self").type(type).build())
-                        .type(res.getMediaType().toString())
-                        .build()
-            );
+            res.setEntity(builder.entityList(((ListView)res.getEntity()).collection()).build());
         }
+        
     }
     
 }

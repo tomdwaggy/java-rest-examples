@@ -29,6 +29,6 @@ public @interface Hyperlinked {
      * 
      * @return rel link text
      */
-    public boolean value() default true;
+    public Class<?> value() default Object.class;
 
 }

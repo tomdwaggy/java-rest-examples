@@ -5,6 +5,7 @@ import io.github.arven.rs.services.example.Group;
 import io.github.arven.rs.services.example.Message;
 import io.github.arven.rs.services.example.Person;
 import java.lang.reflect.Method;
+import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,8 +23,10 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The Hyper class is a wrapper for most data types, including lists, which
@@ -48,7 +51,7 @@ public class Hyper<ResponseType> {
     private List<String> eachActions = new LinkedList<String>();
     private String type = "application/xml";
     private Class<?> matcher = null;
-    private String method = "";
+    private URI method = URI.create("/");
     
     @XmlAttribute
     public Integer getSize() {
@@ -59,6 +62,8 @@ public class Hyper<ResponseType> {
         }
     }
     
+    @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)           
     private final Collection<Link> links = new LinkedList<Link>();
     
     @XmlAnyElement
@@ -90,11 +95,8 @@ public class Hyper<ResponseType> {
             return this;
         }
 
-        public Builder<ResponseType> link(Link link) {
-            if(link.getRels().contains("self")) {
-                response.self = link.getUriBuilder();
-            }
-            response.links.add(link);
+        public Builder<ResponseType> self(Link link) {
+            response.self = link.getUriBuilder();
             return this;
         }
 
@@ -134,7 +136,7 @@ public class Hyper<ResponseType> {
             return this;
         }
         
-        public Builder<ResponseType> method(String method) {
+        public Builder<ResponseType> method(URI method) {
             response.method = method;
             return this;
         }
@@ -149,35 +151,41 @@ public class Hyper<ResponseType> {
                         Map<String, String> params = HyperlinkUtils.getHyperlinkValues(o);
                         if(response.matcher != null) {
                             for(Method m : response.matcher.getSuperclass().getMethods()) {
-                                if(m.isAnnotationPresent(Hyperlinked.class)) {
-                                    String relpath = "/";
-                                    Hyperlinked hlr = (Hyperlinked) m.getAnnotation(Hyperlinked.class);
-                                    if(m.isAnnotationPresent(Path.class)) {
-                                        Path p = (Path)m.getAnnotation(Path.class);
-                                        relpath = p.value();
+                                try {
+                                    if(m.isAnnotationPresent(Hyperlinked.class)) {
+                                        URI relpath = URI.create("/");
+                                        Hyperlinked hlr = (Hyperlinked) m.getAnnotation(Hyperlinked.class);
+                                        if(m.isAnnotationPresent(Path.class)) {
+                                            Path p = (Path)m.getAnnotation(Path.class);
+                                            relpath = UriBuilder.fromPath("/").path(p.value()).buildFromMap(params);
+                                        }
+                                        String newpath = response.method.relativize(relpath).getPath();
+                                        System.out.println(m.getName() + "  " + newpath + " ( method = " + response.method.getPath() + ", rel = " + relpath + ")");
+                                        Link l = null;
+                                        if(!newpath.startsWith("/")) {
+                                            if(m.isAnnotationPresent(GET.class) && (List.class.isAssignableFrom(m.getReturnType()) || ListView.class.isAssignableFrom(m.getReturnType()))) {
+                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("list").title(m.getName()).type(response.type).build();
+                                            } else if(m.isAnnotationPresent(GET.class)) {
+                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("self").title(m.getName()).type(response.type).build();
+                                            } else if(m.isAnnotationPresent(DELETE.class)) {
+                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("remove").title(m.getName()).type(response.type).build();
+                                            } else if(m.isAnnotationPresent(POST.class)) {
+                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("add").title(m.getName()).type(response.type).build();
+                                            } else if(m.isAnnotationPresent(PUT.class)) {
+                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("update").title(m.getName()).type(response.type).build();
+                                            }
+                                            if(newpath.length() == 0) { 
+                                                response.links.add(l);
+                                            } else { 
+                                                links.add(l);
+                                            }                                            
+                                        }
                                     }
-                                    System.out.println(response.method);
-                                    System.out.println(relpath);
-                                    if(relpath.startsWith(response.method)) {
-                                        relpath = relpath.substring(response.method.length(), relpath.length());
-                                        System.out.println(relpath);
-                                        if(m.isAnnotationPresent(GET.class)) {
-                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("self").build());
-                                        }
-                                        if(m.isAnnotationPresent(DELETE.class)) {
-                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("remove").build());
-                                        }
-                                        if(m.isAnnotationPresent(POST.class)) {
-                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("build").build());
-                                        }
-                                        if(m.isAnnotationPresent(PUT.class)) {
-                                            links.add(Link.fromUri(UriBuilder.fromPath(id.value()).path(relpath).buildFromMap(params)).rel("update").build());
-                                        }
-                                    }
+                                } catch(IllegalArgumentException iae) {
+                                    // Fall through, this path is just not filled in yet.
                                 }
                             }
                         }
-                        System.out.println(links);
                         HyperlinkUtils.injectHyperlinks(o, links);
                     }
                 }

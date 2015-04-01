@@ -19,7 +19,7 @@ import java.lang.annotation.Target;
  */
 @Inherited
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.FIELD})
 public @interface InjectHyperlinks {
      
     /**

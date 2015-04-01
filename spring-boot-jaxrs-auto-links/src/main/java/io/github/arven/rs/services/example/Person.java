@@ -186,13 +186,9 @@ public class Person implements Serializable {
     }
     
     @Transient
-    private List<Link> links = new LinkedList<Link>();
-
     @InjectHyperlinks
     @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
-    public Collection<Link> getLinks() {
-        return links;
-    }
+    private List<Link> links = new LinkedList<Link>();
     
 }
