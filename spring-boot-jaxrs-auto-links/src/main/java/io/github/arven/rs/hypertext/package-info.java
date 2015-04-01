@@ -24,7 +24,7 @@
  * which is usually also a locator. However, it does not expose this object
  * at the locator's path.
  */
-@XmlSchema( namespace="http://github.com/Arven/java-rest-examples/hypertext", elementFormDefault=XmlNsForm.QUALIFIED, xmlns = {@XmlNs(namespaceURI = "http://github.com/Arven/java-rest-examples/hypertext", prefix="hyper"), @XmlNs(namespaceURI = "http://github.com/Arven/java-rest-examples", prefix="api")} )
+@XmlSchema( namespace="http://github.com/Arven/java-rest-examples/hypertext", elementFormDefault=XmlNsForm.QUALIFIED, xmlns = {@XmlNs(namespaceURI = "http://github.com/Arven/java-rest-examples/hypertext", prefix="hyper"), @XmlNs(namespaceURI = "http://github.com/Arven/java-rest-examples", prefix="api"), @XmlNs(namespaceURI = "http://www.w3.org/2005/Atom", prefix="atom")} )
 package io.github.arven.rs.hypertext;
 
 import javax.xml.bind.annotation.XmlNs;

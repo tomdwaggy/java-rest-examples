@@ -133,7 +133,7 @@ public class Message implements Serializable {
     private List<Link> links = new LinkedList<Link>();
 
     @InjectHyperlinks
-    @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
+    @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
     public Collection<Link> getLinks() {
         return links;

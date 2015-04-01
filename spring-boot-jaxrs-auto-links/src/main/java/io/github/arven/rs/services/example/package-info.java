@@ -9,7 +9,7 @@
  *      - CDI
  *      - Hypertext
  */
-@XmlSchema( namespace="http://github.com/Arven/java-rest-examples", elementFormDefault=XmlNsForm.QUALIFIED , xmlns = {@XmlNs(namespaceURI = "http://github.com/Arven/java-rest-examples", prefix="api")})
+@XmlSchema( namespace="http://github.com/Arven/java-rest-examples", elementFormDefault=XmlNsForm.QUALIFIED , xmlns = {@XmlNs(namespaceURI = "http://github.com/Arven/java-rest-examples", prefix="api"), @XmlNs(namespaceURI = "http://www.w3.org/2005/Atom", prefix="atom")})
 package io.github.arven.rs.services.example;
 
 import javax.xml.bind.annotation.XmlNs;

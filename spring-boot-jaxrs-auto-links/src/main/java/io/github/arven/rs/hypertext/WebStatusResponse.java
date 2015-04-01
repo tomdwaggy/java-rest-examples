@@ -30,7 +30,7 @@ public class WebStatusResponse implements WebStatusCode {
     @XmlElement(name="message")
     private String message;
     
-    @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
+    @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     @XmlJavaTypeAdapter(type = Link.class, value = Link.JaxbAdapter.class)      
     private List<Link> link;
     
