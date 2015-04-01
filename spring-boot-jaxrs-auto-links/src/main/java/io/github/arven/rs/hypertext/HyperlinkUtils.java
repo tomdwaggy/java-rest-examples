@@ -19,7 +19,7 @@ import javax.ws.rs.core.Link;
  */
 public class HyperlinkUtils {
     
-    public static Map<String, String> getHyperlinkValues(Object o) {
+    public static Map<String, Object> getHyperlinkValues(Object o) {
         Map map = new HashMap();
         for(Method m : ObjectArrays.concat(o.getClass().getDeclaredMethods(), o.getClass().getMethods(), Method.class)) {
             if(m.isAnnotationPresent(HyperlinkId.class)) {

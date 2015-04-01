@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +49,6 @@ public class Hyper<ResponseType> {
     @XmlAttribute   private Boolean reverse = false;
     @XmlAttribute   private Integer limit = null;
     private UriBuilder self = null;
-    private List<String> eachActions = new LinkedList<String>();
     private String type = "application/xml";
     private Class<?> matcher = null;
     private URI method = URI.create("/");
@@ -64,7 +64,7 @@ public class Hyper<ResponseType> {
     
     @XmlElement(name = "link", namespace = "http://github.com/Arven/java-rest-examples/hypertext")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)           
-    private final Collection<Link> links = new LinkedList<Link>();
+    private final Collection<Link> links = new HashSet<Link>();
     
     @XmlAnyElement
     private List<ResponseType> content;
@@ -126,11 +126,6 @@ public class Hyper<ResponseType> {
             return this;
         }
         
-        public Builder<ResponseType> each(String... action) {
-            response.eachActions.addAll(Arrays.asList(action));
-            return this;
-        }
-        
         public Builder<ResponseType> matcher(Class matched) {
             response.matcher = matched;
             return this;
@@ -141,54 +136,48 @@ public class Hyper<ResponseType> {
             return this;
         }
         
+        public static void buildLinks(Method m, Collection<Link> links, URI from, String newpath, Map<String, Object> params, String type, URI ignoreGet) {
+            URI newURI = UriBuilder.fromUri(from).path(newpath).buildFromMap(params);
+            if(!newURI.equals(ignoreGet) && m.isAnnotationPresent(GET.class) && (List.class.isAssignableFrom(m.getReturnType()) || ListView.class.isAssignableFrom(m.getReturnType()))) {
+                links.add(Link.fromUri(newURI).rel("list").title(m.getName()).type(type).build());
+            } else if(!newURI.equals(ignoreGet) & m.isAnnotationPresent(GET.class)) {
+                links.add(Link.fromUri(newURI).rel("self").title(m.getName()).type(type).build());
+            } else if(m.isAnnotationPresent(DELETE.class)) {
+                links.add(Link.fromUri(newURI).rel("remove").title(m.getName()).type(type).build());
+            } else if(m.isAnnotationPresent(POST.class)) {
+                links.add(Link.fromUri(newURI).rel("add").title(m.getName()).type(type).build());
+            } else if(m.isAnnotationPresent(PUT.class)) {
+                links.add(Link.fromUri(newURI).rel("update").title(m.getName()).type(type).build());
+            } 
+        }
+        
         public Hyper<ResponseType> build() {
-            if(response.self != null) {
+            if(response.self != null && response.matcher != null) {
                 for(Object o : response.content) {
-                    if(o.getClass().isAnnotationPresent(HyperlinkPath.class)) {
-                        HyperlinkPath id = (HyperlinkPath) o.getClass().getAnnotation(HyperlinkPath.class);
-                        System.out.println(response.matcher);
-                        List<Link> links = new LinkedList<Link>();
-                        Map<String, String> params = HyperlinkUtils.getHyperlinkValues(o);
-                        if(response.matcher != null) {
-                            for(Method m : response.matcher.getSuperclass().getMethods()) {
-                                try {
-                                    if(m.isAnnotationPresent(Hyperlinked.class)) {
-                                        URI relpath = URI.create("/");
-                                        Hyperlinked hlr = (Hyperlinked) m.getAnnotation(Hyperlinked.class);
-                                        if(m.isAnnotationPresent(Path.class)) {
-                                            Path p = (Path)m.getAnnotation(Path.class);
-                                            relpath = UriBuilder.fromPath("/").path(p.value()).buildFromMap(params);
-                                        }
-                                        String newpath = response.method.relativize(relpath).getPath();
-                                        System.out.println(m.getName() + "  " + newpath + " ( method = " + response.method.getPath() + ", rel = " + relpath + ")");
-                                        Link l = null;
-                                        if(!newpath.startsWith("/")) {
-                                            if(m.isAnnotationPresent(GET.class) && (List.class.isAssignableFrom(m.getReturnType()) || ListView.class.isAssignableFrom(m.getReturnType()))) {
-                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("list").title(m.getName()).type(response.type).build();
-                                            } else if(m.isAnnotationPresent(GET.class)) {
-                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("self").title(m.getName()).type(response.type).build();
-                                            } else if(m.isAnnotationPresent(DELETE.class)) {
-                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("remove").title(m.getName()).type(response.type).build();
-                                            } else if(m.isAnnotationPresent(POST.class)) {
-                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("add").title(m.getName()).type(response.type).build();
-                                            } else if(m.isAnnotationPresent(PUT.class)) {
-                                                l = Link.fromUri(UriBuilder.fromUri(response.self.build()).path(newpath).buildFromMap(params)).rel("update").title(m.getName()).type(response.type).build();
-                                            }
-                                            if(newpath.length() == 0) { 
-                                                response.links.add(l);
-                                            } else { 
-                                                links.add(l);
-                                            }                                            
-                                        }
-                                    }
-                                } catch(IllegalArgumentException iae) {
-                                    // Fall through, this path is just not filled in yet.
+                    HyperlinkPath id = (HyperlinkPath) o.getClass().getAnnotation(HyperlinkPath.class);
+                    Map<String, Object> params = HyperlinkUtils.getHyperlinkValues(o);
+                    List<Link> links = new LinkedList<Link>();
+                    URI self = UriBuilder.fromPath(id.value()).buildFromMap(params);
+                    links.add(Link.fromUri(self).type(response.type).rel("self").build());
+                    for(Method m : response.matcher.getSuperclass().getMethods()) {
+                        try {
+                            if(m.isAnnotationPresent(Hyperlinked.class)) {
+                                URI relpath = URI.create("/");
+                                if(m.isAnnotationPresent(Path.class)) {
+                                    relpath = UriBuilder.fromPath("/").path(((Path)m.getAnnotation(Path.class)).value()).resolveTemplates(params).build();
+                                }
+                                String newpath = response.method.relativize(relpath).getPath();
+                                System.out.println(m.getName() + "  " + newpath + " ( method = " + response.method.getPath() + ", rel = " + relpath + ")");
+                                if(newpath.equals("")) {
+                                    buildLinks(m, response.links, response.self.build(), newpath, params, response.type, null);
+                                } else if(!newpath.equals("") && !newpath.startsWith("/")) {
+                                    buildLinks(m, links, response.self.build(), newpath, params, response.type, self);
                                 }
                             }
-                        }
-                        HyperlinkUtils.injectHyperlinks(o, links);
+                        } catch (IllegalArgumentException e) { System.out.println(e.getMessage()); }
                     }
-                }
+                    HyperlinkUtils.injectHyperlinks(o, links);
+                }        
             }
             return response;
         }
