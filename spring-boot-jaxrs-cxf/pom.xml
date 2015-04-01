@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.github.arven.rs</groupId>
-	<artifactId>service-example-spring-boot-jaxrs-auto-linking</artifactId>
+	<artifactId>service-example-spring-boot-jaxrs-cxf</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
         
@@ -32,26 +32,39 @@
                 <artifactId>h2</artifactId>
             </dependency>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-jersey</artifactId>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>2.5.1</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-service-description</artifactId>
+                <version>3.0.4</version>
+            </dependency>                        
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>3.0.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>3.0.4</version>
+            </dependency>             
+            <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>2.0.1</version>
+            </dependency>
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-security</artifactId>
-            </dependency>                                                  
-            <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-json-jackson</artifactId>
-            </dependency>
-            <dependency>
-                <groupId>org.glassfish.jersey.media</groupId>
-                <artifactId>jersey-media-jaxb</artifactId>
-                <version>2.17</version>
-            </dependency>            
-            <dependency>
-                <groupId>org.glassfish.jersey.core</groupId>
-                <artifactId>jersey-server</artifactId>
-            </dependency>                
+            </dependency>                  
             <dependency>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-starter-tomcat</artifactId>

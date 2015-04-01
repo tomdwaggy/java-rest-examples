@@ -5,12 +5,10 @@
  */
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.hypertext.Hyperlinked;
-import io.github.arven.rs.hypertext.WebStatusResponse;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
-import io.github.arven.rs.hypertext.ListView;
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
@@ -50,7 +48,7 @@ public class UserRestResource implements Serializable {
      * @param name
      * @return 
      */
-    @GET @Hyperlinked
+    @GET
     public Person getUser(@PathParam("name") String name) {
         return blogService.getUser(name);
     }
@@ -64,14 +62,11 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @DELETE @Hyperlinked
+    @DELETE
     @RolesAllowed({"User"})
-    public WebStatusResponse removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
+    public void removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeUser(name);
-            return new WebStatusResponse(Status.OK);
-        } else {
-            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -83,9 +78,9 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
-    @Path("/friends") @GET @Hyperlinked
-    public ListView<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return new ListView<Person>(blogService.getFriends(name)).offset(offset).limit(MAX_LIST_SPAN);
+    @Path("/friends") @GET
+    public List<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return new LinkedList<Person>(blogService.getFriends(name));
     }
     
     /**
@@ -102,14 +97,11 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/friends/{friend}") @PUT @Hyperlinked
+    @Path("/friends/{friend}") @PUT
     @RolesAllowed({"User"})
-    public WebStatusResponse addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
+    public void addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addFriend(name, friend);
-            return new WebStatusResponse(Status.CREATED, blogService.getUser(name), blogService.getUser(friend));
-        } else {
-            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -125,14 +117,11 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/friends/{friend}") @DELETE @Hyperlinked
+    @Path("/friends/{friend}") @DELETE
     @RolesAllowed({"User"})
-    public WebStatusResponse removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
+    public void removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removeFriend(name, friend);
-            return new WebStatusResponse(Status.OK);
-        } else {
-            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -146,9 +135,9 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
-    @Path("/messages") @GET @Hyperlinked
-    public ListView<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
-        return new ListView(blogService.getPosts(name)).offset(offset).reverse(true);
+    @Path("/messages") @GET
+    public List<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
+        return new LinkedList<Message>(blogService.getPosts(name));
     }
     
     /**
@@ -162,14 +151,11 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
-    @Path("/messages") @POST @Hyperlinked
+    @Path("/messages") @POST
     @RolesAllowed({"User"})
-    public WebStatusResponse postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
+    public void postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
-            return new WebStatusResponse(Status.CREATED, post);
-        } else {
-            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -181,7 +167,7 @@ public class UserRestResource implements Serializable {
      * @param message
      * @return  
      */
-    @Path("/messages/{message}") @GET @Hyperlinked
+    @Path("/messages/{message}") @GET
     public List<Message> getSingleMessage(@PathParam("name") String name, @PathParam("message") String message) {
         return blogService.getPost(name, message);
     } 
@@ -194,16 +180,13 @@ public class UserRestResource implements Serializable {
      * @param ctx
      * @return  
      */
-    @Path("/messages/{message}") @DELETE @Hyperlinked
+    @Path("/messages/{message}") @DELETE
     @RolesAllowed({"User"})
-    public WebStatusResponse deleteMessage(@PathParam("name") String name, @PathParam("message") String message, final @Context SecurityContext ctx) {
+    public void deleteMessage(@PathParam("name") String name, @PathParam("message") String message, final @Context SecurityContext ctx) {
         List<Message> posts = blogService.getPost(name, message);
         Message post = posts.get(0);
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.removePost(name, message);
-            return new WebStatusResponse(Status.OK, post);
-        } else {
-            return new WebStatusResponse(Status.NOT_MODIFIED);
         }
     }        
     

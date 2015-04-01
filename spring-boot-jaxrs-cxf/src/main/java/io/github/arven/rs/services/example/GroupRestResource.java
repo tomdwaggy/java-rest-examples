@@ -5,9 +5,9 @@
  */
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.hypertext.WebStatusResponse;
-import io.github.arven.rs.hypertext.ListView;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -58,8 +58,8 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @Path("/members") @GET
-    public ListView<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
-        return new ListView<Person>(blogService.getGroupMembers(name));
+    public List<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
+        return new LinkedList<Person>(blogService.getGroupMembers(name));
     }
     
     /**
@@ -73,12 +73,9 @@ public class GroupRestResource implements Serializable {
      * @return  
      */
     @Path("/members/{user}") @PUT @RolesAllowed({"User"})
-    public WebStatusResponse joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
+    public void joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.addGroupMember(name, ctx.getUserPrincipal().getName());
-            return new WebStatusResponse(Status.CREATED, blogService.getUser(user), blogService.getGroup(name));
-        } else {
-            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     
@@ -93,12 +90,9 @@ public class GroupRestResource implements Serializable {
      * @return  
      */
     @Path("/members/{user}") @DELETE @RolesAllowed({"User"})
-    public WebStatusResponse leaveGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
+    public void leaveGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
             blogService.leaveGroup(name, ctx.getUserPrincipal().getName());
-            return new WebStatusResponse(Status.OK);
-        } else {
-            return new WebStatusResponse(Status.FORBIDDEN);
         }
     }
     

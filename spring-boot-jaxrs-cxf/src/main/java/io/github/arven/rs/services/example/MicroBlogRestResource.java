@@ -1,6 +1,5 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.hypertext.WebStatusResponse;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -15,6 +14,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import org.apache.cxf.jaxrs.ext.xml.ElementClass;
 
 /**
  * MicroBlogRestService is the REST service front end for the MicroBlogService.
@@ -58,13 +60,8 @@ public class MicroBlogRestResource {
      * @return  
      */
     @Path("/group") @POST @RolesAllowed({"User"})
-    public WebStatusResponse createGroup(Group group, final @Context SecurityContext ctx) {
-        try {
-            blogService.addGroup(group, ctx.getUserPrincipal().getName());
-            return new WebStatusResponse(Status.CREATED, group);
-        } catch (Exception e) {
-            return new WebStatusResponse(Status.FORBIDDEN);
-        }
+    public void createGroup(Group group, final @Context SecurityContext ctx) {
+        blogService.addGroup(group, ctx.getUserPrincipal().getName());
     }        
     
     /**
@@ -86,14 +83,8 @@ public class MicroBlogRestResource {
      * @return 
      */
     @Path("/user") @POST
-    public WebStatusResponse addUser(Person user) {
-        try {
-            blogService.addUser(user);
-            //return StatusMessage.created(Link.fromPath("/example/v1/user/{name}").rel("created").build(user.getId()));
-            return new WebStatusResponse(Status.CREATED, user);
-        } catch (Exception e) {
-            return new WebStatusResponse(Status.FORBIDDEN);
-        }
+    public void addUser(Person user) {
+        blogService.addUser(user);
     }    
     
     /**

@@ -3,16 +3,11 @@ package io.github.arven.rs.services.example;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
-import io.github.arven.rs.hypertext.HyperlinkId;
-import io.github.arven.rs.hypertext.HyperlinkPath;
-import io.github.arven.rs.hypertext.InjectHyperlinks;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Collection;
 import java.util.Date;
-import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -24,14 +19,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.ws.rs.core.Link;
 import javax.xml.bind.annotation.XmlID;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 /**
  * The MessageData class provides some basic information about a message
@@ -43,10 +36,8 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
-@HyperlinkPath("/example/v1/user/{user}/messages/{message}")
 public class Message implements Serializable {
        
-    @HyperlinkId("message")
     @Id
     @XmlID @XmlAttribute
     private String id;
@@ -107,7 +98,6 @@ public class Message implements Serializable {
         this.user = person;
     }    
     
-    @HyperlinkId("user")
     public String getUserName() {
         return this.user.getId();
     }
@@ -128,11 +118,5 @@ public class Message implements Serializable {
         }
         return tag;
     }
-
-    @Transient
-    @InjectHyperlinks
-    @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)           
-    private List<Link> links;
 
 }
