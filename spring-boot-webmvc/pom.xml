@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.github.arven.rs</groupId>
-	<artifactId>service-example-spring-boot-jaxrs-auto-linking</artifactId>
+	<artifactId>service-example-spring-boot-webmvc</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
         

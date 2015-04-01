@@ -1,8 +1,5 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.hypertext.HyperlinkId;
-import io.github.arven.rs.hypertext.HyperlinkPath;
-import io.github.arven.rs.hypertext.InjectHyperlinks;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -36,7 +33,6 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="USERDATA")
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
-@HyperlinkPath("/example/v1/user/{id}")
 public class Person implements Serializable {
 
     @Id
@@ -106,7 +102,6 @@ public class Person implements Serializable {
      * 
      * @return	the user's id
      */
-    @HyperlinkId
     public String getId() {
     	return this.id;
     }  
@@ -186,7 +181,6 @@ public class Person implements Serializable {
     }
     
     @Transient
-    @InjectHyperlinks
     @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
     private List<Link> links;

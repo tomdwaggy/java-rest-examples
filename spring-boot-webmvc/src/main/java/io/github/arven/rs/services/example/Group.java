@@ -1,10 +1,6 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.rs.hypertext.HyperlinkId;
-import io.github.arven.rs.hypertext.HyperlinkPath;
-import io.github.arven.rs.hypertext.InjectHyperlinks;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Basic;
@@ -33,10 +29,9 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="GROUPDATA")
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.NONE)
-@HyperlinkPath("/example/v1/group/{id}")
 public class Group implements Serializable {
 
-    @HyperlinkId @Id
+    @Id
     @XmlID @XmlAttribute
     private String id;
     
@@ -98,7 +93,6 @@ public class Group implements Serializable {
     }    
 
     @Transient
-    @InjectHyperlinks
     @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)          
     private List<Link> links;
