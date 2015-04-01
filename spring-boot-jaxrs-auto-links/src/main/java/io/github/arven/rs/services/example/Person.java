@@ -189,6 +189,6 @@ public class Person implements Serializable {
     @InjectHyperlinks
     @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
     @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
-    private List<Link> links = new LinkedList<Link>();
+    private List<Link> links;
     
 }

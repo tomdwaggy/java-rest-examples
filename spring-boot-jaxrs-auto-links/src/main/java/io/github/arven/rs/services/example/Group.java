@@ -98,13 +98,9 @@ public class Group implements Serializable {
     }    
 
     @Transient
-    private List<Link> links = new LinkedList<Link>();
-
     @InjectHyperlinks
     @XmlElement(name = "link", namespace = "http://www.w3.org/2005/Atom")
-    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)       
-    public Collection<Link> getLinks() {
-        return links;
-    }
+    @XmlJavaTypeAdapter(Link.JaxbAdapter.class)          
+    private List<Link> links;
     
 }
