@@ -2,4 +2,5 @@
 /spring-boot-jaxrs-linking/target/
 /spring-boot-jaxrs-auto/target/
 /spring-boot-jaxrs-auto-links/target/
+/spring-boot-jaxrs-cxf/target/
 /spring-boot-webmvc/target/
