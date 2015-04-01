@@ -10,6 +10,7 @@ import javax.inject.Named;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
+import javax.ws.rs.WebApplicationException;
 
 /**
  * MicroBlogService is a backend implementation, with no database or any
@@ -86,10 +87,11 @@ public class MicroBlogService {
      */
     public List<Message> getPost( String userName, String postName ) {
         Message m = test.find(Message.class, postName);
-        if (m.getUserName().equals(userName)) {
+        if (m != null && m.getUserName().equals(userName)) {
             return Arrays.asList(m);
+        } else {
+            return Collections.EMPTY_LIST;
         }
-        return Collections.EMPTY_LIST;
     }    
 
     /**
@@ -117,13 +119,11 @@ public class MicroBlogService {
      * @param postName
      */
     public void removePost( String userName, String postName ) {
-        Person user = test.find(Person.class, userName);
-        for(Message p : user.getMessages()) {
-            if(p.getId().equals(postName)) {
-                user.getMessages().remove(p);
-            }
+        Message message = test.find(Message.class, postName);
+        if(message.getUserName().equals(userName)) {
+            test.remove(message);
         }
-    }    
+    }
     
     /**
      * Get the group information for a given group. If the group does not

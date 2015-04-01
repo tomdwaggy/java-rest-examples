@@ -184,6 +184,27 @@ public class UserRestResource implements Serializable {
     @Path("/messages/{message}") @GET @Hyperlinked
     public List<Message> getSingleMessage(@PathParam("name") String name, @PathParam("message") String message) {
         return blogService.getPost(name, message);
-    }    
+    } 
+    
+    /**
+     * For a given user name, this method removes a specific message.
+     * 
+     * @param name
+     * @param message
+     * @param ctx
+     * @return  
+     */
+    @Path("/messages/{message}") @DELETE @Hyperlinked
+    @RolesAllowed({"User"})
+    public WebStatusResponse deleteMessage(@PathParam("name") String name, @PathParam("message") String message, final @Context SecurityContext ctx) {
+        List<Message> posts = blogService.getPost(name, message);
+        Message post = posts.get(0);
+        if(ctx.getUserPrincipal().getName().equals(name)) {
+            blogService.removePost(name, message);
+            return new WebStatusResponse(Status.OK, post);
+        } else {
+            return new WebStatusResponse(Status.NOT_MODIFIED);
+        }
+    }        
     
 }
