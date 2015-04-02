@@ -8,6 +8,17 @@
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
         
+        <repositories>
+            <repository>
+                <id>oss-sonatype</id>
+                <name>oss-sonatype</name>
+                <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+        </repositories>        
+        
         <parent>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-parent</artifactId>
@@ -113,12 +124,7 @@
                         <artifactId>jsr311-api</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency> 
-            <dependency>
-                <groupId>com.fasterxml.jackson.module</groupId>
-                <artifactId>jackson-module-swagger</artifactId>
-                <version>0.5.0</version>
-            </dependency>                
+            </dependency>                            
 	</dependencies>
 
 	<properties>
@@ -133,7 +139,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
-                <plugin>
+                <!-- <plugin>
                   <groupId>org.codehaus.enunciate</groupId>
                   <artifactId>maven-enunciate-cxf-plugin</artifactId>
                   <version>1.30.1</version>
@@ -169,7 +175,7 @@
                         <version>1.30.1</version>
                     </dependency>                    
                   </dependencies>                
-                </plugin>
+                </plugin> -->
                 <!-- <plugin>
                     <groupId>com.github.kongchen</groupId>
                     <artifactId>swagger-maven-plugin</artifactId>

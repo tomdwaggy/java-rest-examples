@@ -3,7 +3,7 @@ package io.github.arven.rs.services.example.spring;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import com.wordnik.swagger.jackson.ModelResolver;
+import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -61,7 +61,7 @@ public class Application implements Serializable {
     }    
 
     @Bean
-    public Server jaxRsServer() {
+    public Server jaxRsServer() {        
         List<ResourceProvider> resourceProviders = new LinkedList<ResourceProvider>();
         for (String beanName : ctx.getBeanDefinitionNames()) {
             if (ctx.findAnnotationOnBean(beanName, Path.class) != null) {
@@ -81,13 +81,12 @@ public class Application implements Serializable {
         }
     }
     
-    /*@Bean
-    public ModelResolver modelResolver() {
+    @Bean
+    public ObjectMapper objectMapper() {
         ObjectMapper obMap = new ObjectMapper();
         obMap.setAnnotationIntrospector(new JaxbAnnotationIntrospector(obMap.getTypeFactory()));
-        ModelResolver resolve = new ModelResolver(obMap);
-        System.out.println(resolve.);
-        return resolve;
-    }*/
+        ModelConverters.getInstance().addConverter(new com.wordnik.swagger.jackson.ModelResolver(obMap));
+        return obMap;
+    }
     
 }
