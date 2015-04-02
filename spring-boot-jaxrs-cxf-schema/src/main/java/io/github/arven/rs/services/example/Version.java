@@ -16,14 +16,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Version {
     
     @XmlElement
-    private String version;
+    private String ver;
     
     public Version() {
         
     }
     
     public Version(String version) {
-        this.version = version;
+        this.ver = version;
     }
     
 }

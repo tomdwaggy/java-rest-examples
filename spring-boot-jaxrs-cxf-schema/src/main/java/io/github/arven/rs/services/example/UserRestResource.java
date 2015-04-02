@@ -6,6 +6,7 @@
 package io.github.arven.rs.services.example;
 
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
 import java.io.Serializable;
@@ -25,7 +26,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -36,6 +36,7 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
+@Api(hidden = true, value = "/user")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class UserRestResource implements Serializable {
@@ -49,6 +50,7 @@ public class UserRestResource implements Serializable {
      * @param name
      * @return 
      */
+    @ApiOperation("Get information on user")
     @GET
     public Person getUser(@PathParam("name") String name) {
         return blogService.getUser(name);
@@ -63,6 +65,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Delete a user if logged in as this user")
     @DELETE
     @RolesAllowed({"User"})
     public void removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
@@ -79,6 +82,7 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
+    @ApiOperation("List a user's friends")
     @Path("/friends") @GET
     public List<Person> getFriendsList(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
         return new LinkedList<Person>(blogService.getFriends(name));
@@ -98,6 +102,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Add a friend if logged in as this user")
     @Path("/friends/{friend}") @PUT
     @RolesAllowed({"User"})
     public void addFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
@@ -118,6 +123,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Remove a friend if logged in as this user")
     @Path("/friends/{friend}") @DELETE
     @RolesAllowed({"User"})
     public void removeFriend(@PathParam("name") String name, @PathParam("friend") String friend, final @Context SecurityContext ctx) {
@@ -136,6 +142,7 @@ public class UserRestResource implements Serializable {
      * @param offset
      * @return 
      */
+    @ApiOperation("Get this user's public messages")
     @Path("/messages") @GET
     public List<Message> getMessagesByUser(@PathParam("name") String name, @MatrixParam("offset") Integer offset) {
         return new LinkedList<Message>(blogService.getPosts(name));
@@ -152,6 +159,7 @@ public class UserRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Post a message as this user if logged in as this user")
     @Path("/messages") @POST
     @RolesAllowed({"User"})
     public void postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
@@ -168,6 +176,7 @@ public class UserRestResource implements Serializable {
      * @param message
      * @return  
      */
+    @ApiOperation("Get a single message from this user by Message ID")
     @Path("/messages/{message}") @GET
     public List<Message> getSingleMessage(@PathParam("name") String name, @PathParam("message") String message) {
         return blogService.getPost(name, message);
@@ -181,6 +190,7 @@ public class UserRestResource implements Serializable {
      * @param ctx
      * @return  
      */
+    @ApiOperation("Delete a message from this user's public messages if logged in as this user")
     @Path("/messages/{message}") @DELETE
     @RolesAllowed({"User"})
     public void deleteMessage(@PathParam("name") String name, @PathParam("message") String message, final @Context SecurityContext ctx) {

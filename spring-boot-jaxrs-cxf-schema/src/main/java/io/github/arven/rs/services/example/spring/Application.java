@@ -1,7 +1,12 @@
 package io.github.arven.rs.services.example.spring;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.jaxrs.config.BeanConfig;
+import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
+import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
 import io.github.arven.rs.services.example.MicroBlogRestResource;
+import io.github.arven.rs.services.example.Version;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -11,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
@@ -36,7 +42,7 @@ import org.springframework.context.annotation.ImportResource;
 @ComponentScan("io.github.arven.rs.services.example")
 @EntityScan("io.github.arven.rs.services.example")
 @Configuration
-@ImportResource({"classpath:META-INF/cxf/cxf.xml", "classpath:META-INF/cxf/cxf-servlet.xml"})
+@ImportResource({"classpath:META-INF/cxf/cxf.xml", "classpath:META-INF/cxf/cxf-servlet.xml", "classpath:/swagger-beans.xml"})
 public class Application implements Serializable {
     
     @Inject
@@ -65,12 +71,14 @@ public class Application implements Serializable {
                 SpringResourceFactory factory = new SpringResourceFactory(beanName);
                 factory.setApplicationContext(ctx);
                 resourceProviders.add(factory);
+                System.out.println(beanName);
             }
         }
+        //resourceProviders.add(apiListingResource());
         if (resourceProviders.size() > 0) {
             JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
             factory.setBus(ctx.getBean(SpringBus.class));
-            factory.setProviders(Arrays.asList(new JacksonJsonProvider(), new JAXBElementProvider()));
+            factory.setProviders(Arrays.asList(new JacksonJsonProvider(), new JAXBElementProvider(), new SwaggerSerializers()));
             factory.setResourceProviders(resourceProviders);
             return factory.create();
         } else {

@@ -80,7 +80,12 @@
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-annotations</artifactId>
-            </dependency>                              
+            </dependency>     
+            <dependency>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-rs-security-cors</artifactId>
+              <version>3.0.4</version>
+            </dependency>                                     
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
@@ -102,7 +107,7 @@
                 <groupId>com.wordnik</groupId>
                 <artifactId>swagger-jaxrs</artifactId>
                 <version>1.5.3-M1</version>
-            </dependency>
+            </dependency>                      
 	</dependencies>
 
 	<properties>
@@ -110,52 +115,78 @@
             <start-class>io.github.arven.rs.services.example.spring.Application</start-class>
             <java.version>1.7</java.version>
 	</properties>
-
+        
 	<build>
-            <plugins>
+            <plugins>              
                 <plugin>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
                 <plugin>
+                  <groupId>org.codehaus.enunciate</groupId>
+                  <artifactId>maven-enunciate-cxf-plugin</artifactId>
+                  <version>1.30.1</version>
+                  <configuration>
+                    <configFile>${basedir}/enunciate.xml</configFile>
+                  </configuration>
+                  <executions>
+                    <execution>
+                      <goals>
+                        <goal>assemble</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+                  <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.enunciate</groupId>
+                        <artifactId>enunciate-spring-app</artifactId>
+                        <version>1.30.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.enunciate</groupId>
+                        <artifactId>enunciate-php</artifactId>
+                        <version>1.30.1</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.codehaus.enunciate</groupId>
+                        <artifactId>enunciate-ruby</artifactId>
+                        <version>1.30.1</version>
+                    </dependency>      
+                    <dependency>
+                        <groupId>org.codehaus.enunciate</groupId>
+                        <artifactId>enunciate-swagger</artifactId>
+                        <version>1.30.1</version>
+                    </dependency>                    
+                  </dependencies>                
+                </plugin>
+                <!-- <plugin>
                     <groupId>com.github.kongchen</groupId>
                     <artifactId>swagger-maven-plugin</artifactId>
                     <version>2.3.4</version>
                     <configuration>
                         <apiSources>
                             <apiSource>
-                                <!--Required parameters BEGIN-->
                                 <locations>io.github.arven.rs.services.example</locations>
                                 <apiVersion>v1</apiVersion>
-                                <basePath>http://localhost:8080/</basePath>
-                                <!--Required parameters END-->
-
-                                <!--Optional parameters BEGIN-->
-                                <!---General parameters BEGIN-->
+                                <basePath>http://localhost:8080</basePath>
+                                
                                 <apiInfo>
-                                    <title>Swagger Maven Plugin Sample</title>
-                                    <description>This is a sample for swagger-maven-plugin</description>
-                                    <termsOfServiceUrl>http://www.github.com/kongchen/swagger-maven-plugin</termsOfServiceUrl>
-                                    <contact>kongchen#gmail$com</contact>
+                                    <title>Spring Boot CXF Example</title>
+                                    <description>This is an example web service for Spring Boot with CXF</description>
+                                    <contact>arven@arven.github.io</contact>
                                     <license>Apache 2.0</license>
                                     <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
                                 </apiInfo>
-                                <!-- <overridingModels>/swagger-overriding-models.json</overridingModels> -->
-                                <swaggerInternalFilter>com.wordnik.swagger.config.DefaultSpecFilter</swaggerInternalFilter>
-                                <!---General parameters END-->
 
-                                <!---Document generation parameters BEGIN-->
+                                <swaggerInternalFilter>com.wordnik.swagger.config.DefaultSpecFilter</swaggerInternalFilter>
+
                                 <outputTemplate>templates/strapdown.html.mustache</outputTemplate>
                                 <mustacheFileRoot>${basedir}/templates/</mustacheFileRoot>
                                 <outputPath>${basedir}/generated/document.html</outputPath>
-                                <!---Document generation parameters END-->
 
-                                <!---Swagger JSON parameters BEGIN-->
                                 <swaggerDirectory>generated/swagger-ui</swaggerDirectory>
                                 <swaggerUIDocBasePath>http://www.wordnik.com/restapi/doc</swaggerUIDocBasePath>
                                 <useOutputFlatStructure>false</useOutputFlatStructure>
-                                <!---Swagger JSON parameters END-->
-                                <!--Optional parameters END-->
                             </apiSource>
                         </apiSources>
                     </configuration>
@@ -167,7 +198,7 @@
                             </goals>
                         </execution>
                     </executions>
-                </plugin>                
+                </plugin>        -->       
             </plugins>
 	</build>
 

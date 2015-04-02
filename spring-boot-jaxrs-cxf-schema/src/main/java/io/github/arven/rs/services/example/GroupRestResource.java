@@ -5,6 +5,8 @@
  */
 package io.github.arven.rs.services.example;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,7 +23,6 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
 
 /**
@@ -31,6 +32,7 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
+@Api(hidden = true, value = "/group")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class GroupRestResource implements Serializable {
@@ -44,6 +46,7 @@ public class GroupRestResource implements Serializable {
      * @param name
      * @return 
      */
+    @ApiOperation("Get group information")
     @GET
     public Group getGroupInfo(@PathParam("group") String name) {
         return blogService.getGroup(name);
@@ -57,6 +60,7 @@ public class GroupRestResource implements Serializable {
      * @param offset
      * @return 
      */
+    @ApiOperation("Get group members list")
     @Path("/members") @GET
     public List<Person> getGroupMembers(@PathParam("group") String name, @MatrixParam("offset") Integer offset) {
         return new LinkedList<Person>(blogService.getGroupMembers(name));
@@ -72,6 +76,7 @@ public class GroupRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Add user to group, if logged in as this user")
     @Path("/members/{user}") @PUT @RolesAllowed({"User"})
     public void joinGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {
@@ -89,6 +94,7 @@ public class GroupRestResource implements Serializable {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Remove user from group, if logged in as this user")
     @Path("/members/{user}") @DELETE @RolesAllowed({"User"})
     public void leaveGroup(@PathParam("group") String name, @PathParam("user") String user, final @Context SecurityContext ctx) {
         if(user.equals(ctx.getUserPrincipal().getName())) {

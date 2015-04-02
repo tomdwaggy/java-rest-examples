@@ -14,11 +14,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.SecurityContext;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import org.apache.cxf.jaxrs.ext.xml.ElementClass;
 
 /**
  * MicroBlogRestService is the REST service front end for the MicroBlogService.
@@ -63,6 +59,7 @@ public class MicroBlogRestResource {
      * @param ctx 
      * @return  
      */
+    @ApiOperation("Create a new user group")
     @Path("/group") @POST @RolesAllowed({"User"})
     public void createGroup(Group group, final @Context SecurityContext ctx) {
         blogService.addGroup(group, ctx.getUserPrincipal().getName());
@@ -73,6 +70,7 @@ public class MicroBlogRestResource {
      * 
      * @return sub resource for group
      */
+    @ApiOperation(value = "Get operations on a selected group", response = GroupRestResource.class)
     @Path("/group/{group}")
     public GroupRestResource getGroupSubResource() {
         return groupResource;
@@ -86,6 +84,7 @@ public class MicroBlogRestResource {
      * @param user
      * @return 
      */
+    @ApiOperation("Add a user")
     @Path("/user") @POST
     public void addUser(Person user) {
         blogService.addUser(user);
@@ -96,6 +95,7 @@ public class MicroBlogRestResource {
      * 
      * @return sub resource for user
      */
+    @ApiOperation(value = "Get operations on a selected user", response = UserRestResource.class)
     @Path("/user/{name}")
     public UserRestResource getUserSubResource() {
         return userResource;
