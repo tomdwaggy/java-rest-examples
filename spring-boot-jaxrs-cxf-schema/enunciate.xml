@@ -1,0 +1,17 @@
+<enunciate xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://enunciate.codehaus.org/schemas/enunciate-1.30.xsd">
+    <namespaces>
+        <namespace id="app" uri="http://github.com/Arven/java-rest-examples" />
+    </namespaces>
+    <services>
+        <rest defaultRestSubcontext="/" />
+    </services>
+    <modules>
+        <spring-app disabled="false" />
+        <jaxws-ri disabled="true" />
+        <jersey disabled="true" />
+        <php disabled="false" />
+        <docs docsDir="/" splashPackage="io.github.arven.rs.services.example" title="MicroBlog Web Service API" copyright="Arven"/>
+        <swagger dir="swagger" />
+    </modules>
+</enunciate>
