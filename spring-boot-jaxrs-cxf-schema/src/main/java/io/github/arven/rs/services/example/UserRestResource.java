@@ -5,6 +5,7 @@
  */
 package io.github.arven.rs.services.example;
 
+import com.wordnik.swagger.annotations.Api;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
 import java.io.Serializable;

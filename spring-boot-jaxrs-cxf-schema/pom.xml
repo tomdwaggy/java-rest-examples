@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>io.github.arven.rs</groupId>
-	<artifactId>service-example-spring-boot-jaxrs-cxf</artifactId>
+	<artifactId>service-example-spring-boot-jaxrs-cxf-schema</artifactId>
 	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
         
@@ -99,10 +99,10 @@
                 <version>3.1</version>
             </dependency>
             <dependency>
-                    <groupId>org.javatuples</groupId>
-                    <artifactId>javatuples</artifactId>
-                    <version>1.2</version>
-            </dependency>    
+                <groupId>com.wordnik</groupId>
+                <artifactId>swagger-jaxrs</artifactId>
+                <version>1.5.3-M1</version>
+            </dependency>
 	</dependencies>
 
 	<properties>
@@ -117,6 +117,57 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
+                <plugin>
+                    <groupId>com.github.kongchen</groupId>
+                    <artifactId>swagger-maven-plugin</artifactId>
+                    <version>2.3.4</version>
+                    <configuration>
+                        <apiSources>
+                            <apiSource>
+                                <!--Required parameters BEGIN-->
+                                <locations>io.github.arven.rs.services.example</locations>
+                                <apiVersion>v1</apiVersion>
+                                <basePath>http://localhost:8080/</basePath>
+                                <!--Required parameters END-->
+
+                                <!--Optional parameters BEGIN-->
+                                <!---General parameters BEGIN-->
+                                <apiInfo>
+                                    <title>Swagger Maven Plugin Sample</title>
+                                    <description>This is a sample for swagger-maven-plugin</description>
+                                    <termsOfServiceUrl>http://www.github.com/kongchen/swagger-maven-plugin</termsOfServiceUrl>
+                                    <contact>kongchen#gmail$com</contact>
+                                    <license>Apache 2.0</license>
+                                    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+                                </apiInfo>
+                                <!-- <overridingModels>/swagger-overriding-models.json</overridingModels> -->
+                                <swaggerInternalFilter>com.wordnik.swagger.config.DefaultSpecFilter</swaggerInternalFilter>
+                                <!---General parameters END-->
+
+                                <!---Document generation parameters BEGIN-->
+                                <outputTemplate>templates/strapdown.html.mustache</outputTemplate>
+                                <mustacheFileRoot>${basedir}/templates/</mustacheFileRoot>
+                                <outputPath>${basedir}/generated/document.html</outputPath>
+                                <!---Document generation parameters END-->
+
+                                <!---Swagger JSON parameters BEGIN-->
+                                <swaggerDirectory>generated/swagger-ui</swaggerDirectory>
+                                <swaggerUIDocBasePath>http://www.wordnik.com/restapi/doc</swaggerUIDocBasePath>
+                                <useOutputFlatStructure>false</useOutputFlatStructure>
+                                <!---Swagger JSON parameters END-->
+                                <!--Optional parameters END-->
+                            </apiSource>
+                        </apiSources>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>                
             </plugins>
 	</build>
 

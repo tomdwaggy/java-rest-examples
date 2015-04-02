@@ -78,14 +78,4 @@ public class Application implements Serializable {
         }
     }
     
-    //@Bean
-    //public SpringBus springBus() {
-    //    return new SpringBus();
-    //}
-    
-    //@Bean
-    //public SpringBus cxf() {
-    //    return new CXF();
-    //}    
-    
 }

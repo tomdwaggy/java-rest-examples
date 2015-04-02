@@ -1,5 +1,7 @@
 package io.github.arven.rs.services.example;
 
+import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.annotations.ApiOperation;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -29,6 +31,7 @@ import org.apache.cxf.jaxrs.ext.xml.ElementClass;
 
 @Named
 @Path("/example/v1")
+@Api(value = "/example/v1", description = "Microblog Service")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class MicroBlogRestResource {
@@ -45,6 +48,7 @@ public class MicroBlogRestResource {
      * 
      * @return  Version of this demo
      */
+    @ApiOperation("Get version of this web service")
     @Path("/version") @GET
     public Version getVersion() {
         return new Version("v1.1");
