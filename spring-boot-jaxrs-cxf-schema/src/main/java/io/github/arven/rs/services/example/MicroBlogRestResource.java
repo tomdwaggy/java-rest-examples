@@ -2,6 +2,7 @@ package io.github.arven.rs.services.example;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;
@@ -61,7 +62,7 @@ public class MicroBlogRestResource {
      */
     @ApiOperation("Create a new user group")
     @Path("/group") @POST @RolesAllowed({"User"})
-    public void createGroup(Group group, final @Context SecurityContext ctx) {
+    public void createGroup(@ApiParam Group group, final @Context SecurityContext ctx) {
         blogService.addGroup(group, ctx.getUserPrincipal().getName());
     }        
     
@@ -84,9 +85,9 @@ public class MicroBlogRestResource {
      * @param user
      * @return 
      */
-    @ApiOperation("Add a user")
+    @ApiOperation(value = "Add a user")
     @Path("/user") @POST
-    public void addUser(Person user) {
+    public void addUser(@ApiParam Person user) {
         blogService.addUser(user);
     }    
     

@@ -32,7 +32,7 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
-@Api(hidden = true, value = "/group")
+@Api(value = "/group")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class GroupRestResource implements Serializable {
@@ -47,7 +47,7 @@ public class GroupRestResource implements Serializable {
      * @return 
      */
     @ApiOperation("Get group information")
-    @GET
+    @Path("/") @GET
     public Group getGroupInfo(@PathParam("group") String name) {
         return blogService.getGroup(name);
     }

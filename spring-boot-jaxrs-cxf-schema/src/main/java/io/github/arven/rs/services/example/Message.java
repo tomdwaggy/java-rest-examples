@@ -1,5 +1,6 @@
 package io.github.arven.rs.services.example;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
@@ -54,6 +55,7 @@ public class Message implements Serializable {
     
     @ManyToOne
     @JoinColumn(name="USERDATA_ID")
+    @JsonIgnore
     private Person user;
     
     @Transient
@@ -98,6 +100,7 @@ public class Message implements Serializable {
         this.user = person;
     }    
     
+    @JsonIgnore
     public String getUserName() {
         return this.user.getId();
     }

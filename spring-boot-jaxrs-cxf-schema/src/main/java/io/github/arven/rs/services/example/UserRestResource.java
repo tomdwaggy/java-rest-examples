@@ -7,6 +7,7 @@ package io.github.arven.rs.services.example;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
+import com.wordnik.swagger.annotations.ApiParam;
 import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
 import java.io.Serializable;
@@ -36,7 +37,7 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
-@Api(hidden = true, value = "/user")
+@Api(value = "/user")
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
 public class UserRestResource implements Serializable {
@@ -51,7 +52,7 @@ public class UserRestResource implements Serializable {
      * @return 
      */
     @ApiOperation("Get information on user")
-    @GET
+    @Path("/") @GET
     public Person getUser(@PathParam("name") String name) {
         return blogService.getUser(name);
     }
@@ -66,7 +67,7 @@ public class UserRestResource implements Serializable {
      * @return  
      */
     @ApiOperation("Delete a user if logged in as this user")
-    @DELETE
+    @Path("/") @DELETE
     @RolesAllowed({"User"})
     public void removeUser(@PathParam("name") String name, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
@@ -162,7 +163,7 @@ public class UserRestResource implements Serializable {
     @ApiOperation("Post a message as this user if logged in as this user")
     @Path("/messages") @POST
     @RolesAllowed({"User"})
-    public void postMessage(@PathParam("name") String name, Message post, final @Context SecurityContext ctx) {
+    public void postMessage(@PathParam("name") String name, @ApiParam Message post, final @Context SecurityContext ctx) {
         if(ctx.getUserPrincipal().getName().equals(name)) {
             blogService.addPost(ctx.getUserPrincipal().getName(), post);
         }

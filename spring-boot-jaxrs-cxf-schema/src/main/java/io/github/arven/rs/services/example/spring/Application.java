@@ -1,12 +1,10 @@
 package io.github.arven.rs.services.example.spring;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
-import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.jaxrs.config.BeanConfig;
-import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
+import com.wordnik.swagger.jackson.ModelResolver;
 import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
-import io.github.arven.rs.services.example.MicroBlogRestResource;
-import io.github.arven.rs.services.example.Version;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,7 +14,6 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.endpoint.Server;
 import org.apache.cxf.jaxrs.JAXRSServerFactoryBean;
@@ -71,19 +68,26 @@ public class Application implements Serializable {
                 SpringResourceFactory factory = new SpringResourceFactory(beanName);
                 factory.setApplicationContext(ctx);
                 resourceProviders.add(factory);
-                System.out.println(beanName);
             }
         }
-        //resourceProviders.add(apiListingResource());
         if (resourceProviders.size() > 0) {
             JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
             factory.setBus(ctx.getBean(SpringBus.class));
-            factory.setProviders(Arrays.asList(new JacksonJsonProvider(), new JAXBElementProvider(), new SwaggerSerializers()));
+            factory.setProviders(Arrays.asList(new JacksonJaxbJsonProvider(), new JAXBElementProvider(), new SwaggerSerializers()));
             factory.setResourceProviders(resourceProviders);
             return factory.create();
         } else {
             return null;
         }
     }
+    
+    /*@Bean
+    public ModelResolver modelResolver() {
+        ObjectMapper obMap = new ObjectMapper();
+        obMap.setAnnotationIntrospector(new JaxbAnnotationIntrospector(obMap.getTypeFactory()));
+        ModelResolver resolve = new ModelResolver(obMap);
+        System.out.println(resolve.);
+        return resolve;
+    }*/
     
 }

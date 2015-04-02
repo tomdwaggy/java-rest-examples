@@ -1,5 +1,8 @@
 package io.github.arven.rs.services.example;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wordnik.swagger.annotations.ApiModel;
+import com.wordnik.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,31 +35,38 @@ import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 @Table(name="USERDATA")
 @XmlRootElement(name = "user")
 @XmlAccessorType(XmlAccessType.NONE)
+@ApiModel("Person")
 public class Person implements Serializable {
 
     @Id
     @XmlID @XmlAttribute
+    @ApiModelProperty("the user id")
     private String id;
     
     @Basic
     @XmlElement
+    @ApiModelProperty("the user nickname")
     private String nickname;
     
     @Basic
     @XmlElement
+    @ApiModelProperty("the user email address")
     private String email;
     
     @Basic
     @XmlElement
+    @ApiModelProperty("the user password")
     private String password;
 	
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Message> messages;
 	
     @ManyToMany(mappedBy = "members")
+    @JsonIgnore
     private List<Group> groups;
 	
     @OneToMany(cascade = CascadeType.ALL) @JoinTable(name="HAS_FRIEND")
+    @JsonIgnore
     private List<Person> friends;
     
     public Person() {
