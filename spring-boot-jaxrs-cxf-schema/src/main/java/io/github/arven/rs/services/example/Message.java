@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Predicates;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
+import com.wordnik.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +38,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="MESSAGEDATA")
 @XmlRootElement(name = "message")
 @XmlAccessorType(XmlAccessType.NONE)
+@ApiModel("Message")
 public class Message implements Serializable {
        
     @Id

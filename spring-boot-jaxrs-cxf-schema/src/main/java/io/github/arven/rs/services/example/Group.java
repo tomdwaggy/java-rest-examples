@@ -1,6 +1,7 @@
 package io.github.arven.rs.services.example;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.wordnik.swagger.annotations.ApiModel;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +28,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="GROUPDATA")
 @XmlRootElement(name = "group")
 @XmlAccessorType(XmlAccessType.NONE)
+@ApiModel("Group")
 public class Group implements Serializable {
 
     @Id

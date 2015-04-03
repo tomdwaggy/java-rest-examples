@@ -7,7 +7,6 @@
     http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
 
-    <!-- <bean id="jacksonJaxbJsonProvider" class="com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider" /> -->
     <bean id="swaggerResourceJSON" class="com.wordnik.swagger.jaxrs.listing.ApiListingResource" />
     
     <bean id="swaggerConfig" class="com.wordnik.swagger.jaxrs.config.BeanConfig">
@@ -20,7 +19,6 @@
       <property name="license" value="Apache 2.0 License"/>
       <property name="licenseUrl" value="http://www.apache.org/licenses/LICENSE-2.0.html"/>
       <property name="scan" value="true"/>
-      
     </bean>
     
 </beans>

@@ -37,7 +37,7 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
-@Api(hidden = true, value = "/user")
+@Api(hidden = true)
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 public class UserRestResource implements Serializable {

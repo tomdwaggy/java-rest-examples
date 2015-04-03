@@ -5,6 +5,7 @@
  */
 package io.github.arven.rs.services.example;
 
+import com.wordnik.swagger.annotations.ApiModel;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -12,18 +13,19 @@ import javax.xml.bind.annotation.XmlRootElement;
  *
  * @author Brian Becker
  */
-@XmlRootElement
+@XmlRootElement(name = "version")
+@ApiModel("Version")
 public class Version {
     
-    @XmlElement
-    private String ver;
+    @XmlElement(name = "v")
+    private String v;
     
     public Version() {
         
     }
     
     public Version(String version) {
-        this.ver = version;
+        this.v = version;
     }
     
 }
