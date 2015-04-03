@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.github.arven.rs</groupId>
+	<artifactId>service-example-spring-boot-jaxrs-cxf-schema</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+        
+        <repositories>
+            <repository>
+                <id>oss-sonatype</id>
+                <name>oss-sonatype</name>
+                <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+        </repositories>        
+        
+        <parent>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-parent</artifactId>
+            <version>1.2.2.RELEASE</version>
+        </parent>        
+
+	<dependencies>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-jms</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-jpa</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-jta-atomikos</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>2.5.1</version>
+            </dependency>    
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-rs-service-description</artifactId>
+                <version>3.0.4</version>
+            </dependency>                        
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxrs</artifactId>
+                <version>3.0.4</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>3.0.4</version>
+            </dependency>             
+            <!-- <dependency>
+                <groupId>javax.ws.rs</groupId>
+                <artifactId>javax.ws.rs-api</artifactId>
+                <version>2.0.1</version>
+            </dependency> -->
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+            </dependency>                  
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-tomcat</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+            </dependency>            
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+            </dependency>     
+            <dependency>
+              <groupId>org.apache.cxf</groupId>
+              <artifactId>cxf-rt-rs-security-cors</artifactId>
+              <version>3.0.4</version>
+            </dependency>                                     
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.auto.value</groupId>
+                <artifactId>auto-value</artifactId>
+                <version>1.0</version>
+                <scope>compile</scope>
+            </dependency>  
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>3.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.wordnik</groupId>
+                <artifactId>swagger-jaxrs</artifactId>
+                <version>1.5.0-M2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>jsr311-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>                                        
+	</dependencies>
+
+	<properties>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <start-class>io.github.arven.rs.services.example.spring.Application</start-class>
+            <java.version>1.7</java.version>
+	</properties>
+        
+	<build>
+            <plugins>              
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+                <plugin>
+                  <groupId>org.codehaus.enunciate</groupId>
+                  <artifactId>maven-enunciate-cxf-plugin</artifactId>
+                  <version>1.30.1</version>
+                  <configuration>
+                    <configFile>${basedir}/enunciate.xml</configFile>
+                  </configuration>
+                  <executions>
+                    <execution>
+                      <goals>
+                        <goal>assemble</goal>
+                      </goals>
+                    </execution>
+                  </executions>
+                  <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.enunciate</groupId>
+                        <artifactId>enunciate-spring-app</artifactId>
+                        <version>1.30.1</version>
+                    </dependency>
+                  </dependencies>                
+                </plugin>
+                <!-- <plugin>
+                    <groupId>com.github.kongchen</groupId>
+                    <artifactId>swagger-maven-plugin</artifactId>
+                    <version>2.3.4</version>
+                    <configuration>
+                        <apiSources>
+                            <apiSource>
+                                <locations>io.github.arven.rs.services.example</locations>
+                                <apiVersion>v1</apiVersion>
+                                <basePath>http://localhost:8080</basePath>
+                                
+                                <apiInfo>
+                                    <title>Spring Boot CXF Example</title>
+                                    <description>This is an example web service for Spring Boot with CXF</description>
+                                    <contact>arven@arven.github.io</contact>
+                                    <license>Apache 2.0</license>
+                                    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+                                </apiInfo>
+
+                                <swaggerInternalFilter>com.wordnik.swagger.config.DefaultSpecFilter</swaggerInternalFilter>
+
+                                <outputTemplate>templates/strapdown.html.mustache</outputTemplate>
+                                <mustacheFileRoot>${basedir}/templates/</mustacheFileRoot>
+                                <outputPath>${basedir}/generated/document.html</outputPath>
+
+                                <swaggerDirectory>generated/swagger-ui</swaggerDirectory>
+                                <swaggerUIDocBasePath>http://www.wordnik.com/restapi/doc</swaggerUIDocBasePath>
+                                <useOutputFlatStructure>false</useOutputFlatStructure>
+                            </apiSource>
+                        </apiSources>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>generate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>        -->       
+            </plugins>
+	</build>
+
+</project>
