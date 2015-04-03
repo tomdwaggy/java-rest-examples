@@ -124,7 +124,7 @@
                         <artifactId>jsr311-api</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency>                            
+            </dependency>                                        
 	</dependencies>
 
 	<properties>

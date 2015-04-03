@@ -37,7 +37,7 @@ import org.springframework.context.annotation.ImportResource;
  * @author Brian Becker
  */
 @SpringBootApplication
-@ComponentScan("io.github.arven.rs.services.example")
+@ComponentScan({"io.github.arven.rs.services.example", "io.github.arven.rs.provider"})
 @EntityScan("io.github.arven.rs.services.example")
 @Configuration
 @ImportResource({"classpath:META-INF/cxf/cxf.xml", "classpath:META-INF/cxf/cxf-servlet.xml", "classpath:/swagger-beans.xml"})
