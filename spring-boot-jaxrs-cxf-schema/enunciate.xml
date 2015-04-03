@@ -4,14 +4,20 @@
         <namespace id="app" uri="http://github.com/Arven/java-rest-examples" />
     </namespaces>
     <services>
-        <rest defaultRestSubcontext="/" />
+        <rest defaultRestSubcontext="/">
+            <content-types>
+                <content-type type="application/json" id="json"/> 
+                <content-type type="application/xml" id="xml"/>
+                <content-type type="application/yaml" id="yaml"/>
+                <content-type type="text/yaml" id="text-yaml"/>
+            </content-types>            
+        </rest>
     </services>
     <modules>
         <spring-app disabled="false" />
         <jaxws-ri disabled="true" />
         <jersey disabled="true" />
-        <php disabled="false" />
         <docs docsDir="/" splashPackage="io.github.arven.rs.services.example" title="MicroBlog Web Service API" copyright="Arven"/>
-        <swagger dir="swagger" />
+        
     </modules>
 </enunciate>

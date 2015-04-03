@@ -139,7 +139,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
-                <!-- <plugin>
+                <plugin>
                   <groupId>org.codehaus.enunciate</groupId>
                   <artifactId>maven-enunciate-cxf-plugin</artifactId>
                   <version>1.30.1</version>
@@ -159,23 +159,8 @@
                         <artifactId>enunciate-spring-app</artifactId>
                         <version>1.30.1</version>
                     </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.enunciate</groupId>
-                        <artifactId>enunciate-php</artifactId>
-                        <version>1.30.1</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.codehaus.enunciate</groupId>
-                        <artifactId>enunciate-ruby</artifactId>
-                        <version>1.30.1</version>
-                    </dependency>      
-                    <dependency>
-                        <groupId>org.codehaus.enunciate</groupId>
-                        <artifactId>enunciate-swagger</artifactId>
-                        <version>1.30.1</version>
-                    </dependency>                    
                   </dependencies>                
-                </plugin> -->
+                </plugin>
                 <!-- <plugin>
                     <groupId>com.github.kongchen</groupId>
                     <artifactId>swagger-maven-plugin</artifactId>
