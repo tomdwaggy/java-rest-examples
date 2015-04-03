@@ -1,0 +1,685 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "CXF Example Application",
+        "version": "1.0.0",
+        "title": "MicroBlog Sample App",
+        "contact": {
+            "name": "arven@arven.github.io"
+        },
+        "license": {
+            "name": "Apache 2.0 License",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "tags": [
+        {
+            "name": "example"
+        }
+    ],
+    "paths": {
+        "/example/v1/group": {
+            "post": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Create a new user group",
+                "description": "",
+                "operationId": "createGroup",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/group"
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/group/{group}": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Get group information",
+                "description": "",
+                "operationId": "getGroupInfo",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/group"
+                        }
+                    }
+                }
+            }
+        },
+        "/example/v1/group/{group}/members": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Get group members list",
+                "description": "",
+                "operationId": "getGroupMembers",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/example/v1/group/{group}/members/{user}": {
+            "put": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Add user to group, if logged in as this user",
+                "description": "",
+                "operationId": "joinGroup",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Remove user from group, if logged in as this user",
+                "description": "",
+                "operationId": "leaveGroup",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "group",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "user",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/user": {
+            "post": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Add a user",
+                "description": "",
+                "operationId": "addUser",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/Person"
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/user/{name}": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Get information on user",
+                "description": "",
+                "operationId": "getUser",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/Person"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Delete a user if logged in as this user",
+                "description": "",
+                "operationId": "removeUser",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/user/{name}/friends": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "List a user's friends",
+                "description": "",
+                "operationId": "getFriendsList",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/example/v1/user/{name}/friends/{friend}": {
+            "put": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Add a friend if logged in as this user",
+                "description": "",
+                "operationId": "addFriend",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "friend",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Remove a friend if logged in as this user",
+                "description": "",
+                "operationId": "removeFriend",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "friend",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/user/{name}/messages": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Get this user's public messages",
+                "description": "",
+                "operationId": "getMessagesByUser",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Post a message as this user if logged in as this user",
+                "description": "",
+                "operationId": "postMessage",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "description": "",
+                        "required": false,
+                        "schema": {
+                            "$ref": "#/definitions/message"
+                        }
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/user/{name}/messages/{message}": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Get a single message from this user by Message ID",
+                "description": "",
+                "operationId": "getSingleMessage",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "message",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "object"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Delete a message from this user's public messages if logged in as this user",
+                "description": "",
+                "operationId": "deleteMessage",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "message",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "default": {
+                        "description": "successful operation"
+                    }
+                }
+            }
+        },
+        "/example/v1/version": {
+            "get": {
+                "tags": [
+                    "example"
+                ],
+                "summary": "Get version of this web service",
+                "description": "",
+                "operationId": "getVersion",
+                "consumes": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json",
+                    "application/yaml"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "$ref": "#/definitions/Version"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "message": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "date": {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                "body": {
+                    "type": "string"
+                },
+                "tags": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            },
+            "xml": {
+                "name": "message"
+            }
+        },
+        "group": {
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                }
+            },
+            "xml": {
+                "name": "group"
+            }
+        },
+        "Version": {
+            "properties": {
+                "ver": {
+                    "type": "string"
+                }
+            }
+        },
+        "Person": {
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "description": "the user id"
+                },
+                "nickname": {
+                    "type": "string",
+                    "description": "the user nickname"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "the user email address"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "the user password"
+                }
+            },
+            "xml": {
+                "name": "user"
+            }
+        }
+    }
+}
