@@ -32,9 +32,9 @@ import javax.ws.rs.core.SecurityContext;
  * @author Brian Becker
  */
 @Named
-@Api(value = "/group")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Api(hidden = true, value = "/group")
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 public class GroupRestResource implements Serializable {
         
     @Inject private MicroBlogService blogService;

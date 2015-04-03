@@ -29,8 +29,8 @@ import javax.ws.rs.core.SecurityContext;
 @Named
 @Path("/example/v1")
 @Api(value = "/example/v1", description = "Microblog Service")
-@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
-@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML })
+@Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
+@Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 public class MicroBlogRestResource {
     
     public static int MAX_LIST_SPAN = 10;

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
+import io.github.arven.rs.provider.JacksonJaxbYamlProvider;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -73,7 +74,7 @@ public class Application implements Serializable {
         if (resourceProviders.size() > 0) {
             JAXRSServerFactoryBean factory = new JAXRSServerFactoryBean();
             factory.setBus(ctx.getBean(SpringBus.class));
-            factory.setProviders(Arrays.asList(new JacksonJaxbJsonProvider(), new JAXBElementProvider(), new SwaggerSerializers()));
+            factory.setProviders(Arrays.asList(new JacksonJaxbYamlProvider(), new JacksonJaxbJsonProvider(), new JAXBElementProvider(), new SwaggerSerializers()));
             factory.setResourceProviders(resourceProviders);
             return factory.create();
         } else {
