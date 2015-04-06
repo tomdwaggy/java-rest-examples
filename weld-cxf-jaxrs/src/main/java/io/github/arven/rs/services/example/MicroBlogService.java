@@ -4,13 +4,16 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 
 import javax.inject.Named;
+import javax.inject.Singleton;
 
 import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import javax.ws.rs.WebApplicationException;
 
 /**
  * MicroBlogService is a backend implementation, with no database or any
@@ -21,12 +24,11 @@ import javax.ws.rs.WebApplicationException;
  * @author Brian Becker
  */
 @Named
-@Transactional
 public class MicroBlogService {
 	
     @PersistenceContext
     private EntityManager test;
-            
+ 
     /**
      * Get the user data for a given user.
      * 

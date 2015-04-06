@@ -25,9 +25,6 @@ import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import io.github.arven.rs.provider.JacksonJaxbYamlProvider.YamlEndpointConfig;
 import io.github.arven.rs.provider.JacksonJaxbYamlProvider.YamlMapperConfigurator;
 import java.util.ArrayList;
-//import YamlEndpointConfig;
-//import YamlMapperConfigurator;
-
 /**
  *
  * @author bvan
@@ -80,7 +77,7 @@ public class JacksonJaxbYamlProvider
         @Override
         protected AnnotationIntrospector _resolveIntrospectors(Annotations[] annotationsToUse){
             // Let's ensure there are no dups there first, filter out nulls
-            ArrayList<AnnotationIntrospector> intr = new ArrayList<>();
+            ArrayList<AnnotationIntrospector> intr = new ArrayList<AnnotationIntrospector>();
             for(Annotations a: annotationsToUse){
                 if(a != null){
                     intr.add(_resolveIntrospector(a));

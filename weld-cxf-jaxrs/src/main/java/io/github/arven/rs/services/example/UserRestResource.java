@@ -8,7 +8,6 @@ package io.github.arven.rs.services.example;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import static io.github.arven.rs.services.example.MicroBlogRestResource.MAX_LIST_SPAN;
 
 import java.io.Serializable;
 import java.util.LinkedList;
