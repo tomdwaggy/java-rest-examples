@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.github.arven.flare.ee;
 
 import java.lang.reflect.Method;
@@ -30,7 +25,7 @@ public class FlareEnterpriseBeanInjector implements EjbInjectionServices {
             throw new UnsupportedOperationException("No support for remote beans in embedded server."); //To change body of generated methods, choose Tools | Templates.
         }
                 
-        return new FlareResourceReferenceFactory<Object>(injectionPoint.getType());
+        return new FlareResourceInstanceFactory<Object>(injectionPoint.getType());
     }
 
     public Object resolveEjb(InjectionPoint injectionPoint) {
