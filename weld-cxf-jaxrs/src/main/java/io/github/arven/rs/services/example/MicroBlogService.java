@@ -4,16 +4,15 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import javax.inject.Named;
-import javax.inject.Singleton;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.LoginService;
+import org.eclipse.jetty.util.security.Credential;
 
 /**
  * MicroBlogService is a backend implementation, with no database or any
@@ -28,6 +27,9 @@ public class MicroBlogService {
 	
     @PersistenceContext
     private EntityManager test;
+    
+    @Inject
+    private HashLoginService loginService;
  
     /**
      * Get the user data for a given user.
@@ -46,6 +48,7 @@ public class MicroBlogService {
      * @param   user        user data for the user, containing user id
      */
     public void addUser( Person user ) {
+        loginService.putUser(user.getId(), Credential.getCredential(user.getPassword()), new String[] { "User" });
         test.persist(user);
     }
     
@@ -106,12 +109,9 @@ public class MicroBlogService {
      * @param   post        message which should be posted by the user
      */
     public void addPost( String userName, Message post ) {
-    	test.persist(post);
-    	if(test.contains(post)) {
-            Person user = test.find(Person.class, userName);
-            post.setUser(user);
-            test.persist(post);
-    	}
+        Person user = test.find(Person.class, userName);
+        user.getMessages().add(post);
+        test.persist(post);
     }
     
     /**

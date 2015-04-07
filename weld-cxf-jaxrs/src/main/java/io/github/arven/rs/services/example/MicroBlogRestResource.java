@@ -3,6 +3,7 @@ package io.github.arven.rs.services.example;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
+import io.github.arven.rs.provider.Secure;
 import javax.annotation.security.RolesAllowed;
 
 import javax.inject.Inject;

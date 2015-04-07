@@ -1,23 +1,18 @@
 package io.github.arven.rs.services.example.weld;
 
 import io.github.arven.flare.ee.WeldFlare;
+import io.github.arven.rs.services.example.MicroBlogApplication;
 import io.github.arven.rs.services.example.MicroBlogRestResource;
-import java.lang.annotation.Annotation;
-import java.util.Iterator;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.BeanManager;
-import javax.enterprise.inject.spi.CDI;
-import javax.enterprise.inject.spi.CDIProvider;
-import javax.enterprise.util.TypeLiteral;
-import javax.persistence.Persistence;
+import io.github.arven.rs.services.example.UserRestResource;
 import org.apache.cxf.cdi.CXFCdiServlet;
-import org.eclipse.jetty.plus.jndi.Resource;
+import org.apache.cxf.interceptor.LoggingInInterceptor;
+import org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor;
+import org.eclipse.jetty.security.HashLoginService;
+import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
-import org.jboss.weld.bootstrap.api.SingletonProvider;
 import org.jboss.weld.environment.se.WeldContainer;
-import org.jboss.weld.injection.spi.JpaInjectionServices;
 
 /**
  * This Weld Boot application configuration simply defines Jersey and
@@ -34,17 +29,26 @@ public class Application {
         WeldFlare weld = new WeldFlare();
         WeldContainer container = weld.initialize();
         
-        //System.out.println(">>>>>>>>>>>>>>>" + container.instance().select(JpaInjectionServices.class));
-        
+        HashLoginService login = container.instance().select(HashLoginService.class).get();
+                
         final Server server = new Server(8080);
         
         WebAppContext ctx = new WebAppContext();
         ctx.setContextPath("/*");
-        ctx.addServlet(new ServletHolder(new CXFCdiServlet()), "/*");
+        
+        CXFCdiServlet cxf = new CXFCdiServlet();
+       
+        ctx.addServlet(new ServletHolder(cxf), "/*");
+        
+        ctx.getSecurityHandler().setLoginService(login);
+        ctx.getSecurityHandler().setAuthenticator(new BasicAuthenticator());
+        ctx.getSecurityHandler().setAuthMethod("BASIC");
+        ctx.getSecurityHandler().setRealmName(("users"));
+        
         ctx.setResourceBase(".");
         server.setHandler(ctx);
         
-        server.start();
+        server.start();        
         server.join();
         
         weld.shutdown();
