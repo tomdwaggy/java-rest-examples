@@ -4,9 +4,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javax.ejb.Singleton;
 import javax.inject.Inject;
-
-import javax.inject.Named;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,7 +21,7 @@ import org.eclipse.jetty.util.security.Credential;
  * 
  * @author Brian Becker
  */
-@Named
+@Singleton
 public class MicroBlogService {
 	
     @PersistenceContext

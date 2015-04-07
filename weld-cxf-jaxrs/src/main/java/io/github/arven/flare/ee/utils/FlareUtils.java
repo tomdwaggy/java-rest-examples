@@ -5,6 +5,9 @@
  */
 package io.github.arven.flare.ee.utils;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  *
  * @author brian.becker
@@ -17,6 +20,16 @@ public class FlareUtils {
         } else {
             return unitName;
         }
-    }   
+    }  
+    
+    public static Class<?> getType(Type type) {
+        if (type instanceof Class) {
+            return (Class<?>) type;
+        } else if (type instanceof ParameterizedType) {
+            return getType(((ParameterizedType) type).getRawType());
+        } else {
+            throw new RuntimeException("Could not determine type of object");
+        }
+    }
     
 }

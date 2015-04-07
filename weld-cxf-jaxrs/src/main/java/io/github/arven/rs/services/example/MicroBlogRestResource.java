@@ -5,6 +5,7 @@ import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
 import io.github.arven.rs.provider.Secure;
 import javax.annotation.security.RolesAllowed;
+import javax.ejb.EJB;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,7 +37,7 @@ public class MicroBlogRestResource {
     
     public static int MAX_LIST_SPAN = 10;
     
-    @Inject private MicroBlogService blogService;
+    @EJB private MicroBlogService blogService;
     @Inject private UserRestResource userResource;
     @Inject private GroupRestResource groupResource;
     

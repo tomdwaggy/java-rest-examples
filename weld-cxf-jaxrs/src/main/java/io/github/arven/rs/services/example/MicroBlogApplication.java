@@ -11,6 +11,7 @@ import javax.ws.rs.core.Application;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.wordnik.swagger.annotations.Api;
+import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
 import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
 import io.github.arven.rs.provider.JacksonJaxbYamlProvider;

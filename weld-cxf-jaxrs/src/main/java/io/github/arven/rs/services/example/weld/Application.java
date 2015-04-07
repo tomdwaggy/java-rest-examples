@@ -1,30 +1,20 @@
 package io.github.arven.rs.services.example.weld;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
 import com.wordnik.swagger.config.ScannerFactory;
-import com.wordnik.swagger.jaxrs.config.BeanConfig;
-import com.wordnik.swagger.jaxrs.config.DefaultJaxrsScanner;
+import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jaxrs.config.ReflectiveJaxrsScanner;
-import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
-import com.wordnik.swagger.models.Swagger;
 import io.github.arven.flare.ee.WeldFlare;
 import io.github.arven.rs.provider.ApiOriginFilter;
-import io.github.arven.rs.services.example.MicroBlogApplication;
-import io.github.arven.rs.services.example.MicroBlogRestResource;
-import io.github.arven.rs.services.example.UserRestResource;
-import java.io.IOException;
+import io.github.arven.rs.services.example.MicroBlogService;
+import io.github.arven.rs.services.example.Person;
 import java.util.EnumSet;
 import javax.servlet.DispatcherType;
 import org.apache.cxf.cdi.CXFCdiServlet;
-import org.apache.cxf.interceptor.LoggingInInterceptor;
-import org.apache.cxf.interceptor.security.SecureAnnotationsInterceptor;
 import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.security.RoleInfo;
-import org.eclipse.jetty.security.SecurityHandler;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.Response;
 import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.UserIdentity;
 import org.eclipse.jetty.servlet.ServletHolder;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.jboss.weld.environment.se.WeldContainer;
@@ -45,8 +35,12 @@ public class Application {
         
         WeldFlare weld = new WeldFlare();
         WeldContainer container = weld.initialize();
+        //System.out.println(FlareEnvironment.getContainer().instance().select(MicroBlogService.class));
         
         HashLoginService login = container.instance().select(HashLoginService.class).get();
+        //MicroBlogService svc = container.instance().select(MicroBlogService.class).get();
+        //svc.addUser(new Person("test", "test", "test", "test"));
+        //System.out.println(svc.getUser("test"));
                 
         final Server server = new Server(8080);
         
@@ -70,6 +64,10 @@ public class Application {
         ReflectiveJaxrsScanner scanner = new ReflectiveJaxrsScanner();
         scanner.setResourcePackage("io.github.arven.rs.services.example");
         ScannerFactory.setScanner(scanner);
+        
+        ObjectMapper obMap = new ObjectMapper();
+        obMap.setAnnotationIntrospector(new JaxbAnnotationIntrospector(obMap.getTypeFactory()));
+        ModelConverters.getInstance().addConverter(new com.wordnik.swagger.jackson.ModelResolver(obMap));
         
         server.join();
         
