@@ -1,4 +1,4 @@
-package io.github.arven.flare.ee.utils;
+package io.github.arven.flare.utils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;

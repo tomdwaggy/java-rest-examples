@@ -22,7 +22,7 @@ public class FlareTransactionServices implements TransactionServices {
     }
 
     public void cleanup() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        // cleanup not required for embedded server
     }
     
 }

@@ -18,7 +18,7 @@ public class FlareResourceInjector implements ResourceInjectionServices {
     
     public ResourceReferenceFactory<Object> registerResourceInjectionPoint(InjectionPoint injectionPoint) {
         Resource res = injectionPoint.getAnnotated().getAnnotation(Resource.class);
-        return registerResourceInjectionPoint(Optional.fromNullable(res.name()).or(res.lookup()), null);
+        return registerResourceInjectionPoint(Optional.fromNullable(res.lookup()).or(res.name()), null);
     }
 
     public ResourceReferenceFactory<Object> registerResourceInjectionPoint(String jndiName, String mappedName) {
@@ -28,6 +28,8 @@ public class FlareResourceInjector implements ResourceInjectionServices {
             if(jndiName != null) {
                 obj = ctx.lookup(jndiName);
                 return new FlareResourceReferenceFactory<Object>(obj);
+            } else {
+                throw new RuntimeException("No name for JNDI Resource");
             }
         } catch (NamingException ex) {
             Logger.getLogger(FlareResourceInjector.class.getName()).log(Level.SEVERE, null, ex);

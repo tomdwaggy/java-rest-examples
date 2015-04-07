@@ -1,6 +1,6 @@
 package io.github.arven.flare.ee;
 
-import io.github.arven.flare.ee.utils.FlareUtils;
+import io.github.arven.flare.utils.FlareUtils;
 import java.lang.reflect.Type;
 import javax.enterprise.inject.spi.Annotated;
 import org.jboss.weld.SimpleCDI;

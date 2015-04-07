@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.github.arven.rs.services.example.weld;
+package io.github.arven.flare.server.jetty;
 
 import javax.enterprise.inject.Produces;
 import org.eclipse.jetty.security.HashLoginService;
@@ -12,7 +12,7 @@ import org.eclipse.jetty.security.HashLoginService;
  *
  * @author Brian Becker
  */
-public class BasicProviders {
+public class FlareLoginService {
     
     private static HashLoginService hash;
 
