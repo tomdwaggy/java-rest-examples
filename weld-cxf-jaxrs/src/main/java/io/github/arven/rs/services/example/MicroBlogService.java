@@ -1,16 +1,16 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.exp.Informal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import javax.ejb.Singleton;
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import org.eclipse.jetty.security.HashLoginService;
-import org.eclipse.jetty.security.LoginService;
 import org.eclipse.jetty.util.security.Credential;
 
 /**
@@ -21,7 +21,7 @@ import org.eclipse.jetty.util.security.Credential;
  * 
  * @author Brian Becker
  */
-@Singleton
+@Stateless @Informal
 public class MicroBlogService {
 	
     @PersistenceContext

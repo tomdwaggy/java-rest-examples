@@ -28,26 +28,6 @@
         </repositories>               
 
 	<dependencies>
-            <!--<dependency>
-                <groupId>org.apache.deltaspike.core</groupId>
-                <artifactId>deltaspike-core-api</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>compile</scope>
-            </dependency>   
-            
-            <dependency>
-                <groupId>org.apache.deltaspike.core</groupId>
-                <artifactId>deltaspike-core-impl</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.apache.deltaspike.cdictrl</groupId>
-                <artifactId>deltaspike-cdictrl-api</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>compile</scope>
-            </dependency>        -->
             
             <dependency>
                 <groupId>org.jboss</groupId>
@@ -60,46 +40,7 @@
                 <artifactId>weld-se</artifactId>
                 <version>${weld.version}</version>
                 <scope>compile</scope>
-            </dependency>
-            
-           <!-- <dependency>
-                <groupId>org.apache.deltaspike.cdictrl</groupId>
-                <artifactId>deltaspike-cdictrl-openejb</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>runtime</scope>
-            </dependency> -->               
-
-<!--
-<dependency>
-    <groupId>org.jboss.weld.se</groupId>
-    <artifactId>weld-se</artifactId>
-    <version>${weld.version}</version>
-    <scope>runtime</scope>
-</dependency>
--->
-
-
-            
-            <!--<dependency>
-                <groupId>org.apache.deltaspike.cdictrl</groupId>
-                <artifactId>deltaspike-cdictrl-servlet</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.apache.deltaspike.modules</groupId>
-                <artifactId>deltaspike-jpa-module-api</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>compile</scope>
-            </dependency>
-            
-            <dependency>
-                <groupId>org.apache.deltaspike.modules</groupId>
-                <artifactId>deltaspike-jpa-module-impl</artifactId>
-                <version>${deltaspike.version}</version>
-                <scope>runtime</scope>
-            </dependency> -->                                                                         
+            </dependency>                                                                   
 
             <dependency>
                 <groupId>org.hibernate</groupId>
@@ -141,12 +82,6 @@
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-integration-cdi</artifactId>
                 <version>3.0.4</version>
-                  <exclusions>
-                        <exclusion>
-                              <groupId>javax.enterprise</groupId>
-                              <artifactId>cdi-api</artifactId>
-                        </exclusion>
-                  </exclusions>
             </dependency>    
             
             <dependency>
@@ -154,13 +89,7 @@
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.7.12</version>
             </dependency>    
-                               
-            <dependency>
-                <groupId>javax.inject</groupId>
-                <artifactId>javax.inject</artifactId>
-                <version>1</version>
-            </dependency>
-            
+                                         
             <dependency>
                 <groupId>org.jboss.spec.javax.ejb</groupId>
                 <artifactId>jboss-ejb-api_3.1_spec</artifactId>
@@ -227,7 +156,13 @@
                 <groupId>org.eclipse.jetty</groupId>
                 <artifactId>jetty-jndi</artifactId>  
                 <version>9.3.0.M2</version>
-            </dependency>   
+            </dependency>
+            
+            <dependency>
+                <groupId>commons-beanutils</groupId>
+                <artifactId>commons-beanutils</artifactId>
+                <version>1.9.2</version>
+            </dependency>
                           
 	</dependencies>
         
@@ -255,46 +190,6 @@
                     </dependency>
                   </dependencies>                
                 </plugin>-->
-                <!-- <plugin>
-                    <groupId>com.github.kongchen</groupId>
-                    <artifactId>swagger-maven-plugin</artifactId>
-                    <version>2.3.4</version>
-                    <configuration>
-                        <apiSources>
-                            <apiSource>
-                                <locations>io.github.arven.rs.services.example</locations>
-                                <apiVersion>v1</apiVersion>
-                                <basePath>http://localhost:8080</basePath>
-                                
-                                <apiInfo>
-                                    <title>Spring Boot CXF Example</title>
-                                    <description>This is an example web service for Spring Boot with CXF</description>
-                                    <contact>arven@arven.github.io</contact>
-                                    <license>Apache 2.0</license>
-                                    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
-                                </apiInfo>
-
-                                <swaggerInternalFilter>com.wordnik.swagger.config.DefaultSpecFilter</swaggerInternalFilter>
-
-                                <outputTemplate>templates/strapdown.html.mustache</outputTemplate>
-                                <mustacheFileRoot>${basedir}/templates/</mustacheFileRoot>
-                                <outputPath>${basedir}/generated/document.html</outputPath>
-
-                                <swaggerDirectory>generated/swagger-ui</swaggerDirectory>
-                                <swaggerUIDocBasePath>http://www.wordnik.com/restapi/doc</swaggerUIDocBasePath>
-                                <useOutputFlatStructure>false</useOutputFlatStructure>
-                            </apiSource>
-                        </apiSources>
-                    </configuration>
-                    <executions>
-                        <execution>
-                            <phase>compile</phase>
-                            <goals>
-                                <goal>generate</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>        -->       
             </plugins>
 	</build>
 

@@ -11,11 +11,10 @@ import javax.ws.rs.core.Application;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.wordnik.swagger.annotations.Api;
-import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
 import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
-import io.github.arven.rs.provider.JacksonJaxbYamlProvider;
-import io.github.arven.rs.provider.Jsr250AuthorizationRequestFilter;
+import io.github.arven.flare.rs.JacksonJaxbYamlProvider;
+import io.github.arven.flare.rs.Jsr250AuthorizationRequestFilter;
 import javax.ws.rs.Path;
 
 @ApplicationPath("/v1")

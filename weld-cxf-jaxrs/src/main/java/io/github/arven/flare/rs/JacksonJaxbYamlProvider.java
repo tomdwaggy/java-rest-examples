@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.github.arven.rs.provider;
+package io.github.arven.flare.rs;
 
 
 import java.lang.annotation.Annotation;
@@ -22,8 +22,8 @@ import com.fasterxml.jackson.jaxrs.cfg.EndpointConfigBase;
 import com.fasterxml.jackson.jaxrs.cfg.MapperConfiguratorBase;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import io.github.arven.rs.provider.JacksonJaxbYamlProvider.YamlEndpointConfig;
-import io.github.arven.rs.provider.JacksonJaxbYamlProvider.YamlMapperConfigurator;
+import io.github.arven.flare.rs.JacksonJaxbYamlProvider.YamlEndpointConfig;
+import io.github.arven.flare.rs.JacksonJaxbYamlProvider.YamlMapperConfigurator;
 import java.util.ArrayList;
 /**
  *

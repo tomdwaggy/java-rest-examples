@@ -6,12 +6,14 @@ import com.wordnik.swagger.config.ScannerFactory;
 import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jaxrs.config.ReflectiveJaxrsScanner;
 import io.github.arven.flare.ee.WeldFlare;
-import io.github.arven.rs.provider.ApiOriginFilter;
-import io.github.arven.rs.services.example.MicroBlogService;
-import io.github.arven.rs.services.example.Person;
+import io.github.arven.flare.rs.ApiOriginFilter;
 import java.util.EnumSet;
+import javax.naming.Context;
+import javax.naming.InitialContext;
 import javax.servlet.DispatcherType;
 import org.apache.cxf.cdi.CXFCdiServlet;
+import org.eclipse.jetty.plus.jndi.EnvEntry;
+import org.eclipse.jetty.plus.jndi.Resource;
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.security.authentication.BasicAuthenticator;
 import org.eclipse.jetty.server.Server;
@@ -33,29 +35,25 @@ public class Application {
         System.setProperty("java.naming.factory.url", "org.eclipse.jetty.jndi");
         System.setProperty("java.naming.factory.initial", "org.eclipse.jetty.jndi.InitialContextFactory");
         
+        Context ic = new InitialContext();
+        ic.createSubcontext("java:comp/env/");
+        ic.bind("java:comp/env/mySpecialValue", 4000);
+        
         WeldFlare weld = new WeldFlare();
         WeldContainer container = weld.initialize();
-        //System.out.println(FlareEnvironment.getContainer().instance().select(MicroBlogService.class));
         
         HashLoginService login = container.instance().select(HashLoginService.class).get();
-        //MicroBlogService svc = container.instance().select(MicroBlogService.class).get();
-        //svc.addUser(new Person("test", "test", "test", "test"));
-        //System.out.println(svc.getUser("test"));
                 
         final Server server = new Server(8080);
-        
+                
         WebAppContext ctx = new WebAppContext();
-        
         ctx.setContextPath("/*");
-        CXFCdiServlet servlet = new CXFCdiServlet();
-        ctx.addServlet(new ServletHolder(servlet), "/example/*");
+        ctx.addServlet(new ServletHolder(new CXFCdiServlet()), "/example/*");
         ctx.addFilter(ApiOriginFilter.class, "/example/*", EnumSet.of(DispatcherType.REQUEST));
-        
         ctx.getSecurityHandler().setLoginService(login);
         ctx.getSecurityHandler().setAuthenticator(new BasicAuthenticator());
         ctx.getSecurityHandler().setAuthMethod("BASIC");
         ctx.getSecurityHandler().setRealmName(("users"));
-        
         ctx.setResourceBase(webappDir);
         server.setHandler(ctx);
         
@@ -68,7 +66,7 @@ public class Application {
         ObjectMapper obMap = new ObjectMapper();
         obMap.setAnnotationIntrospector(new JaxbAnnotationIntrospector(obMap.getTypeFactory()));
         ModelConverters.getInstance().addConverter(new com.wordnik.swagger.jackson.ModelResolver(obMap));
-        
+                
         server.join();
         
         weld.shutdown();

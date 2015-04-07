@@ -25,7 +25,7 @@ public class FlareEnterpriseBeanInjector implements EjbInjectionServices {
             throw new UnsupportedOperationException("No support for remote beans in embedded server."); //To change body of generated methods, choose Tools | Templates.
         }
                 
-        return new FlareResourceInstanceFactory<Object>(injectionPoint.getType());
+        return new FlareResourceInstanceFactory<Object>(injectionPoint.getType(), injectionPoint.getAnnotated());
     }
 
     public Object resolveEjb(InjectionPoint injectionPoint) {

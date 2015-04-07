@@ -3,7 +3,8 @@ package io.github.arven.rs.services.example;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import io.github.arven.rs.provider.Secure;
+import io.github.arven.exp.Informal;
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 
@@ -18,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
+import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * MicroBlogRestService is the REST service front end for the MicroBlogService.
@@ -37,9 +39,24 @@ public class MicroBlogRestResource {
     
     public static int MAX_LIST_SPAN = 10;
     
-    @EJB private MicroBlogService blogService;
+    @Informal @EJB private MicroBlogService blogService;
     @Inject private UserRestResource userResource;
     @Inject private GroupRestResource groupResource;
+    
+    @Resource(lookup = "java:comp/env/mySpecialValue")
+    private Integer mySpecialValue;
+    
+    /**
+     * The most trivial example of a REST method, simply get the version and
+     * return it as a raw string with a MIME type of text/plain.
+     * 
+     * @return  Version of this demo
+     */
+    @ApiOperation("Get my special value")
+    @Path("/value") @GET
+    public Pair<String, Integer> getMySpecialValue() {
+        return Pair.of("value", mySpecialValue);
+    }    
     
     /**
      * The most trivial example of a REST method, simply get the version and
