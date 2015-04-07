@@ -19,14 +19,9 @@ import org.jboss.weld.injection.spi.ResourceReferenceFactory;
  */
 public class FlarePersistenceInjector implements JpaInjectionServices {
     
-    private final Map<String, EntityManager> managers = new HashMap<String, EntityManager>();
-
     public ResourceReferenceFactory<EntityManager> registerPersistenceContextInjectionPoint(final InjectionPoint injectionPoint) {
         PersistenceContext pu = injectionPoint.getAnnotated().getAnnotation(PersistenceContext.class);
-        if(!managers.containsKey(pu.unitName())) {
-            managers.put(pu.unitName(), Persistence.createEntityManagerFactory(FlareUtils.emptyNull(pu.unitName())).createEntityManager());
-        }
-        return new FlareResourceReferenceFactory<EntityManager>(managers.get(pu.name()));
+        return new FlareResourceReferenceFactory<EntityManager>(Persistence.createEntityManagerFactory(FlareUtils.emptyNull(pu.unitName())).createEntityManager());
     }
 
     public ResourceReferenceFactory<EntityManagerFactory> registerPersistenceUnitInjectionPoint(final InjectionPoint injectionPoint) {

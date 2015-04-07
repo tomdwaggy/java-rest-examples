@@ -8,7 +8,6 @@ package io.github.arven.rs.services.example;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import io.github.arven.exp.Informal;
 
 import java.io.Serializable;
 import java.util.LinkedList;
@@ -42,7 +41,7 @@ import javax.ws.rs.core.SecurityContext;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 public class UserRestResource implements Serializable {
         
-    @Informal @Inject private MicroBlogService blogService;
+    @MockDatabase @Inject private MicroBlogService blogService;
     
     /**
      * This method gets a user and displays it as one of the primary content

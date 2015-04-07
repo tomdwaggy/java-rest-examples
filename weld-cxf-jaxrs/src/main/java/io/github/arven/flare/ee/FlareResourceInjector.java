@@ -1,6 +1,6 @@
 package io.github.arven.flare.ee;
 
-import java.lang.reflect.InvocationTargetException;
+import autovalue.shaded.com.google.common.common.base.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -18,12 +18,7 @@ public class FlareResourceInjector implements ResourceInjectionServices {
     
     public ResourceReferenceFactory<Object> registerResourceInjectionPoint(InjectionPoint injectionPoint) {
         Resource res = injectionPoint.getAnnotated().getAnnotation(Resource.class);
-        if(res.name().isEmpty()) {
-            return registerResourceInjectionPoint(res.lookup(), null);
-        } else if(!res.name().isEmpty()) {
-            return registerResourceInjectionPoint(res.name(), null);
-        }
-        throw new RuntimeException("Not able to register resource for injection point " + injectionPoint.toString());
+        return registerResourceInjectionPoint(Optional.fromNullable(res.name()).or(res.lookup()), null);
     }
 
     public ResourceReferenceFactory<Object> registerResourceInjectionPoint(String jndiName, String mappedName) {

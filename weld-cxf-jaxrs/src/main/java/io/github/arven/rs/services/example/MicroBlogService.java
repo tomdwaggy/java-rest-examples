@@ -1,6 +1,5 @@
 package io.github.arven.rs.services.example;
 
-import io.github.arven.exp.Informal;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -21,7 +20,7 @@ import org.eclipse.jetty.util.security.Credential;
  * 
  * @author Brian Becker
  */
-@Stateless @Informal
+@Stateless @MockDatabase
 public class MicroBlogService {
 	
     @PersistenceContext

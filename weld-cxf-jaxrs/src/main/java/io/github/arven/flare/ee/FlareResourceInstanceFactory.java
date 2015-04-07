@@ -10,6 +10,7 @@ import org.jboss.weld.injection.spi.helpers.SimpleResourceReference;
 
 /**
  * @author Brian Becker
+ * @param <T>
  */
 public class FlareResourceInstanceFactory<T> implements ResourceReferenceFactory<T> {
 
@@ -22,7 +23,6 @@ public class FlareResourceInstanceFactory<T> implements ResourceReferenceFactory
     }
     
     public ResourceReference<T> createResource() {
-        System.out.println(">>>>>>>>>>>>>>> CREATING EJB REFERENCE " + ann.toString());
         return new SimpleResourceReference<T>(
                 (T) SimpleCDI.current().select(FlareUtils.getType(this.type),
                     FlareUtils.getQualifiers(this.ann)).get()

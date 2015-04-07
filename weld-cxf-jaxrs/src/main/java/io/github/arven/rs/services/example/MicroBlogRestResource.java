@@ -3,7 +3,6 @@ package io.github.arven.rs.services.example;
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
 import com.wordnik.swagger.annotations.ApiParam;
-import io.github.arven.exp.Informal;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
@@ -39,7 +38,7 @@ public class MicroBlogRestResource {
     
     public static int MAX_LIST_SPAN = 10;
     
-    @Informal @EJB private MicroBlogService blogService;
+    @MockDatabase @EJB private MicroBlogService blogService;
     @Inject private UserRestResource userResource;
     @Inject private GroupRestResource groupResource;
     

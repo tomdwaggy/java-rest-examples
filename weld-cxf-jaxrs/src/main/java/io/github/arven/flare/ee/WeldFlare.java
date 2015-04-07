@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package io.github.arven.flare.ee;
 
 import org.jboss.weld.bootstrap.api.CDI11Bootstrap;
 import org.jboss.weld.bootstrap.spi.Deployment;
+import org.jboss.weld.ejb.spi.EjbServices;
 import org.jboss.weld.environment.se.Weld;
 import org.jboss.weld.injection.spi.EjbInjectionServices;
 import org.jboss.weld.injection.spi.JpaInjectionServices;
@@ -29,6 +25,7 @@ public class WeldFlare extends Weld {
         deployment.getServices().add(ResourceInjectionServices.class, new FlareResourceInjector());
         deployment.getServices().add(EjbInjectionServices.class, new FlareEnterpriseBeanInjector());
         deployment.getServices().add(JpaInjectionServices.class, new FlarePersistenceInjector());  
+        deployment.getServices().add(EjbServices.class, new FlareEnterpriseBeanServices());
         return deployment;
     }
     

@@ -7,7 +7,6 @@ package io.github.arven.rs.services.example;
 
 import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.annotations.ApiOperation;
-import io.github.arven.exp.Informal;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +37,7 @@ import javax.ws.rs.core.SecurityContext;
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 public class GroupRestResource implements Serializable {
         
-    @Informal @Inject private MicroBlogService blogService;
+    @MockDatabase @Inject private MicroBlogService blogService;
     
     /**
      * For a given group, this method gets the information and returns it back
