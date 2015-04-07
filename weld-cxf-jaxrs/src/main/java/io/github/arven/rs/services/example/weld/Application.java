@@ -65,16 +65,7 @@ public class Application {
         ctx.setResourceBase(webappDir);
         server.setHandler(ctx);
         
-        server.start();          
-        
-        BeanConfig cfg = new BeanConfig();
-        cfg.setResourcePackage("io.github.arven.rs.provider");
-        cfg.setVersion("1.0.0");
-        cfg.setBasePath("");
-        cfg.setTitle("MicroBlog Example App");
-        cfg.setDescription("Example JAX-RS Weld App");
-        cfg.setContact("arven@arven.github.io");
-        cfg.setScan(true);
+        server.start();        
         
         ReflectiveJaxrsScanner scanner = new ReflectiveJaxrsScanner();
         scanner.setResourcePackage("io.github.arven.rs.services.example");
