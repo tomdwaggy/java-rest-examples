@@ -28,7 +28,7 @@ import javax.ws.rs.core.SecurityContext;
  */
 
 @Named
-@Path("/example/v1")
+@Path("/")
 @Api(value = "/example/v1", description = "Microblog Service", tags = {"example"})
 @Produces({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })
 @Consumes({ MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML, "application/yaml" })

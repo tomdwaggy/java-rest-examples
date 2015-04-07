@@ -54,7 +54,7 @@ public class Jsr250AuthorizationRequestFilter implements ContainerRequestFilter 
     }
 
     @Override
-    public void filter(ContainerRequestContext ctx) throws IOException {
+    public void filter(ContainerRequestContext ctx) throws IOException {        
         Annotation inner = permissions(info.getResourceMethod());
         Annotation outer = permissions(info.getResourceClass());
         if(allows(outer, ctx.getSecurityContext())) {
