@@ -12,7 +12,6 @@ import com.wordnik.swagger.converter.ModelConverters;
 import io.github.arven.flare.ee.WeldFlare;
 import io.github.arven.flare.server.jetty.FlareJettyServer;
 import io.github.arven.flare.server.FlareServer;
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Set;
 import javax.enterprise.util.AnnotationLiteral;
@@ -35,6 +34,7 @@ public class FlareApplication {
     public void run(String[] args) {
         try {
             String webappDir = "./src/main/webapp/";
+            String webappPath = "/*";
             
             Reflections reflections = new Reflections("");
             Set<Class<?>> cls = reflections.getTypesAnnotatedWith(FlareBootApplication.class);
@@ -42,6 +42,7 @@ public class FlareApplication {
                 throw new RuntimeException("You must have a single @FlareBootApplication annotated class");
             }
             Class<?> main = cls.iterator().next();
+            FlareBootApplication boot = main.getAnnotation(FlareBootApplication.class);
             Package pkg = main.getPackage();
             
             Object config = main.newInstance();
@@ -60,10 +61,10 @@ public class FlareApplication {
             WeldFlare weld = new WeldFlare();
             WeldContainer container = weld.initialize();
 
-            FlareServer server = new FlareJettyServer(webappDir);
+            FlareServer server = new FlareJettyServer(webappDir, boot.value(), pkg, config);
             server.init();
             server.start();
-            
+
             ScannerFactory.setScanner(container.instance().select(Scanner.class, new AnnotationLiteral<FlareConfiguration>() {}).get());
             ModelConverters.getInstance().addConverter(new com.wordnik.swagger.jackson.ModelResolver(container.instance().select(ObjectMapper.class, new AnnotationLiteral<FlareConfiguration>() {}).get()));
             

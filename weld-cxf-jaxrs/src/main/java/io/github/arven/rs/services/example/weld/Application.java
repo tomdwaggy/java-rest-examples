@@ -7,10 +7,14 @@ import com.wordnik.swagger.jaxrs.config.ReflectiveJaxrsScanner;
 import io.github.arven.flare.boot.FlareApplication;
 import io.github.arven.flare.boot.FlareBootApplication;
 import io.github.arven.flare.boot.FlareConfiguration;
+import io.github.arven.flare.boot.FlareServlet;
 import io.github.arven.flare.boot.NamingConfiguration;
+import io.github.arven.flare.rs.ApiOriginFilter;
 import javax.enterprise.inject.Produces;
 
 import javax.naming.Context;
+import javax.servlet.Servlet;
+import org.apache.cxf.cdi.CXFCdiServlet;
 
 /**
  * This Weld Boot application configuration simply defines Jersey and
@@ -18,7 +22,7 @@ import javax.naming.Context;
  * 
  * @author Brian Becker
  */
-@FlareBootApplication
+@FlareBootApplication("/*")
 public class Application {
     
     public static void main(String[] args) {
@@ -43,6 +47,11 @@ public class Application {
         ObjectMapper obMap = new ObjectMapper();
         obMap.setAnnotationIntrospector(new JaxbAnnotationIntrospector(obMap.getTypeFactory()));        
         return obMap;
+    }
+    
+    @FlareServlet("/example/*")
+    public Servlet jaxrsServlet() {
+        return new CXFCdiServlet();
     }
     
 }

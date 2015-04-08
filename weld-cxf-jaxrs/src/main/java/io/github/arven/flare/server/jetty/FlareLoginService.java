@@ -16,7 +16,7 @@ public class FlareLoginService {
     
     private static HashLoginService hash;
 
-    @Produces
+    @Produces @JettyService
     public HashLoginService getLoginService() {
         if(hash == null) { 
             hash = new HashLoginService();

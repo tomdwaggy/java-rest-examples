@@ -3,22 +3,17 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package io.github.arven.flare.boot;
+package io.github.arven.flare.server.jetty;
 
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
 
+import javax.inject.Qualifier;
+
+@Qualifier
 @Retention(RUNTIME)
-@Target({TYPE})
-public @interface FlareBootApplication {
-    
-    /**
-     * Context Path of the web application
-     * @return 
-     */
-    public String value() default "/*";
-    
-}
+@Target({METHOD})
+public @interface JettyService {}

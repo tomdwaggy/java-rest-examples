@@ -5,20 +5,21 @@
  */
 package io.github.arven.flare.boot;
 
+import io.github.arven.flare.rs.ApiOriginFilter;
 import java.lang.annotation.Retention;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 import java.lang.annotation.Target;
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.METHOD;
+import javax.enterprise.util.Nonbinding;
 
+import javax.inject.Qualifier;
+import javax.servlet.Filter;
+
+@Qualifier
 @Retention(RUNTIME)
-@Target({TYPE})
-public @interface FlareBootApplication {
-    
-    /**
-     * Context Path of the web application
-     * @return 
-     */
+@Target({METHOD})
+public @interface FlareServlet {
     public String value() default "/*";
-    
+    @Nonbinding public Class<? extends Filter>[] filters() default { ApiOriginFilter.class };
 }
