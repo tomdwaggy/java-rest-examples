@@ -17,8 +17,8 @@ import javax.servlet.Servlet;
 import org.apache.cxf.cdi.CXFCdiServlet;
 
 /**
- * This Weld Boot application configuration simply defines Jersey and
- * prepares the entire Spring application for startup.
+ * This Weld Boot application configuration simply defines CXF and
+ * prepares the entire Weld application for startup.
  * 
  * @author Brian Becker
  */
