@@ -10,12 +10,10 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Application;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
-import com.wordnik.swagger.annotations.Api;
 import com.wordnik.swagger.jaxrs.listing.ApiListingResource;
 import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
 import io.github.arven.flare.rs.JacksonJaxbYamlProvider;
 import io.github.arven.flare.rs.Jsr250AuthorizationRequestFilter;
-import javax.ws.rs.Path;
 
 @ApplicationPath("/v1")
 public class MicroBlogApplication extends Application {
@@ -31,7 +29,7 @@ public class MicroBlogApplication extends Application {
                 JacksonJaxbJsonProvider.class,
                 JacksonJaxbYamlProvider.class,
                 SwaggerSerializers.class,
-                NextApiListingResource.class
+                ApiListingResource.class
             )
         );
     }
@@ -44,12 +42,6 @@ public class MicroBlogApplication extends Application {
                 restService
             )
         );
-    }    
-
-    @Path("/resources")
-    @Api("/resources")
-    @Produces({"application/json","application/xml"})
-    public static class NextApiListingResource extends ApiListingResource {
     }
     
 }
