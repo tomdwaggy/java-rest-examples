@@ -13,6 +13,7 @@ import io.github.arven.flare.ee.WeldFlare;
 import io.github.arven.flare.server.jetty.FlareJettyServer;
 import io.github.arven.flare.server.FlareServer;
 import java.lang.reflect.Method;
+import java.util.Properties;
 import java.util.Set;
 import javax.enterprise.util.AnnotationLiteral;
 import javax.naming.Context;
@@ -30,9 +31,16 @@ import org.reflections.scanners.MethodAnnotationsScanner;
  * @author Brian Becker
  */
 public class FlareApplication {
+    
+    private Properties applicationProperties;
+    private FlareBootApplication applicationConfigBoot;
+    private Package applicationConfigPackage;
+    private Object application;
            
     public void run(String[] args) {
         try {
+            applicationProperties = new Properties();
+            applicationProperties.load(FlareApplication.class.getResourceAsStream("/application.properties"));
             
             Reflections reflections = new Reflections("");
             Set<Class<?>> cls = reflections.getTypesAnnotatedWith(FlareBootApplication.class);
@@ -40,13 +48,13 @@ public class FlareApplication {
                 throw new RuntimeException("You must have a single @FlareBootApplication annotated class");
             }
             Class<?> main = cls.iterator().next();
-            FlareBootApplication boot = main.getAnnotation(FlareBootApplication.class);
+            applicationConfigBoot = main.getAnnotation(FlareBootApplication.class);
             
-            Package pkg = main.getPackage();
+            applicationConfigPackage = main.getPackage();
             
-            Object config = main.newInstance();
+            application = main.newInstance();
             
-            reflections = new Reflections(pkg.getName(), new MethodAnnotationsScanner());
+            reflections = new Reflections(applicationConfigPackage.getName(), new MethodAnnotationsScanner());
 
             Set<Method> naming = reflections.getMethodsAnnotatedWith(NamingConfiguration.class);
             for(Method m : naming) {
@@ -54,13 +62,19 @@ public class FlareApplication {
                 try {
                     ic.createSubcontext("java:comp/env/");
                 } catch(NamingException ex) {}
-                m.invoke(config, ic);
+                m.invoke(application, ic);
             }
 
             WeldFlare weld = new WeldFlare();
             WeldContainer container = weld.initialize();
 
-            FlareServer server = new FlareJettyServer(boot.resources(), boot.value(), pkg, config);
+            FlareServer server = (FlareServer) container.instance().select(Class.forName(applicationProperties.getProperty("flare.container.server"))).get();
+            
+            server.setWebAppContext(applicationConfigBoot.value());
+            server.setWebAppDir(applicationConfigBoot.resources());
+            server.setPackage(applicationConfigPackage);
+            server.setConfiguration(application);
+            
             server.init();
             server.start();
 

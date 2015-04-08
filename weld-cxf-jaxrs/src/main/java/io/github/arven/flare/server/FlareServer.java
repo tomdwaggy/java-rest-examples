@@ -13,4 +13,9 @@ public interface FlareServer {
     public void init();
     public void start();
     public void join();
+    
+    public void setWebAppDir(String dir);
+    public void setWebAppContext(String dir);
+    public void setPackage(Package pkg);
+    public void setConfiguration(Object obj);
 }

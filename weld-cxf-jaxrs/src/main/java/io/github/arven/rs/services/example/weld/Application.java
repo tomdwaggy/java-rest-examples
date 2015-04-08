@@ -9,7 +9,6 @@ import io.github.arven.flare.boot.FlareBootApplication;
 import io.github.arven.flare.boot.FlareConfiguration;
 import io.github.arven.flare.boot.FlareServlet;
 import io.github.arven.flare.boot.NamingConfiguration;
-import io.github.arven.flare.rs.ApiOriginFilter;
 import javax.enterprise.inject.Produces;
 
 import javax.naming.Context;

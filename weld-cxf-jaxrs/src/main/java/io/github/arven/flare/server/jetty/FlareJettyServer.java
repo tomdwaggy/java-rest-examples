@@ -30,25 +30,18 @@ import org.reflections.scanners.MethodAnnotationsScanner;
  */
 public class FlareJettyServer implements FlareServer {
     
-    private final String webappDir;
-    private final String webappPath;
-    private final Package pkg;
-    private final Object config;
+    private String webappDir;
+    private String webappContext;
+    private Package pkg;
+    private Object config;
     private Server server;
-    
-    public FlareJettyServer(String webappDir, String webappPath, Package pkg, Object config) {
-        this.webappDir = webappDir;
-        this.webappPath = webappPath;
-        this.pkg = pkg;
-        this.config = config;
-    }
     
     public void init() {
         HashLoginService login = SimpleCDI.current().select(HashLoginService.class, new AnnotationLiteral<JettyService>() {}).get();
         
         server = new Server(8080);
         WebAppContext ctx = new WebAppContext();
-        ctx.setContextPath(this.webappPath);
+        ctx.setContextPath(this.webappContext);
         
         Reflections reflections = new Reflections(pkg.getName(), new MethodAnnotationsScanner());
         for(Method m : reflections.getMethodsAnnotatedWith(FlareServlet.class)) {
@@ -91,6 +84,22 @@ public class FlareJettyServer implements FlareServer {
         } catch (InterruptedException ex) {
             Logger.getLogger(FlareJettyServer.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void setWebAppDir(String dir) {
+        this.webappDir = dir;
+    }
+
+    public void setWebAppContext(String dir) {
+        this.webappContext = dir;
+    }
+
+    public void setPackage(Package pkg) {
+        this.pkg = pkg;
+    }
+
+    public void setConfiguration(Object obj) {
+        this.config = obj;
     }
     
 }
