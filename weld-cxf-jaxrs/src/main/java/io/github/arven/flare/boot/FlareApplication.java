@@ -33,8 +33,6 @@ public class FlareApplication {
            
     public void run(String[] args) {
         try {
-            String webappDir = "./src/main/webapp/";
-            String webappPath = "/*";
             
             Reflections reflections = new Reflections("");
             Set<Class<?>> cls = reflections.getTypesAnnotatedWith(FlareBootApplication.class);
@@ -43,6 +41,7 @@ public class FlareApplication {
             }
             Class<?> main = cls.iterator().next();
             FlareBootApplication boot = main.getAnnotation(FlareBootApplication.class);
+            
             Package pkg = main.getPackage();
             
             Object config = main.newInstance();
@@ -61,7 +60,7 @@ public class FlareApplication {
             WeldFlare weld = new WeldFlare();
             WeldContainer container = weld.initialize();
 
-            FlareServer server = new FlareJettyServer(webappDir, boot.value(), pkg, config);
+            FlareServer server = new FlareJettyServer(boot.resources(), boot.value(), pkg, config);
             server.init();
             server.start();
 

@@ -20,5 +20,6 @@ public @interface FlareBootApplication {
      * @return 
      */
     public String value() default "/*";
+    public String resources() default "./src/main/webapp/";
     
 }

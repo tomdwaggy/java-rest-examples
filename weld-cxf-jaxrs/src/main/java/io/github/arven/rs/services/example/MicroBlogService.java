@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.enterprise.inject.Any;
 import javax.inject.Inject;
 
 import javax.persistence.EntityManager;
@@ -26,7 +27,7 @@ public class MicroBlogService {
     @PersistenceContext
     private EntityManager test;
     
-    @Inject
+    @Inject @Any
     private HashLoginService loginService;
  
     /**
