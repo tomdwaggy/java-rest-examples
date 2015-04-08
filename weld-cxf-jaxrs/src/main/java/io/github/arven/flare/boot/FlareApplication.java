@@ -77,9 +77,11 @@ public class FlareApplication {
             
             server.init();
             server.start();
-
-            ScannerFactory.setScanner(container.instance().select(Scanner.class, new AnnotationLiteral<FlareConfiguration>() {}).get());
-            ModelConverters.getInstance().addConverter(new com.wordnik.swagger.jackson.ModelResolver(container.instance().select(ObjectMapper.class, new AnnotationLiteral<FlareConfiguration>() {}).get()));
+            
+            Set<Method> flare = reflections.getMethodsAnnotatedWith(FlareConfiguration.class);
+            for(Method m : flare) {
+                m.invoke(application);
+            }
             
             server.join();
 
