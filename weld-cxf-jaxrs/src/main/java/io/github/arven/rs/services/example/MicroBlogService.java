@@ -10,6 +10,7 @@ import javax.inject.Inject;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+
 import org.eclipse.jetty.security.HashLoginService;
 import org.eclipse.jetty.util.security.Credential;
 
@@ -21,7 +22,7 @@ import org.eclipse.jetty.util.security.Credential;
  * 
  * @author Brian Becker
  */
-@Stateless @MockDatabase
+@MockDatabase @Stateless
 public class MicroBlogService {
 	
     @PersistenceContext
@@ -29,7 +30,7 @@ public class MicroBlogService {
     
     @Inject @Any
     private HashLoginService loginService;
- 
+
     /**
      * Get the user data for a given user.
      * 

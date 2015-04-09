@@ -55,8 +55,8 @@ public class MicroBlogRestResource {
     @Path("/value") @GET
     public Pair<String, Integer> getMySpecialValue() {
         return Pair.of("value", mySpecialValue);
-    }    
-    
+    }
+
     /**
      * The most trivial example of a REST method, simply get the version and
      * return it as a raw string with a MIME type of text/plain.

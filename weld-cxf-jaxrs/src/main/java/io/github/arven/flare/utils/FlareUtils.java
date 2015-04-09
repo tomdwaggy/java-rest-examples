@@ -3,6 +3,7 @@ package io.github.arven.flare.utils;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import javax.enterprise.inject.spi.Annotated;
@@ -33,8 +34,12 @@ public class FlareUtils {
     }
     
     public static Annotation[] getQualifiers(Annotated ann) {
+        return FlareUtils.getQualifiers(ann.getAnnotations().toArray(new Annotation[0]));
+    }
+    
+    public static Annotation[] getQualifiers(Annotation[] anns) {
         List<Annotation> quals = new LinkedList<Annotation>();
-        for(Annotation a : ann.getAnnotations()) {
+        for(Annotation a : anns) {
             if(a.annotationType().isAnnotationPresent(Qualifier.class)) {
                 quals.add(a);
             }

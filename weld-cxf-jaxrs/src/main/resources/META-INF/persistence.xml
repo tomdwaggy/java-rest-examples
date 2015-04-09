@@ -3,10 +3,10 @@
     xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
     version="2.0">
     <persistence-unit name="testPU" transaction-type="RESOURCE_LOCAL">
-        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
-        <class>com.github.arven.rs.services.example.UserData</class>
-        <class>com.github.arven.rs.services.example.MessageData</class>
-        <class>com.github.arven.rs.services.example.GroupData</class>
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>io.github.arven.rs.services.example.Person</class>
+        <class>io.github.arven.rs.services.example.Message</class>
+        <class>io.github.arven.rs.services.example.Group</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect" />
             <property name="hibernate.connection.driver_class" value="org.h2.Driver" />

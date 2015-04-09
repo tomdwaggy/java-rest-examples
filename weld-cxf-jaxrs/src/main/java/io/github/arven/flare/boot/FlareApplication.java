@@ -5,17 +5,15 @@
  */
 package io.github.arven.flare.boot;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.wordnik.swagger.config.Scanner;
-import com.wordnik.swagger.config.ScannerFactory;
-import com.wordnik.swagger.converter.ModelConverters;
 import io.github.arven.flare.ee.WeldFlare;
+import io.github.arven.flare.ejb.FlareContainerProvider;
 import io.github.arven.flare.server.jetty.FlareJettyServer;
 import io.github.arven.flare.server.FlareServer;
+
 import java.lang.reflect.Method;
 import java.util.Properties;
 import java.util.Set;
-import javax.enterprise.util.AnnotationLiteral;
+import javax.ejb.embeddable.EJBContainer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -26,7 +24,7 @@ import org.reflections.scanners.MethodAnnotationsScanner;
 /**
  * The FlareApplication main class, which starts the web application,
  * loads configuration from the main class, and loads a few beans from
- * the Weld container which will be used in configuration.
+ * the container which will be used in configuration.
  * 
  * @author Brian Becker
  */
@@ -65,9 +63,11 @@ public class FlareApplication {
                 m.invoke(application, ic);
             }
 
+            // EJBContainer ejbs = new FlareContainerProvider().createEJBContainer();
+            
             WeldFlare weld = new WeldFlare();
             WeldContainer container = weld.initialize();
-
+            
             FlareServer server = (FlareServer) container.instance().select(Class.forName(applicationProperties.getProperty("flare.container.server"))).get();
             
             server.setWebAppContext(applicationConfigBoot.value());

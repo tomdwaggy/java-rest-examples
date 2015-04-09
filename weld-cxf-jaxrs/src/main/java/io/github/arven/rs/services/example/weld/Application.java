@@ -1,8 +1,8 @@
 package io.github.arven.rs.services.example.weld;
 
+import org.apache.cxf.cdi.CXFCdiServlet;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.jaxb.JaxbAnnotationIntrospector;
-import com.wordnik.swagger.config.Scanner;
 import com.wordnik.swagger.config.ScannerFactory;
 import com.wordnik.swagger.converter.ModelConverters;
 import com.wordnik.swagger.jackson.ModelResolver;
@@ -12,12 +12,10 @@ import io.github.arven.flare.boot.FlareBootApplication;
 import io.github.arven.flare.boot.FlareConfiguration;
 import io.github.arven.flare.boot.FlareServlet;
 import io.github.arven.flare.boot.NamingConfiguration;
-import javax.enterprise.inject.Produces;
-import javax.enterprise.util.AnnotationLiteral;
 
 import javax.naming.Context;
+import javax.naming.NamingException;
 import javax.servlet.Servlet;
-import org.apache.cxf.cdi.CXFCdiServlet;
 
 /**
  * This Weld Boot application configuration simply defines CXF and
@@ -27,8 +25,8 @@ import org.apache.cxf.cdi.CXFCdiServlet;
  */
 @FlareBootApplication("/*")
 public class Application {
-    
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws NamingException {
         FlareApplication app = new FlareApplication();
         app.run(args);
     }

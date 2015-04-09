@@ -25,10 +25,10 @@
                     <enabled>true</enabled>
                 </snapshots>
             </repository>
-        </repositories>               
+        </repositories>    
 
-	<dependencies>
-            
+	<dependencies>                                                       
+
             <dependency>
                 <groupId>org.jboss</groupId>
                 <artifactId>jandex</artifactId>
@@ -36,12 +36,36 @@
             </dependency>
             
             <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-server</artifactId>
+                    <version>8.2.0.Final</version>
+            </dependency> 
+            
+            <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-weld</artifactId>
+                    <version>8.2.0.Final</version>
+            </dependency> 
+            
+            <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-logging</artifactId>
+                    <version>8.2.0.Final</version>
+            </dependency>                                                                                      
+            
+            <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-ee</artifactId>
+                    <version>8.2.0.Final</version>
+            </dependency>
+            
+            <dependency>
                 <groupId>org.jboss.weld.se</groupId>
                 <artifactId>weld-se</artifactId>
                 <version>${weld.version}</version>
                 <scope>compile</scope>
-            </dependency>                                                                   
-
+            </dependency>
+           
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
@@ -88,13 +112,13 @@
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
                 <version>1.7.12</version>
-            </dependency>    
+            </dependency>                                                                                    
                                          
             <dependency>
                 <groupId>org.jboss.spec.javax.ejb</groupId>
                 <artifactId>jboss-ejb-api_3.1_spec</artifactId>
                 <version>1.0.2.Final</version>
-            </dependency>
+            </dependency>   
             
             <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
