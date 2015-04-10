@@ -7,3 +7,4 @@
 /spring-boot-webmvc/target/
 /weld-cxf-jaxrs/target/
 /wildfly-cxf-jaxrs/target/
+/tomee-cxf-jaxrs/target/

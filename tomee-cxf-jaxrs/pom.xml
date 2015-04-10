@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>io.github.arven.rs</groupId>
+	<artifactId>service-example-tomee-embedded-jaxrs</artifactId>
+	<version>1.0.0-SNAPSHOT</version>
+	<packaging>war</packaging>
+        
+        <properties>
+            <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+            <start-class>io.github.arven.rs.services.example.weld.Application</start-class>
+            <java.version>1.7</java.version>
+            <deltaspike.version>1.3.0</deltaspike.version>
+            <weld.version>2.2.10.Final</weld.version>
+        </properties>
+        
+        <repositories>
+            <repository>
+                <id>apache-m2-snapshot</id>
+                <name>Apache Snapshot Repository</name>
+                <url>https://repository.apache.org/content/groups/snapshots</url>
+            </repository>            
+            <repository>
+                <id>oss-sonatype</id>
+                <name>oss-sonatype</name>
+                <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+                <snapshots>
+                    <enabled>true</enabled>
+                </snapshots>
+            </repository>
+        </repositories>    
+
+	<dependencies>         
+            
+            <dependency>
+                <groupId>org.apache.openejb</groupId>
+                <artifactId>tomee-embedded</artifactId>
+                <version>2.0.0-SNAPSHOT</version>
+            </dependency>           
+            
+            <dependency>
+                <groupId>com.h2database</groupId>
+                <artifactId>h2</artifactId>
+                <version>1.4.186</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.fasterxml.jackson.jaxrs</groupId>
+                <artifactId>jackson-jaxrs-json-provider</artifactId>
+                <version>2.5.1</version>
+            </dependency>    
+            
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-simple</artifactId>
+                <version>1.7.12</version>
+            </dependency>                         
+            
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-annotations</artifactId>
+                <version>2.5.1</version>
+            </dependency> 
+                                           
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>18.0</version>
+                <scope>compile</scope>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.google.auto.value</groupId>
+                <artifactId>auto-value</artifactId>
+                <version>1.0</version>
+                <scope>compile</scope>
+            </dependency>  
+            
+            <dependency>
+                <groupId>cglib</groupId>
+                <artifactId>cglib</artifactId>
+                <version>3.1</version>
+            </dependency>
+            
+            <dependency>
+                <groupId>com.wordnik</groupId>
+                <artifactId>swagger-jaxrs</artifactId>
+                <version>1.5.0-M2</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>javax.ws.rs</groupId>
+                        <artifactId>jsr311-api</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+                          
+	</dependencies>
+
+</project>
