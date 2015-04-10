@@ -15,7 +15,7 @@ import com.wordnik.swagger.jaxrs.listing.SwaggerSerializers;
 import io.github.arven.flare.rs.JacksonJaxbYamlProvider;
 import io.github.arven.flare.rs.Jsr250AuthorizationRequestFilter;
 
-@ApplicationPath("/v1")
+@ApplicationPath("/example/v1")
 public class MicroBlogApplication extends Application {
     
     @Inject private MicroBlogRestResource restService;

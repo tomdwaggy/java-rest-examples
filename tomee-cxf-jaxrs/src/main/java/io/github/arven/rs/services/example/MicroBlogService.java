@@ -1,15 +1,14 @@
 package io.github.arven.rs.services.example;
 
+import io.github.arven.flare.boot.ApplicationManager;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import javax.inject.Inject;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 
 /**
  * MicroBlogService is a backend implementation, with no database or any
@@ -22,7 +21,7 @@ import javax.persistence.PersistenceUnit;
 public class MicroBlogService {
 	
     private static final EntityManager test = Persistence.createEntityManagerFactory(null).createEntityManager();
-    
+        
     /**
      * Get the user data for a given user.
      * 
@@ -30,7 +29,6 @@ public class MicroBlogService {
      * @return  The data for the user
      */
     public Person getUser( String userName ) {
-        //EntityManager test = factory.createEntityManager();
     	return test.find(Person.class, userName);
     }
     
@@ -41,8 +39,7 @@ public class MicroBlogService {
      * @param   user        user data for the user, containing user id
      */
     public void addUser( Person user ) {
-        //EntityManager test = factory.createEntityManager();
-        //loginService.putUser(user.getId(), Credential.getCredential(user.getPassword()), new String[] { "User" });
+        ApplicationManager.instance().addUser(user.getId(), user.getPassword(), Arrays.asList("User"));
         test.persist(user);
     }
     
@@ -53,7 +50,6 @@ public class MicroBlogService {
      * @param   userName        user data for the user, containing user id
      */
     public void removeUser( String userName ) {
-        //EntityManager test = factory.createEntityManager();
         Person user = test.find(Person.class, userName);
         user.getGroups().clear();
         user.getMessages().clear();
@@ -71,7 +67,6 @@ public class MicroBlogService {
      * @return  a list of posts from the user
      */
     public List<Message> getPosts( String userName ) {
-        //EntityManager test = factory.createEntityManager();
         Person d = test.find(Person.class, userName);
         if (d != null) {
             return new LinkedList<Message>(d.getMessages());
@@ -87,7 +82,6 @@ public class MicroBlogService {
      * @return  a single matching post
      */
     public List<Message> getPost( String userName, String postName ) {
-        //EntityManager test = factory.createEntityManager();
         Message m = test.find(Message.class, postName);
         if (m != null && m.getUserName().equals(userName)) {
             return Arrays.asList(m);
@@ -106,7 +100,6 @@ public class MicroBlogService {
      * @param   post        message which should be posted by the user
      */
     public void addPost( String userName, Message post ) {
-        //EntityManager test = factory.createEntityManager();
         Person user = test.find(Person.class, userName);
         user.getMessages().add(post);
         test.persist(post);
@@ -119,7 +112,6 @@ public class MicroBlogService {
      * @param postName
      */
     public void removePost( String userName, String postName ) {
-        //EntityManager test = factory.createEntityManager();
         Message message = test.find(Message.class, postName);
         if(message.getUserName().equals(userName)) {
             test.remove(message);
@@ -134,7 +126,6 @@ public class MicroBlogService {
      * @return  The group information
      */
     public Group getGroup( String groupName ) {
-        //EntityManager test = factory.createEntityManager();
         return test.find(Group.class, groupName);
     }
     
@@ -146,7 +137,6 @@ public class MicroBlogService {
      * @return  The group member list
      */
     public List<Person> getGroupMembers( String groupName ) {
-        //EntityManager test = factory.createEntityManager();
         Group d = test.find(Group.class, groupName);
         if (d != null) {
             return new LinkedList<Person>(d.getMembers());
@@ -164,7 +154,6 @@ public class MicroBlogService {
      * @param   userName    username of the person who is creating the group
      */
     public void addGroup( Group group, String userName ) {
-        //EntityManager test = factory.createEntityManager();
     	if(!test.contains(group)) {
             Person user = test.find(Person.class, userName);
             group.getMembers().add(user);    		
@@ -180,7 +169,6 @@ public class MicroBlogService {
      * @param   userName    username who is joining the group
      */
     public void addGroupMember( String groupName, String userName ) {
-        //EntityManager test = factory.createEntityManager();
         Group group = test.find(Group.class, groupName);
         Person user = test.find(Person.class, userName);
         if(!group.getMembers().contains(user)) {
@@ -200,7 +188,6 @@ public class MicroBlogService {
      * @param   userName    user id which is leaving the group
      */
     public void leaveGroup( String groupName, String userName ) {
-        //EntityManager test = factory.createEntityManager();
         Group group = test.find(Group.class, groupName);
         Person user = test.find(Person.class, userName);
         group.getMembers().remove(user);
@@ -218,7 +205,6 @@ public class MicroBlogService {
      * @param   groupName       group id for removal
      */
     public void removeGroup( String groupName ) {
-        //EntityManager test = factory.createEntityManager();
         test.remove(test.find(Group.class, groupName));
     }
     
@@ -231,7 +217,6 @@ public class MicroBlogService {
      * @return  the friends list, or empty if not valid
      */
     public List<Person> getFriends( String userName ) {
-        //EntityManager test = factory.createEntityManager();
         Person d = test.find(Person.class, userName);
         if (d != null) {
             return new LinkedList<Person>(d.getFriends());
@@ -249,7 +234,6 @@ public class MicroBlogService {
      * @param   friendName  user id which is being added as a friend
      */
     public void addFriend( String userName, String friendName ) {
-        //EntityManager test = factory.createEntityManager();
     	Person user = test.find(Person.class, userName);
     	Person friend = test.find(Person.class, friendName);
     	user.getFriends().add(friend);
@@ -265,7 +249,6 @@ public class MicroBlogService {
      * @param   friendName  user id which is being removed as a friend
      */
     public void removeFriend( String userName, String friendName ) {
-        //EntityManager test = factory.createEntityManager();
     	Person user = test.find(Person.class, userName);
     	Person friend = test.find(Person.class, friendName);
     	user.getFriends().remove(friend);

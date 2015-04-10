@@ -1,10 +1,5 @@
 package io.github.arven.flare.rs;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
@@ -49,7 +44,7 @@ public class Jsr250AuthorizationRequestFilter implements ContainerRequestFilter 
     }
 
     @Override
-    public void filter(ContainerRequestContext ctx) throws IOException {        
+    public void filter(ContainerRequestContext ctx) throws IOException { 
         Annotation inner = permissions(info.getResourceMethod());
         Annotation outer = permissions(info.getResourceClass());
         if(allows(outer, ctx.getSecurityContext())) {

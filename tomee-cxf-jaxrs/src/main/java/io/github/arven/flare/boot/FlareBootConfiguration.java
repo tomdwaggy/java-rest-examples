@@ -13,7 +13,7 @@ import static java.lang.annotation.ElementType.TYPE;
 
 @Retention(RUNTIME)
 @Target({TYPE})
-public @interface FlareBootApplication {
+public @interface FlareBootConfiguration {
     
     /**
      * Context Path of the web application
