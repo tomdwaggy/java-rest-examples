@@ -19,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * @author Brian Becker
  */
-@WebFilter(filterName = "HTTP-BASIC", urlPatterns = "/*")
 public class HttpBasicAuthenticationFilter implements Filter {
 
     public void init(FilterConfig fc) throws ServletException {

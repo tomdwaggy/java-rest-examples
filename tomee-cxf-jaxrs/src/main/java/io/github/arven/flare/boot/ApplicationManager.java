@@ -31,7 +31,6 @@ public class ApplicationManager {
         for(String role : roles) {
             this.tomcat.addRole(name, role);
         }
-        System.err.println("Trying to add... " + name + " " + password);
     }
     
 }

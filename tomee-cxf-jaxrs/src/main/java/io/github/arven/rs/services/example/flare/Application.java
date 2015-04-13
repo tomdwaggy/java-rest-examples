@@ -21,7 +21,7 @@ import org.apache.openejb.jee.Module;
  * 
  * @author Brian Becker
  */
-@FlareBootConfiguration("/*")
+@FlareBootConfiguration
 public class Application {
 
     public static void main(String[] args) throws NamingException {

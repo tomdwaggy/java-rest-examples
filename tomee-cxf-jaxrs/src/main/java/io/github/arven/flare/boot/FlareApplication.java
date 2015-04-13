@@ -5,16 +5,18 @@
  */
 package io.github.arven.flare.boot;
 
+import io.github.arven.flare.rs.ApiOriginFilter;
+import io.github.arven.flare.rs.HttpBasicAuthenticationFilter;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.spi.CDI;
 import javax.ws.rs.Produces;
+import org.apache.openejb.AppContext;
+import org.apache.openejb.core.WebContext;
 import org.apache.openejb.loader.JarLocation;
 import org.apache.tomee.embedded.Configuration;
-import org.apache.tomee.embedded.Container;
 
 /**
  * The FlareApplication main class, which starts the web application,
@@ -38,18 +40,20 @@ public class FlareApplication {
             
             HashMap users = new HashMap();
             
-            final Configuration configuration =
-                new Configuration()
+            final TomcatConfiguration configuration =
+                new TomcatConfiguration()
                 .http(8080)
                 .property("openejb.container.additional.exclude", "org.apache.tomee.embedded.")
-                .property("openejb.additional.include", "tomee-");
+                .property("openejb.additional.include", "tomee-")
+                .filter("http basic", HttpBasicAuthenticationFilter.class.getName())
+                .filter("api origin", ApiOriginFilter.class.getName());
             
-            final Container container =
-                new Container(configuration).deployClasspathAsWebApp().inject(this);
-            
+            final TomcatContainer container =
+                new TomcatContainer(configuration).deployPathsAsWebapp(JarLocation.jarLocation(FlareApplication.class));
+                                    
             ApplicationManager.setApplicationManager(new ApplicationManager(container.getTomcat()));
             ApplicationManager.instance().addUser("anonymous", "anonymous", Arrays.asList("Anonymous"));
-                        
+                                    
             annotations.doConfiguration(FlarePostConfiguration.class);
             
             container.await();
